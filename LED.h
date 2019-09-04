@@ -7,7 +7,7 @@
 
 #include "stm32f303xe.h"
 
-#define DELAY_COUNT 10000000UL
+#define DELAY_COUNT 1000000UL
 
 #define LED_PORT	A
 #define LED_PIN		5

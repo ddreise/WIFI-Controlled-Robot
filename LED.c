@@ -22,13 +22,15 @@ void LED_Init(GPIO_TypeDef* PORT, uint32_t PIN)
 //Toggles a PIN on a PORT high and low with a DELAY
 void Toggle_PIN(GPIO_TypeDef* PORT, uint32_t PIN, uint32_t DELAY)
 {
+	uint32_t i;
+	
 	Change_PIN(PORT, PIN, 1);
 	
-	for(uint32_t i = 0; i < DELAY; i++);
+	for(i = 0; i < DELAY; i++);
 	
 	Change_PIN(PORT, PIN, 0);
 	
-	for(uint32_t i = 0; i < DELAY; i++);
+	for(i = 0; i < DELAY; i++);
 }
 
 //Change the PORTs PIN to a new STATE (high or low, 1 or 0) NOTE: if you use > 1, you'll be changing multiple pins
