@@ -7,17 +7,17 @@
 #include "Macros.h"
 #include "LED.h"
 #include "SysTick.h"
-//#include "LCD.h"
-//#include "Stepper_Motor.h"
-//#include "RC_Servo.h"
-//#include "DC_Motor.h"
-//#include "UART.h"
-//#include "Encoder.h"
+#include "LCD.h"
+#include "Stepper_Motor.h"
+#include "RC_Servo.h"
+#include "DC_Motor.h"
+#include "UART.h"
+#include "Encoder.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
-#define LED		1
+#define LED		0
 #define LCD		0
-#define STP		0
+#define STP		1
 #define SERVO 0
 #define DC		0
 #define ENC		0
