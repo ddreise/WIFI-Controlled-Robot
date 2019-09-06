@@ -17,12 +17,14 @@
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 #define LED		0
 #define LCD		0
-#define STP		1
+#define STP		0
 #define SERVO 0
 #define DC		0
 #define ENC		0
 #define UART	0
 #define BUZ		0
+
+#define DC_REAL_TEST	1
 
 int main(void){
 
@@ -136,6 +138,11 @@ int main(void){
 		Motor(DC_M1, 100, DC_FORWARD);
 		Motor(DC_M2, 100, DC_FORWARD);
 		Delay_s(5);
+		
+		Motor(DC_M2, 100, DC_COAST);
+		Motor(DC_M1, 100, DC_COAST);
+		Delay_ms(200);
+		
 		Motor(DC_M1, 50, DC_BACKWARD);
 		Motor(DC_M2, 50, DC_BACKWARD);
 		Delay_s(5);
@@ -208,6 +215,17 @@ int main(void){
 	while(TRUE)
 	{
 	}
+	#endif
+	
+	#if DC_REAL_TEST
+	
+	DC_Init();
+	
+	LCD_Printf(FIRST_LINE, "DC MOTOR");
+	
+	Motor(DC_M1, 50, DC_FORWARD);
+	Motor(DC_M2, 50, DC_FORWARD);
+	
 	#endif
 	
 }

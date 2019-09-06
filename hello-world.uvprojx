@@ -10,6 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pArmCC>5060528::V5.06 update 5 (build 528)::ARMCC</pArmCC>
       <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
@@ -433,6 +434,66 @@
               <FileName>SysTick.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\SysTick.h</FilePath>
+            </File>
+            <File>
+              <FileName>DC_Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\DC_Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Encoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Encoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD.c</FilePath>
+            </File>
+            <File>
+              <FileName>RC_Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\RC_Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stepper_Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Stepper_Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>UART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UART.c</FilePath>
+            </File>
+            <File>
+              <FileName>DC_Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\DC_Motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>Encoder.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Encoder.h</FilePath>
+            </File>
+            <File>
+              <FileName>LCD.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\LCD.h</FilePath>
+            </File>
+            <File>
+              <FileName>RC_Servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\RC_Servo.h</FilePath>
+            </File>
+            <File>
+              <FileName>Stepper_Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Stepper_Motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>UART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\UART.h</FilePath>
             </File>
           </Files>
         </Group>
