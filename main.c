@@ -16,7 +16,7 @@
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 #define LED		0
-#define LCD		0
+#define LCD		1
 #define STP		0
 #define SERVO 0
 #define DC		0
@@ -24,18 +24,20 @@
 #define UART	0
 #define BUZ		0
 
-#define DC_REAL_TEST	1
+#define DC_REAL_TEST	0
 
 int main(void){
 
+	uint16_t counter;
+	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
 	// TIMER INIT //
 	SysTick_Init(SYSTICK_TICKS);			// initialize the systick interrupt
 	
 	// PERIPHERAL INITIALIZATION //
-//	LCD_Init();												// initialize the LCD screen
-//	LCDclear();												// clears residual data in the LCD display from previous operation
+	LCD_Init();												// initialize the LCD screen
+	LCDclear();												// clears residual data in the LCD display from previous operation
 	
 	/////////////////
 	// LED TESTING //
@@ -56,7 +58,7 @@ int main(void){
 	/////////////////
 	
 	#if LCD
-	uint16_t counter = 0;		//counter for incrementing values on the LCD screen
+	counter = 0;		//counter for incrementing values on the LCD screen
 	
 	LCD_Printf(FIRST_LINE, "Hello World!");
 	
