@@ -16,9 +16,9 @@
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 #define LED		0
-#define LCD		1
+#define LCD		0
 #define STP		0
-#define SERVO 0
+#define SERVO 1
 #define DC		0
 #define ENC		0
 #define UART	0
@@ -115,7 +115,7 @@ int main(void){
 	{
 		RC_Position(0);
 		Delay_s(5);
-		RC_Position(90);
+		RC_Position(89);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
 		Delay_s(5);
 		RC_Position(-90);
 		Delay_s(5);
