@@ -66,8 +66,6 @@ void LCD_Printf(char location, char* params, ...)
 	
 	va_list args;						//parameter for functions receiving variable arguments
 	
-	LCDclear();
-	
 	LCDcmd(LCD_CMD_DDRAM | location);	//sets the location to start printing the string on the LCD
 	
 	va_start(args, params);	//initializes args to retrieve argument inputted after params
