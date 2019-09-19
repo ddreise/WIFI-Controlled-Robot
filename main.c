@@ -2,6 +2,9 @@
 //	Justin Turcotte, Daniel Dreise, Ramtin Alikhani
 //	September 4, 2019
 
+#include "stdio.h"
+#include "string.h"
+
 #include "stm32f303xe.h"
 #include "SysClock.h"
 #include "Macros.h"
@@ -13,12 +16,13 @@
 #include "DC_Motor.h"
 #include "UART.h"
 #include "Encoder.h"
+//#include "MACROS2.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 #define LED		0
 #define LCD		0
 #define STP		0
-#define SERVO 1
+#define SERVO 0
 #define DC		0
 #define ENC		0
 #define UART	0
@@ -26,9 +30,12 @@
 
 #define DC_REAL_TEST	0
 
+#define RS232_Interface	1
+
 int main(void){
 
 	uint16_t counter;
+	char str[32];											// For UART
 	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
@@ -190,21 +197,34 @@ int main(void){
 	//////////
 	
 	#if UART
-	char* buffer = 0;
 	
-	UARTinit();
+	UART1_init();
 	
 	LCD_Printf(FIRST_LINE, "UART:");
 	
-	UARTprintf("Hello World!");
-		
-	buffer = Get_Buffer();
-		
-	LCD_Printf(SECOND_LINE, "%s", buffer);
+	Test_Menu();
+	
+	get_Input(str);
+	
+	LCD_Printf(SECOND_LINE, "%s", str);
+
+	
+	//	char* buffer = 0;
+//	
+//	UARTinit();
+//	
+//	LCD_Printf(FIRST_LINE, "UART:");
+//	
+//	UARTprintf("Hello World!");
+//		
+//	buffer = Get_Buffer();
+//		
+//	LCD_Printf(SECOND_LINE, "%s", buffer);
 	
 	while(TRUE)
 	{
 		Delay_ms(50);
+		//UART1_printf("This is a test");
 	}
 	#endif
 	
@@ -227,6 +247,36 @@ int main(void){
 	
 	Motor(DC_M1, 50, DC_FORWARD);
 	Motor(DC_M2, 50, DC_FORWARD);
+	
+	#endif
+	
+	#if RS232_Interface
+	
+	while(TRUE)
+	{
+		int i = 0;
+		for(i = 0; i < 32; i++)
+		{
+			str[i] = 0;
+		}
+		
+		UART1_init();
+		
+		//send menu to host
+		Test_Menu();
+		
+		//get user input
+		get_Input(str);
+		
+		LCD_Printf(SECOND_LINE, "%s", str); //output input to LCD screen for reference
+		//perform correct action based on input
+		if(!strcmp(str, "1"))
+		{
+			LCD_Printf(FIRST_LINE, "LCD GO!");
+		}
+		
+		//keep performing action
+	}
 	
 	#endif
 	

@@ -1,26 +1,41 @@
-//uartsetup.h - Interface to initialize and handle UART operations
-//By: Justin Turcotte
-//Assisted by: Bill - ESE4 EMBSOFT Prof
-//January 20, 2019
-
-#ifndef UARTSETUP_H
-#define UARTSETUP_H
-
-// PIN LAYOUT //
-#define UART_PORT			C
+/* UART.h
+ * 
+ * Purpose: Interface for Lab 2 -- uses UART to continuously loop a message and send it to the serial port
+ * 
+ * Project: Lab 2
+ *
+ * By: Daniel Dreise
+ *
+ * Date start: January 17, 2019
+ * Date finish: January 18, 2019
+ * 
+ * Semester: Winter 2019
+ * Embedded Systems Software - Conestoga College
+ */
+ 
+#ifndef	UART_H
+#define UART_H
+ 
+#define MAX_UART_BUFSIZ 255						// max size of the UART buff size
+#define RS232_PORT C
+#define RS232_TX_PIN 4
+#define RS232_RX_PIN 5
 #define UART_PIN_DTX	4
 #define UART_PIN_DRX	5
-#define UART_PIN_RTS	10
-#define UART_PIN_CTS	11
+ 
 
-#define MAX_UART_BUFSIZE 32UL
 
-void UARTinit(void);									//initializes USART1
-void UARTputc(char cx);								//output a character to USART1
-void UARTputs(char *str);							//output a string to USART1
-void UARTprintf(char* params, ...);		//output "Justin Turcotte\ncount: 0xXXXX" with the hex value incrementing
-void USART_Read(USART_TypeDef *USARTx, uint8_t *buffer, uint32_t nBytes);
-void USART1_IRQHandler(void);
-char* Get_Buffer(void);
+/****************** PROTOTYPE FUNCTIONS ********************/
 
-#endif
+void UART1_init(void);
+void UART1_printf(char *fmt, ...);
+void UARTputc(char str);
+void UARTputs(char *str);
+void Test_Menu(void);
+void receive(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter);
+char read_USART(void);
+char read(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter);
+void get_Input(char* str);
+
+ 
+#endif 
