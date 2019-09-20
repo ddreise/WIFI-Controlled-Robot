@@ -20,17 +20,15 @@
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 #define LED		0
-#define LCD		0
-#define STP		0
+//#define LCD		0 *** Implemented into RS232_Interface
+#define STP		1
 #define SERVO 0
-#define DC		0
+//#define DC		0 *** Implemented into RS232_Interface
 #define ENC		0
 #define UART	0
 #define BUZ		0
 
-#define DC_REAL_TEST	0
-
-#define RS232_Interface	1
+#define RS232_Interface	0
 
 //Prototypes
 void LCD_Test(void);
@@ -68,23 +66,6 @@ int main(void){
 	}
 	#endif
 	
-	/////////////////
-	// LCD TESTING //
-	/////////////////
-	
-	#if LCD
-	counter = 0;		//counter for incrementing values on the LCD screen
-	
-	LCD_Printf(FIRST_LINE, "Hello World!");
-	
-	while(TRUE)
-	{
-		// Code related to testing the LCD
-		LCD_Printf(SECOND_LINE, "Count: 0x%x", counter++);
-		Delay_s(1);																				//delay for readability
-	}
-	#endif
-	
 	//////////////////////////////////////////
 	// STEPPER MOTOR & LIMIT SWITCH TESTING //
 	//////////////////////////////////////////
@@ -96,23 +77,24 @@ int main(void){
 	
 	LCD_Printf(FIRST_LINE, "STEPPER");
 	
-	Stepper_Home();
+	//Stepper_Home();
 	
-	Delay_s(5);
+	//Delay_s(5);
 	
-	Stepper_Set(STPR_FULL, 0x00FF, 90);
+	//Stepper_Set(STPR_FULL, 0x00FF, 90);
 	
-	Delay_s(5);
+	//Delay_s(5);
 	
-	Stepper_Set(STPR_FULL, 0x0FFF, -90);
+	//Stepper_Set(STPR_FULL, 0x0FFF, -90);
 	
-	Delay_s(5);
+	//Delay_s(5);
 	
-	Stepper_Set(STPR_FULL, 0xFFFF, 0);
+	//Stepper_Set(STPR_FULL, 0xFFFF, 0);
 	
 	while(TRUE)
 	{
-		LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+		//LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+		LCD_Printf(SECOND_LINE, "Lim switch: %d", Get_LimSwitch_State());
 		Delay_ms(20);
 	}
 	#endif
@@ -134,47 +116,6 @@ int main(void){
 		Delay_s(5);
 		RC_Position(-90);
 		Delay_s(5);
-	}
-	#endif
-	
-	//////////////
-	// DC MOTOR //
-	//////////////
-	
-	#if DC
-	DC_Init();
-	
-	LCD_Printf(FIRST_LINE, "DC MOTOR");
-	
-	while(TRUE)
-	{
-		Delay_s(5);
-		Motor(DC_M1, 50, DC_FORWARD);
-		Motor(DC_M2, 50, DC_FORWARD);
-		Delay_s(5);
-		Motor(DC_M1, 100, DC_FORWARD);
-		Motor(DC_M2, 100, DC_FORWARD);
-		Delay_s(5);
-		
-		Motor(DC_M2, 100, DC_COAST);
-		Motor(DC_M1, 100, DC_COAST);
-		Delay_ms(200);
-		
-		Motor(DC_M1, 50, DC_BACKWARD);
-		Motor(DC_M2, 50, DC_BACKWARD);
-		Delay_s(5);
-		Motor(DC_M1, 100, DC_BACKWARD);
-		Motor(DC_M2, 100, DC_BACKWARD);
-		Delay_s(5);
-		//coasting speed doesn't matter because inputs need to be low anyways
-		Motor(DC_M1, 100, DC_COAST);
-		Motor(DC_M2, 100, DC_COAST);
-		Delay_s(5);
-		Motor(DC_M1, 50, DC_BRAKE);
-		Motor(DC_M2, 50, DC_BRAKE);
-		Delay_s(5);
-		Motor(DC_M1, 100, DC_BRAKE);
-		Motor(DC_M2, 100, DC_BRAKE);
 	}
 	#endif
 	
@@ -247,17 +188,6 @@ int main(void){
 	}
 	#endif
 	
-	#if DC_REAL_TEST
-	
-	DC_Init();
-	
-	LCD_Printf(FIRST_LINE, "DC MOTOR");
-	
-	Motor(DC_M1, 50, DC_FORWARD);
-	Motor(DC_M2, 50, DC_FORWARD);
-	
-	#endif
-	
 	#if RS232_Interface
 	
 	while(TRUE)
@@ -274,6 +204,7 @@ int main(void){
 		TIM3_Init();
 		stepperInit();
 		LimSwitch_Init();
+		DC_Init();
 		
 		//send menu to host
 		Test_Menu();
@@ -306,35 +237,30 @@ void LCD_Test()
 
 void DC_Motor_Test()
 {
-	Delay_s(5);
+	LCD_Printf(FIRST_LINE, "DC MOTOR");
+	
 	Motor(DC_M1, 50, DC_FORWARD);
 	Motor(DC_M2, 50, DC_FORWARD);
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 100, DC_FORWARD);
 	Motor(DC_M2, 100, DC_FORWARD);
-	Delay_s(5);
-		
-	Motor(DC_M2, 100, DC_COAST);
-	Motor(DC_M1, 100, DC_COAST);
-	Delay_ms(200);
-
+	Delay_s(2);	
 	Motor(DC_M1, 50, DC_BACKWARD);
 	Motor(DC_M2, 50, DC_BACKWARD);
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 100, DC_BACKWARD);
 	Motor(DC_M2, 100, DC_BACKWARD);
-	Delay_s(5);
-	
+	Delay_s(2);
 	//coasting speed doesn't matter because inputs need to be low anyways
 	Motor(DC_M1, 100, DC_COAST);
 	Motor(DC_M2, 100, DC_COAST);
-	
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 50, DC_BRAKE);
 	Motor(DC_M2, 50, DC_BRAKE);
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 100, DC_BRAKE);
 	Motor(DC_M2, 100, DC_BRAKE);
+	Delay_s(2);
 }
 
 void Encoder_Test()
