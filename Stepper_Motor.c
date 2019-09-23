@@ -103,7 +103,7 @@ void Stepper_Home(void)
 	//move stepper forward by half steps until limit switch is hit
 	while(!(Get_LimSwitch_State() == LIM_RIGHT_TOUCH))
 	{
-		stepperRun(STPR_HALF_FRWRD);
+		stepperRun(STPR_FULL_FRWRD);
 		Delay_ms(STPR_MIN_DELAY_MS);
 	}
 	
@@ -221,14 +221,19 @@ void LimSwitch_Init(void)
 	
 	GPIO_PIN_DRV_TYPE(LIM_PORT, LIM_PIN_LEFT, OTYPER_PUSH_PULL);
 	GPIO_PIN_DRV_TYPE(LIM_PORT, LIM_PIN_RIGHT, OTYPER_PUSH_PULL);
+	
+	GPIO_PIN_PUPD(LIM_PORT, LIM_PIN_LEFT, PUPDR_NO_PUPD);
+	GPIO_PIN_PUPD(LIM_PORT, LIM_PIN_RIGHT, PUPDR_NO_PUPD);
 }
 
 uint8_t Get_LimSwitch_State(void)
 {
+	//take copy of input
 	uint16_t limIn = LIM_IN;
 	
-	if(limIn & (1UL << LIM_PIN_RIGHT)) return LIM_RIGHT_TOUCH;
-	else if(limIn & (1UL << LIM_PIN_LEFT)) return LIM_LEFT_TOUCH;
+	//check to see which pin is pressed (low means press)
+	if(!(limIn & (0x1UL << LIM_PIN_LEFT))) return LIM_LEFT_TOUCH;
+	else if(!(limIn & (0x1UL << LIM_PIN_RIGHT))) return LIM_RIGHT_TOUCH;
 	else return LIM_NO_TOUCH;
 }
 

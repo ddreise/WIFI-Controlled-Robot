@@ -19,16 +19,16 @@
 //#include "MACROS2.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
-#define LED		0
+//#define LED		0 *** OBSOLETE
 //#define LCD		0 *** Implemented into RS232_Interface
-#define STP		1
-#define SERVO 0
+#define STP		0
+//#define SERVO 0 *** Implemented into RS232_Interface
 //#define DC		0 *** Implemented into RS232_Interface
 #define ENC		0
-#define UART	0
+//#define UART	0 *** Implemented into RS232_Interface
 #define BUZ		0
 
-#define RS232_Interface	0
+#define RS232_Interface	1
 
 //Prototypes
 void LCD_Test(void);
@@ -91,31 +91,17 @@ int main(void){
 	
 	//Stepper_Set(STPR_FULL, 0xFFFF, 0);
 	
+	while(!Get_LimSwitch_State()) 
+	{	
+		stepperRun(STPR_HALF_FRWRD);
+		Delay_ms(50);
+	}
+	
 	while(TRUE)
 	{
 		//LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
-		LCD_Printf(SECOND_LINE, "Lim switch: %d", Get_LimSwitch_State());
+		//LCD_Printf(SECOND_LINE, "Lim switch: %d", Get_LimSwitch_State());
 		Delay_ms(20);
-	}
-	#endif
-	
-	//////////////
-	// RC SERVO //
-	//////////////
-	
-	#if SERVO
-	RC_Init();
-	
-	LCD_Printf(FIRST_LINE, "RC SERVO");
-	
-	while(TRUE)
-	{
-		RC_Position(0);
-		Delay_s(5);
-		RC_Position(89);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
-		Delay_s(5);
-		RC_Position(-90);
-		Delay_s(5);
 	}
 	#endif
 	
@@ -141,42 +127,6 @@ int main(void){
 	}
 	#endif
 	
-	//////////
-	// UART //
-	//////////
-	
-	#if UART
-	
-	UART1_init();
-	
-	LCD_Printf(FIRST_LINE, "UART:");
-	
-	Test_Menu();
-	
-	get_Input(str);
-	
-	LCD_Printf(SECOND_LINE, "%s", str);
-
-	
-	//	char* buffer = 0;
-//	
-//	UARTinit();
-//	
-//	LCD_Printf(FIRST_LINE, "UART:");
-//	
-//	UARTprintf("Hello World!");
-//		
-//	buffer = Get_Buffer();
-//		
-//	LCD_Printf(SECOND_LINE, "%s", buffer);
-	
-	while(TRUE)
-	{
-		Delay_ms(50);
-		//UART1_printf("This is a test");
-	}
-	#endif
-	
 	////////////
 	// BUZZER //
 	////////////
@@ -190,6 +140,16 @@ int main(void){
 	
 	#if RS232_Interface
 	
+	TIM3_Init();
+	
+	UART1_init();
+	Encoder_Init();
+	stepperInit();
+	LimSwitch_Init();
+	DC_Init();
+	
+	RC_Init();	//needs to init last
+	
 	while(TRUE)
 	{
 		int i = 0;
@@ -197,14 +157,6 @@ int main(void){
 		{
 			str[i] = 0;
 		}
-		
-		UART1_init();
-		RC_Init();
-		Encoder_Init();
-		TIM3_Init();
-		stepperInit();
-		LimSwitch_Init();
-		DC_Init();
 		
 		//send menu to host
 		Test_Menu();
@@ -282,15 +234,17 @@ void Encoder_Test()
 
 void Servo_Test()
 {
+	//RC_Init();
+	
 	LCD_Printf(FIRST_LINE, "RC SERVO");
 	
 	while(TRUE)
 	{
-		RC_Position(0);
+		RC_Position(15);
 		Delay_s(5);
-		RC_Position(89);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
+		RC_Position(45);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
 		Delay_s(5);
-		RC_Position(-90);
+		RC_Position(-5);
 		Delay_s(5);
 	}
 }
