@@ -19,16 +19,14 @@
 //#include "MACROS2.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
-#define LED		0
-#define LCD		0
+//#define LED		0 *** OBSOLETE
+//#define LCD		0 *** Implemented into RS232_Interface
 #define STP		0
-#define SERVO 0
-#define DC		0
+//#define SERVO 0 *** Implemented into RS232_Interface
+//#define DC		0 *** Implemented into RS232_Interface
 #define ENC		0
-#define UART	0
+//#define UART	0 *** Implemented into RS232_Interface
 #define BUZ		0
-
-#define DC_REAL_TEST	0
 
 #define RS232_Interface	1
 
@@ -68,23 +66,6 @@ int main(void){
 	}
 	#endif
 	
-	/////////////////
-	// LCD TESTING //
-	/////////////////
-	
-	#if LCD
-	counter = 0;		//counter for incrementing values on the LCD screen
-	
-	LCD_Printf(FIRST_LINE, "Hello World!");
-	
-	while(TRUE)
-	{
-		// Code related to testing the LCD
-		LCD_Printf(SECOND_LINE, "Count: 0x%x", counter++);
-		Delay_s(1);																				//delay for readability
-	}
-	#endif
-	
 	//////////////////////////////////////////
 	// STEPPER MOTOR & LIMIT SWITCH TESTING //
 	//////////////////////////////////////////
@@ -96,85 +77,31 @@ int main(void){
 	
 	LCD_Printf(FIRST_LINE, "STEPPER");
 	
-	Stepper_Home();
+	//Stepper_Home();
 	
-	Delay_s(5);
+	//Delay_s(5);
 	
-	Stepper_Set(STPR_FULL, 0x00FF, 90);
+	//Stepper_Set(STPR_FULL, 0x00FF, 90);
 	
-	Delay_s(5);
+	//Delay_s(5);
 	
-	Stepper_Set(STPR_FULL, 0x0FFF, -90);
+	//Stepper_Set(STPR_FULL, 0x0FFF, -90);
 	
-	Delay_s(5);
+	//Delay_s(5);
 	
-	Stepper_Set(STPR_FULL, 0xFFFF, 0);
+	//Stepper_Set(STPR_FULL, 0xFFFF, 0);
+	
+	while(!Get_LimSwitch_State()) 
+	{	
+		stepperRun(STPR_HALF_FRWRD);
+		Delay_ms(50);
+	}
 	
 	while(TRUE)
 	{
-		LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+		//LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+		//LCD_Printf(SECOND_LINE, "Lim switch: %d", Get_LimSwitch_State());
 		Delay_ms(20);
-	}
-	#endif
-	
-	//////////////
-	// RC SERVO //
-	//////////////
-	
-	#if SERVO
-	RC_Init();
-	
-	LCD_Printf(FIRST_LINE, "RC SERVO");
-	
-	while(TRUE)
-	{
-		RC_Position(0);
-		Delay_s(5);
-		RC_Position(89);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
-		Delay_s(5);
-		RC_Position(-90);
-		Delay_s(5);
-	}
-	#endif
-	
-	//////////////
-	// DC MOTOR //
-	//////////////
-	
-	#if DC
-	DC_Init();
-	
-	LCD_Printf(FIRST_LINE, "DC MOTOR");
-	
-	while(TRUE)
-	{
-		Delay_s(5);
-		Motor(DC_M1, 50, DC_FORWARD);
-		Motor(DC_M2, 50, DC_FORWARD);
-		Delay_s(5);
-		Motor(DC_M1, 100, DC_FORWARD);
-		Motor(DC_M2, 100, DC_FORWARD);
-		Delay_s(5);
-		
-		Motor(DC_M2, 100, DC_COAST);
-		Motor(DC_M1, 100, DC_COAST);
-		Delay_ms(200);
-		
-		Motor(DC_M1, 50, DC_BACKWARD);
-		Motor(DC_M2, 50, DC_BACKWARD);
-		Delay_s(5);
-		Motor(DC_M1, 100, DC_BACKWARD);
-		Motor(DC_M2, 100, DC_BACKWARD);
-		Delay_s(5);
-		//coasting speed doesn't matter because inputs need to be low anyways
-		Motor(DC_M1, 100, DC_COAST);
-		Motor(DC_M2, 100, DC_COAST);
-		Delay_s(5);
-		Motor(DC_M1, 50, DC_BRAKE);
-		Motor(DC_M2, 50, DC_BRAKE);
-		Delay_s(5);
-		Motor(DC_M1, 100, DC_BRAKE);
-		Motor(DC_M2, 100, DC_BRAKE);
 	}
 	#endif
 	
@@ -200,42 +127,6 @@ int main(void){
 	}
 	#endif
 	
-	//////////
-	// UART //
-	//////////
-	
-	#if UART
-	
-	UART1_init();
-	
-	LCD_Printf(FIRST_LINE, "UART:");
-	
-	Test_Menu();
-	
-	get_Input(str);
-	
-	LCD_Printf(SECOND_LINE, "%s", str);
-
-	
-	//	char* buffer = 0;
-//	
-//	UARTinit();
-//	
-//	LCD_Printf(FIRST_LINE, "UART:");
-//	
-//	UARTprintf("Hello World!");
-//		
-//	buffer = Get_Buffer();
-//		
-//	LCD_Printf(SECOND_LINE, "%s", buffer);
-	
-	while(TRUE)
-	{
-		Delay_ms(50);
-		//UART1_printf("This is a test");
-	}
-	#endif
-	
 	////////////
 	// BUZZER //
 	////////////
@@ -247,18 +138,17 @@ int main(void){
 	}
 	#endif
 	
-	#if DC_REAL_TEST
+	#if RS232_Interface
 	
+	TIM3_Init();
+	
+	UART1_init();
+	Encoder_Init();
+	stepperInit();
+	LimSwitch_Init();
 	DC_Init();
 	
-	LCD_Printf(FIRST_LINE, "DC MOTOR");
-	
-	Motor(DC_M1, 50, DC_FORWARD);
-	Motor(DC_M2, 50, DC_FORWARD);
-	
-	#endif
-	
-	#if RS232_Interface
+	RC_Init();	//needs to init last
 	
 	while(TRUE)
 	{
@@ -267,13 +157,6 @@ int main(void){
 		{
 			str[i] = 0;
 		}
-		
-		UART1_init();
-		RC_Init();
-		Encoder_Init();
-		TIM3_Init();
-		stepperInit();
-		LimSwitch_Init();
 		
 		//send menu to host
 		Test_Menu();
@@ -306,35 +189,30 @@ void LCD_Test()
 
 void DC_Motor_Test()
 {
-	Delay_s(5);
+	LCD_Printf(FIRST_LINE, "DC MOTOR");
+	
 	Motor(DC_M1, 50, DC_FORWARD);
 	Motor(DC_M2, 50, DC_FORWARD);
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 100, DC_FORWARD);
 	Motor(DC_M2, 100, DC_FORWARD);
-	Delay_s(5);
-		
-	Motor(DC_M2, 100, DC_COAST);
-	Motor(DC_M1, 100, DC_COAST);
-	Delay_ms(200);
-
+	Delay_s(2);	
 	Motor(DC_M1, 50, DC_BACKWARD);
 	Motor(DC_M2, 50, DC_BACKWARD);
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 100, DC_BACKWARD);
 	Motor(DC_M2, 100, DC_BACKWARD);
-	Delay_s(5);
-	
+	Delay_s(2);
 	//coasting speed doesn't matter because inputs need to be low anyways
 	Motor(DC_M1, 100, DC_COAST);
 	Motor(DC_M2, 100, DC_COAST);
-	
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 50, DC_BRAKE);
 	Motor(DC_M2, 50, DC_BRAKE);
-	Delay_s(5);
+	Delay_s(2);
 	Motor(DC_M1, 100, DC_BRAKE);
 	Motor(DC_M2, 100, DC_BRAKE);
+	Delay_s(2);
 }
 
 void Encoder_Test()
@@ -356,15 +234,17 @@ void Encoder_Test()
 
 void Servo_Test()
 {
+	//RC_Init();
+	
 	LCD_Printf(FIRST_LINE, "RC SERVO");
 	
 	while(TRUE)
 	{
-		RC_Position(0);
+		RC_Position(15);
 		Delay_s(5);
-		RC_Position(89);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
+		RC_Position(45);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
 		Delay_s(5);
-		RC_Position(-90);
+		RC_Position(-5);
 		Delay_s(5);
 	}
 }

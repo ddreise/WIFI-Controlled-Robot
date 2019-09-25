@@ -24,10 +24,10 @@
 #define STPR_OUT_MASK			(0xF << STPR_PIN_IN1)
 
 // PIN SETUP - LIM //
-#define LIM_PORT					A
+#define LIM_PORT					B
 
-#define LIM_PIN_RIGHT			13
-#define LIM_PIN_LEFT			14
+#define LIM_PIN_RIGHT			14
+#define LIM_PIN_LEFT			13
 
 #define LIM_NO_TOUCH			0
 #define LIM_LEFT_TOUCH		1
