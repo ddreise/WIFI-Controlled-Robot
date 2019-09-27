@@ -21,7 +21,7 @@
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
 //#define LCD		0 *** Implemented into RS232_Interface
-#define STP		0
+//#define STP		0 *** Implemented into RS232_Interface
 //#define SERVO 0 *** Implemented into RS232_Interface
 //#define DC		0 *** Implemented into RS232_Interface
 #define ENC		0
@@ -52,57 +52,12 @@ int main(void){
 	LCD_Init();												// initialize the LCD screen
 	LCDclear();												// clears residual data in the LCD display from previous operation
 	
-	/////////////////
-	// LED TESTING //
-	/////////////////
-	
-	#if LED
-	LED_Init(GPIOA, LED_PIN);					// initialize the LED ports to be output
-	
-	while(TRUE)
-	{
-		// Code related to flashing the LED
-		Toggle_PIN(GPIOA, LED_PIN, DELAY_COUNT); //toggle red LED on and off
-	}
-	#endif
-	
 	//////////////////////////////////////////
 	// STEPPER MOTOR & LIMIT SWITCH TESTING //
 	//////////////////////////////////////////
 	
 	#if STP
-	TIM3_Init();
-	stepperInit();
-	LimSwitch_Init();
-	
-	LCD_Printf(FIRST_LINE, "STEPPER");
-	
-	//Stepper_Home();
-	
-	//Delay_s(5);
-	
-	//Stepper_Set(STPR_FULL, 0x00FF, 90);
-	
-	//Delay_s(5);
-	
-	//Stepper_Set(STPR_FULL, 0x0FFF, -90);
-	
-	//Delay_s(5);
-	
-	//Stepper_Set(STPR_FULL, 0xFFFF, 0);
-	
-	while(!Get_LimSwitch_State()) 
-	{	
-		stepperRun(STPR_HALF_FRWRD);
-		Delay_ms(50);
-	}
-	
-	while(TRUE)
-	{
-		//LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
-		//LCD_Printf(SECOND_LINE, "Lim switch: %d", Get_LimSwitch_State());
-		Delay_ms(20);
-	}
+
 	#endif
 	
 	/////////////
@@ -255,22 +210,22 @@ void Stepper_Test()
 	
 	Stepper_Home();
 	
-	Delay_s(5);
+	Delay_s(1);
 	
-	Stepper_Set(STPR_FULL, 0x00FF, 90);
+	Stepper_Set(STPR_HALF, 0x13B, 45);
 	
-	Delay_s(5);
+	Delay_s(1);
 	
-	Stepper_Set(STPR_FULL, 0x0FFF, -90);
+	Stepper_Set(STPR_HALF, 0x13B, -45);
 	
-	Delay_s(5);
+	Delay_s(1);
 	
-	Stepper_Set(STPR_FULL, 0xFFFF, 0);
+	Stepper_Set(STPR_HALF, 0x13B, 0);
 	
 	while(TRUE)
 	{
 		LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
-		Delay_ms(20);
+		Delay_ms(500);
 	}
 }
 
