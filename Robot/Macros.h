@@ -74,4 +74,20 @@
 #define GPIO_PORT(port) GPIO_PORTx(port)
 #define GPIO_PORTx(port) GPIO ## port
 
+
+
+
+
+
+
+// Dan's stuff
+#define PP 0
+#define OD 1
+
+
+#define NONE	0
+#define PULL_UP	1
+#define PULL_DOWN 2
+#define	RESRVD	3
+
 #endif

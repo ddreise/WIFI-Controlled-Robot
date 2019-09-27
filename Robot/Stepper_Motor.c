@@ -10,10 +10,10 @@
 
 // IMPORTANT VARIABLES //
 
-static volatile uint16_t stepsRemaining = 0;
+static volatile int32_t stepsRemaining = 0;
 static uint8_t stepMode = STPR_STOP;
-static uint8_t totalSteps = 0; 
-static uint8_t currentStepPos = 0;
+static uint32_t totalSteps = 0; 
+static uint32_t currentStepPos = 0;
 
 // FUNCTIONS //
 
@@ -24,15 +24,27 @@ void TIM3_IRQHandler(void)
 	if((TIM3->SR & TIM_SR_UIF) != 0)
 	{
 		// Check if there are any steps to take
-		if(!(stepsRemaining == 0))
+		if(!(stepsRemaining <= 0))
 		{
 			// Take a step and decrement the number of steps left
 			stepperRun(stepMode);
-			stepsRemaining--;
+			
+			switch(stepMode)
+			{
+				case STPR_FULL_FRWRD:
+				case STPR_FULL_BCKWRD:
+					stepsRemaining -= 2;
+					break;
+				case STPR_HALF_FRWRD:
+				case STPR_HALF_BCKWRD:
+					stepsRemaining--;
+					break;
+			}
 		}
 		else
 		{
 			stepMode = STPR_STOP;
+			stepsRemaining = 0;
 		}
 		
 		TIM3->SR &= ~TIM_SR_UIF;
@@ -48,23 +60,23 @@ void stepperInit(void)
 	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_IN2, MODER_OUT);
 	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_IN3, MODER_OUT);
 	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_IN4, MODER_OUT);
-	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_NSLEEP, MODER_OUT);
-	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_NFAULT, MODER_OUT);
-	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_TRQ, MODER_OUT);
-	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_MODE, MODER_OUT);
-	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_ISEN12, MODER_OUT);
-	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_ISEN34, MODER_OUT);
+//	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_NSLEEP, MODER_OUT);
+//	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_NFAULT, MODER_OUT);
+//	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_TRQ, MODER_OUT);
+//	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_MODE, MODER_OUT);
+//	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_ISEN12, MODER_OUT);
+//	GPIO_PIN_MODE(STPR_PORT, STPR_PIN_ISEN34, MODER_OUT);
 	
 	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_IN1, OTYPER_PUSH_PULL);
 	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_IN2, OTYPER_PUSH_PULL);
 	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_IN3, OTYPER_PUSH_PULL);
 	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_IN4, OTYPER_PUSH_PULL);
-	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_NSLEEP, OTYPER_PUSH_PULL);
-	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_NFAULT, OTYPER_PUSH_PULL);
-	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_TRQ, OTYPER_PUSH_PULL);
-	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_MODE, OTYPER_PUSH_PULL);
-	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN12, OTYPER_PUSH_PULL);
-	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN34, OTYPER_PUSH_PULL);
+//	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_NSLEEP, OTYPER_PUSH_PULL);
+//	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_NFAULT, OTYPER_PUSH_PULL);
+//	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_TRQ, OTYPER_PUSH_PULL);
+//	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_MODE, OTYPER_PUSH_PULL);
+//	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN12, OTYPER_PUSH_PULL);
+//	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN34, OTYPER_PUSH_PULL);
 }
 
 void TIM3_Init(void)
@@ -104,7 +116,7 @@ void Stepper_Home(void)
 	while(!(Get_LimSwitch_State() == LIM_RIGHT_TOUCH))
 	{
 		stepperRun(STPR_HALF_FRWRD);
-		Delay_ms(STPR_MIN_DELAY_MS);
+		Delay_us(2500);
 	}
 	
 	totalSteps = 0;	//set totalSteps to 0
@@ -114,10 +126,12 @@ void Stepper_Home(void)
 	{
 		stepperRun(STPR_HALF_BCKWRD);
 		totalSteps++;
-		Delay_ms(STPR_MIN_DELAY_MS);
+		Delay_us(2500);
 	}
 	
-	Stepper_Set(STPR_FULL, 0x0FFF, 0);	//goto stepper home
+	currentStepPos = 0;
+	
+	Stepper_Set(STPR_FULL, 0x13B, 0);	//goto stepper home
 	
 }
 
@@ -165,23 +179,32 @@ void stepperRun(uint8_t usr_mode)
 // Will set the mode (full/half step), sets the speed of the step (ms delay per step), sets the position to go to in degrees (stepper will home to +/- 90 degrees)
 void Stepper_Set(uint8_t mode, uint16_t speed, int16_t position_degrees)
 {
-	uint8_t stepPos = 0;
+	double stepPos = 0;
 	
 	Set_Stepper_Speed(speed);	//set the speed
 	
-	stepPos = (totalSteps / 2) * (position_degrees + 90);	//convert position into appropriate step position
+	stepPos = (((double)totalSteps) / 180) * (((double)position_degrees) + 90);	//convert position into appropriate step position
 	
 	//use stepPos - currentStepPos to determine CW (+) and CCW (-) stepping
 	if((currentStepPos - stepPos) > 0)
 	{
-		if(mode == STPR_FULL) Set_Stepper_Mode(STPR_FULL_FRWRD);
-		else if(mode == STPR_HALF) Set_Stepper_Mode(STPR_HALF_FRWRD);
-	}
-	else if ((currentStepPos - stepPos) < 0)
-	{
 		if(mode == STPR_FULL) Set_Stepper_Mode(STPR_FULL_BCKWRD);
 		else if(mode == STPR_HALF) Set_Stepper_Mode(STPR_HALF_BCKWRD);
 	}
+	else if ((currentStepPos - stepPos) < 0)
+	{
+		if(mode == STPR_FULL) Set_Stepper_Mode(STPR_FULL_FRWRD);
+		else if(mode == STPR_HALF) Set_Stepper_Mode(STPR_HALF_FRWRD);
+	}
+	
+	//if(mode == STPR_FULL)
+	//{
+	//	stepsRemaining = abs(currentStepPos - stepPos)/2;	//set the number of steps left to step
+	//}
+	//else
+	//{
+	//	stepsRemaining = abs(currentStepPos - stepPos);	//set the number of steps left to step
+	//}
 	
 	stepsRemaining = abs(currentStepPos - stepPos);	//set the number of steps left to step
 }
@@ -221,14 +244,19 @@ void LimSwitch_Init(void)
 	
 	GPIO_PIN_DRV_TYPE(LIM_PORT, LIM_PIN_LEFT, OTYPER_PUSH_PULL);
 	GPIO_PIN_DRV_TYPE(LIM_PORT, LIM_PIN_RIGHT, OTYPER_PUSH_PULL);
+	
+	GPIO_PIN_PUPD(LIM_PORT, LIM_PIN_LEFT, PUPDR_NO_PUPD);
+	GPIO_PIN_PUPD(LIM_PORT, LIM_PIN_RIGHT, PUPDR_NO_PUPD);
 }
 
 uint8_t Get_LimSwitch_State(void)
 {
+	//take copy of input
 	uint16_t limIn = LIM_IN;
 	
-	if(limIn & (1UL << LIM_PIN_RIGHT)) return LIM_RIGHT_TOUCH;
-	else if(limIn & (1UL << LIM_PIN_LEFT)) return LIM_LEFT_TOUCH;
+	//check to see which pin is pressed (low means press)
+	if(!(limIn & (0x1UL << LIM_PIN_LEFT))) return LIM_LEFT_TOUCH;
+	else if(!(limIn & (0x1UL << LIM_PIN_RIGHT))) return LIM_RIGHT_TOUCH;
 	else return LIM_NO_TOUCH;
 }
 

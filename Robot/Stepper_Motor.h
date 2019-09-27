@@ -12,22 +12,24 @@
 
 #define STPR_PIN_IN1			0
 #define STPR_PIN_IN2			1
-#define STPR_PIN_IN3			2
-#define STPR_PIN_IN4			3
-#define STPR_PIN_NSLEEP		4
-#define STPR_PIN_NFAULT		6
-#define STPR_PIN_TRQ			7
-#define STPR_PIN_ISEN12		8
-#define STPR_PIN_ISEN34		9
-#define STPR_PIN_MODE			10
+#define STPR_PIN_IN3			6
+#define STPR_PIN_IN4			7
 
-#define STPR_OUT_MASK			(0xF << STPR_PIN_IN1)
+// HARD-WIRED ON DAN'S BOARD
+//#define STPR_PIN_NSLEEP		4
+//#define STPR_PIN_NFAULT		6
+//#define STPR_PIN_TRQ			7
+//#define STPR_PIN_ISEN12		8
+//#define STPR_PIN_ISEN34		9
+//#define STPR_PIN_MODE			10
+
+#define STPR_OUT_MASK	(0xC3 << STPR_PIN_IN1)
 
 // PIN SETUP - LIM //
-#define LIM_PORT					A
+#define LIM_PORT					B
 
-#define LIM_PIN_RIGHT			13
-#define LIM_PIN_LEFT			14
+#define LIM_PIN_RIGHT			14
+#define LIM_PIN_LEFT			13
 
 #define LIM_NO_TOUCH			0
 #define LIM_LEFT_TOUCH		1
@@ -36,15 +38,26 @@
 #define LIM_IN					(GPIO_PORT(LIM_PORT)->IDR)
 
 //stepper motor states
+//#define STATES		8
+//#define STATE0		0x8
+//#define STATE1		0xA
+//#define STATE2		0x2
+//#define STATE3		0x6
+//#define STATE4		0x4
+//#define STATE5		0x5
+//#define STATE6		0x1
+//#define STATE7		0x9
+
+//stepper motor stated - CONFIGURED FOR PINOUT
 #define STATES		8
-#define STATE0		0x8
-#define STATE1		0xA
-#define STATE2		0x2
-#define STATE3		0x6
-#define STATE4		0x4
-#define STATE5		0x5
-#define STATE6		0x1
-#define STATE7		0x9
+#define STATE0		0x80
+#define STATE1		0x82
+#define STATE2		0x02
+#define STATE3		0x42
+#define STATE4		0x40
+#define STATE5		0x41
+#define STATE6		0x01
+#define STATE7		0x81
 
 // OUTPUT TO STEPPER //
 #define COUNTER_MAX					7
