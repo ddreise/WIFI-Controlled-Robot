@@ -16,7 +16,6 @@
 #include "DC_Motor.h"
 #include "UART.h"
 #include "Encoder.h"
-//#include "MACROS2.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
@@ -200,6 +199,12 @@ void Servo_Test()
 		RC_Position(45);		// In testing, Servo could not exceed +89 degrees. If > 89 degrees, the gears grind.
 		Delay_s(5);
 		RC_Position(-5);
+		Delay_s(5);
+		
+		// Test max and min
+		RC_Position(50);
+		Delay_s(5);
+		RC_Position(-10);
 		Delay_s(5);
 	}
 }
