@@ -21,7 +21,7 @@
  * September 27, 2019
  */
 
-//INCLUDE//
+// INCLUDE //
 #include <errno.h>
 #include <fcntl.h> 
 #include <stdio.h>
@@ -30,7 +30,9 @@
 #include <termios.h>
 #include <unistd.h>
 
-//DEFINE//
+#include "interface.h"
+
+// DEFINE //
 #define DISPLAY_STRING 1
 
 //read rs232 and output what the robot sends
@@ -89,6 +91,8 @@ void set_mincount(int fd, int mcount)
 
 int main()
 {
+#ifdef RS232
+	
     char *portname = "/dev/ttyS1";
     int fd;
     int wlen;
@@ -136,5 +140,7 @@ int main()
         }               
         /* repeat read to get full message */
     } while (1);
+#endif
+
 }
 

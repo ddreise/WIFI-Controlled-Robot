@@ -14,7 +14,9 @@ AM_CFLAGS =\
 bin_PROGRAMS = linux
 
 linux_SOURCES = \
-	main.c
+	main.c \
+	interface.c \
+	interface.h
 
 linux_LDFLAGS = 
 
