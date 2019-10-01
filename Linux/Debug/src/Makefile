@@ -14,7 +14,7 @@
 
 
 
-VPATH = /home/linuxuser/dev/engineering-project-v/Linux/src
+VPATH = /home/justin/dev/engineering-project-v/Linux/src
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
     false; \
@@ -101,7 +101,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_linux_OBJECTS = main.$(OBJEXT)
+am_linux_OBJECTS = main.$(OBJEXT) interface.$(OBJEXT)
 linux_OBJECTS = $(am_linux_OBJECTS)
 linux_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_$(V))
@@ -173,14 +173,14 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/linuxuser/dev/engineering-project-v/Linux/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/justin/dev/engineering-project-v/Linux/missing aclocal-1.15
 ALL_LINGUAS = 
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 0
 AR = ar
-AUTOCONF = ${SHELL} /home/linuxuser/dev/engineering-project-v/Linux/missing autoconf
-AUTOHEADER = ${SHELL} /home/linuxuser/dev/engineering-project-v/Linux/missing autoheader
-AUTOMAKE = ${SHELL} /home/linuxuser/dev/engineering-project-v/Linux/missing automake-1.15
+AUTOCONF = ${SHELL} /home/justin/dev/engineering-project-v/Linux/missing autoconf
+AUTOHEADER = ${SHELL} /home/justin/dev/engineering-project-v/Linux/missing autoheader
+AUTOMAKE = ${SHELL} /home/justin/dev/engineering-project-v/Linux/missing automake-1.15
 AWK = mawk
 CATALOGS = 
 CATOBJEXT = .gmo
@@ -231,10 +231,10 @@ LIPO =
 LN_S = ln -s
 LTLIBOBJS = 
 LT_SYS_LIBRARY_PATH = 
-MAKEINFO = ${SHELL} /home/linuxuser/dev/engineering-project-v/Linux/missing makeinfo
+MAKEINFO = ${SHELL} /home/justin/dev/engineering-project-v/Linux/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
-MKINSTALLDIRS = /home/linuxuser/dev/engineering-project-v/Linux/mkinstalldirs
+MKINSTALLDIRS = /home/justin/dev/engineering-project-v/Linux/mkinstalldirs
 MSGFMT = /usr/bin/msgfmt
 MSGFMT_OPTS = -c
 MSGMERGE = /usr/bin/msgmerge
@@ -264,10 +264,10 @@ STRIP = strip
 USE_NLS = yes
 VERSION = 0.1
 XGETTEXT = /usr/bin/xgettext
-abs_builddir = /home/linuxuser/dev/engineering-project-v/Linux/Debug/src
-abs_srcdir = /home/linuxuser/dev/engineering-project-v/Linux/src
-abs_top_builddir = /home/linuxuser/dev/engineering-project-v/Linux/Debug
-abs_top_srcdir = /home/linuxuser/dev/engineering-project-v/Linux
+abs_builddir = /home/justin/dev/engineering-project-v/Linux/Debug/src
+abs_srcdir = /home/justin/dev/engineering-project-v/Linux/src
+abs_top_builddir = /home/justin/dev/engineering-project-v/Linux/Debug
+abs_top_srcdir = /home/justin/dev/engineering-project-v/Linux
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -296,7 +296,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/linuxuser/dev/engineering-project-v/Linux/install-sh
+install_sh = ${SHELL} /home/justin/dev/engineering-project-v/Linux/install-sh
 intltool__v_merge_options_ = $(intltool__v_merge_options_$(AM_DEFAULT_VERBOSITY))
 intltool__v_merge_options_0 = -q
 libdir = ${exec_prefix}/lib
@@ -313,12 +313,12 @@ psdir = ${docdir}
 runstatedir = ${localstatedir}/run
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
-srcdir = /home/linuxuser/dev/engineering-project-v/Linux/src
+srcdir = /home/justin/dev/engineering-project-v/Linux/src
 sysconfdir = ${prefix}/etc
 target_alias = 
 top_build_prefix = ../
 top_builddir = ..
-top_srcdir = /home/linuxuser/dev/engineering-project-v/Linux
+top_srcdir = /home/justin/dev/engineering-project-v/Linux
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -329,7 +329,9 @@ AM_CFLAGS = \
 	 -g
 
 linux_SOURCES = \
-	main.c
+	main.c \
+	interface.c \
+	interface.h
 
 linux_LDFLAGS = 
 linux_LDADD = 
@@ -426,6 +428,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/interface.Po
 include ./$(DEPDIR)/main.Po
 
 .c.o:

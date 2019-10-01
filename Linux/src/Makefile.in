@@ -101,7 +101,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_linux_OBJECTS = main.$(OBJEXT)
+am_linux_OBJECTS = main.$(OBJEXT) interface.$(OBJEXT)
 linux_OBJECTS = $(am_linux_OBJECTS)
 linux_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -329,7 +329,9 @@ AM_CFLAGS = \
 	 -g
 
 linux_SOURCES = \
-	main.c
+	main.c \
+	interface.c \
+	interface.h
 
 linux_LDFLAGS = 
 linux_LDADD = 
@@ -426,6 +428,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .c.o:
