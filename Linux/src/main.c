@@ -142,5 +142,10 @@ int main()
     } while (1);
 #endif
 
+	ParseJoyconCmd("BA1");
+	ParseJoyconCmd("BA0");
+	ParseJoyconCmd("AR+050-070");
+	ParseJoyconCmd("E34");
+	
 }
 

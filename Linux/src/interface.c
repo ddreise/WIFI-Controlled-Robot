@@ -17,9 +17,20 @@
 // DEFINES //
 
 // FUNCTIONS //
-char *ParseJoycon(char *sInput)
+char *ParseJoyconCmd(char *sInput)
 {
 	//sInput would look something like this: BA1 for button A is on
 	//									 or: ARF50B50 for right analog is pressed forward 50% for m1 and backwards 50% for m2
-	
+	//ex: sInput = "BA1"
+	switch(sInput[0])
+	{
+		case 'B':
+			printf("Button press!\n");
+			break;
+		case 'A':
+			printf("Analog detect!\n");
+			break;
+		default:
+			printf("Error: Malformed command.\n");
+	}
 }

@@ -30,7 +30,7 @@
 
 // 2 - parse joystick input
 // 3 - form appropriate command syntax
-char *ParseJoycon(char *sInput);
+char *ParseJoyconCmd(char *sInput);
 
 // 4 - add command to output buffer which sends to robot
 // 5 - send commands from FIFO output buffer to robot and wait for response
