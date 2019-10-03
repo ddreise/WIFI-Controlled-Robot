@@ -10,6 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pArmCC>5060528::V5.06 update 5 (build 528)::ARMCC</pArmCC>
       <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
@@ -493,6 +494,11 @@
               <FileName>UART.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\UART.h</FilePath>
+            </File>
+            <File>
+              <FileName>Robot_Command.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Robot_Command.c</FilePath>
             </File>
           </Files>
         </Group>

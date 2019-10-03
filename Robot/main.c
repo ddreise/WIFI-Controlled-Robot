@@ -16,6 +16,7 @@
 #include "DC_Motor.h"
 #include "UART.h"
 #include "Encoder.h"
+#include "Robot_Command.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
@@ -27,7 +28,8 @@
 //#define UART	0 *** Implemented into RS232_Interface
 #define BUZ		0
 
-#define RS232_Interface	1
+#define RS232_Interface	0
+#define COMMAND_TEST 1
 
 //Prototypes
 void LCD_Test(void);
@@ -118,6 +120,13 @@ int main(void){
 		//get user input
 		get_Input(str);
 		
+		
+		// **********************************
+		if (str[0] == "$"){
+			CMD(str);
+		}
+		// **********************************
+		
 		LCDclear(); //need to clear LCD so that there is no left over characters
 		
 		LCD_Printf(SECOND_LINE, "%s", str); //output input to LCD screen for reference
@@ -130,6 +139,80 @@ int main(void){
 		else if(!strcmp(str, "6")) Beeper_Test();
 		
 		//keep performing action
+	}
+	
+	#endif
+	
+	
+	
+	
+	#if COMMAND_TEST
+	
+	TIM3_Init();
+	
+	UART1_init();
+	Encoder_Init();
+	stepperInit();
+	LimSwitch_Init();
+	DC_Init();
+	
+	RC_Init();	//needs to init last
+	
+	strcpy(str, "$H%");
+	CMD(str);
+	Delay_s(2);
+	
+	while(TRUE){
+		
+		Test_Menu();
+		
+		get_Input(str);
+		CMD(str);
+		
+		// *********************************************
+		// Home camera test
+
+//		strcpy(str, "$H%");
+//		CMD(str);
+		
+		// *********************************************
+		
+		// DC Motor Test
+//		strcpy(str, "$M100F100F%");
+//		CMD(str);
+//		Delay_s(2);
+//		
+//		strcpy(str, "$M050B050B%");
+//		CMD(str);
+//		Delay_s(2);
+//		
+//		strcpy(str, "$M100F050B%");
+//		CMD(str);
+//		Delay_s(2);
+//		
+//		strcpy(str, "$M050B100F%");
+//		CMD(str);
+//		Delay_s(2);
+//		
+//		strcpy(str, "$M000F000F%");
+//		CMD(str);
+//		Delay_s(2);
+//		
+		// *************************************************
+		// Camera movement test	
+		
+//		strcpy(str, "$CR0U%");
+//		CMD(str);
+
+//		strcpy(str, "$CL1S%");
+//		CMD(str);
+		
+		// *************************************************
+		// Acknowledgement Test
+		
+		
+		//	Delay_ms(5);
+		
 	}
 	
 	#endif
@@ -202,7 +285,7 @@ void Servo_Test()
 		Delay_s(5);
 		
 		// Test max and min
-		RC_Position(50);
+		RC_Position(90);
 		Delay_s(5);
 		RC_Position(-10);
 		Delay_s(5);
@@ -214,24 +297,30 @@ void Stepper_Test()
 	LCD_Printf(FIRST_LINE, "STEPPER");
 	
 	Stepper_Home();
+	LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+	Delay_ms(500);
 	
 	Delay_s(1);
 	
-	Stepper_Set(STPR_HALF, 0x13B, 45);
+	Stepper_Set(STPR_HALF, 0x13B, 95);
+	LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+	Delay_ms(500);
 	
 	Delay_s(1);
 	
-	Stepper_Set(STPR_HALF, 0x13B, -45);
+	Stepper_Set(STPR_HALF, 0x13B, -95);
+	LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+	Delay_ms(500);
 	
 	Delay_s(1);
 	
 	Stepper_Set(STPR_HALF, 0x13B, 0);
+	LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
+	Delay_ms(500);
 	
-	while(TRUE)
-	{
-		LCD_Printf(SECOND_LINE, "Stepper Pos: %d ", Get_Stepper_Position());
-		Delay_ms(500);
-	}
+	Delay_s(1);
+	
+
 }
 
 void Beeper_Test()

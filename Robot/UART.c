@@ -28,7 +28,6 @@
 #include <string.h>
 #include "stm32f303xe.h"
 #include "UART.h"
-//#include "MACROS2.h"
 #include "LCD.h"
 #include "Macros.h"
 
@@ -272,8 +271,16 @@ void get_Input(char *str){
 	do {
 		str[i] = read_USART();
 		i++;
+
 		
-		if(str[i-1] == '\r')
+		if(str[i-1] == '%')	// end character for command sequence
+		{
+			str[i-1] = 0;
+			break;
+		}
+		
+		//for testing menu
+		else if(str[i-1] == '\r')
 		{
 			str[i-1] = 0;
 			break;
