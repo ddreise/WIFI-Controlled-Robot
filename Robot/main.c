@@ -43,6 +43,7 @@ int main(void){
 
 	uint16_t counter;
 	char str[32];											// For UART
+	uint8_t i = 0;										// Synchronous command test variable
 	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
@@ -145,34 +146,42 @@ int main(void){
 	
 	
 	
-	
+	// **************************************************************************
+	// **     									COMMAND FUNCTION    													**
+	// *************************************************************************
 	#if COMMAND_TEST
 	
 	TIM3_Init();
 	
 	UART1_init();
 	Encoder_Init();
-	stepperInit();
 	LimSwitch_Init();
 	DC_Init();
 	
-	RC_Init();	//needs to init last
-	
-	strcpy(str, "$H%");
-	CMD(str);
-	Delay_s(2);
+	RC_Init();	//needs to init last. Correction: doesn't need to
+	stepperInit();
+
 	
 	while(TRUE){
 		
-		Test_Menu();
+		Command_Menu();
 		
 		get_Input(str);
 		CMD(str);
+		
+		if(i == 0xFF) {
+			LCD_Printf(FIRST_LINE, "STP%d SRV%d", Get_Stepper_Position, servo_position);
+			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", right_speed, left_speed);
+		}
+		i++;
+
 		
 		// *********************************************
 		// Home camera test
 
 //		strcpy(str, "$H%");
+//		CMD(str);
+//		strcpy(str, "\n");
 //		CMD(str);
 		
 		// *********************************************
@@ -197,22 +206,29 @@ int main(void){
 //		strcpy(str, "$M000F000F%");
 //		CMD(str);
 //		Delay_s(2);
-//		
+		
 		// *************************************************
 		// Camera movement test	
 		
 //		strcpy(str, "$CR0U%");
 //		CMD(str);
 
-//		strcpy(str, "$CL1S%");
+//		strcpy(str, "$CR1S%");
 //		CMD(str);
 		
 		// *************************************************
 		// Acknowledgement Test
 		
 		
-		//	Delay_ms(5);
 		
+		// *************************************************
+		// SYNCHRONOUS COMMAND TEST
+//		strcpy(str, "$M100F100F%");
+//		CMD(str);
+//		
+//		
+//		strcpy(str, "$CL0D%");
+//		CMD(str);
 	}
 	
 	#endif

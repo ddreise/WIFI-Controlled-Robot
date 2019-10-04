@@ -6,6 +6,7 @@
 #include "stm32f303xe.h"
 #include "Macros.h"
 #include "SysTick.h"
+#include "Robot_Command.h"
 #include <stdlib.h>
 
 // IMPORTANT VARIABLES //
@@ -79,6 +80,10 @@ void stepperInit(void)
 //	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_MODE, OTYPER_PUSH_PULL);
 //	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN12, OTYPER_PUSH_PULL);
 //	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN34, OTYPER_PUSH_PULL);
+
+	//strcpy(str, "$H%");
+	CMD("$H");
+	Delay_s(2);
 }
 
 void TIM3_Init(void)
@@ -239,18 +244,23 @@ void Set_Stepper_Steps(uint16_t steps)
 	
 	
 	// Need to Disable Interrupt so that stepsRemaining can actually be set to ZERO without interruption 
-	NVIC_DisableIRQ(TIM3_IRQn);
-	if(currentStepPos >= totalSteps) {	
+	
+	
+	if(currentStepPos >= totalSteps) {
+		NVIC_DisableIRQ(TIM3_IRQn);
 		stepsRemaining = 0;
 		currentStepPos = totalSteps;
+		NVIC_EnableIRQ(TIM3_IRQn);
+		Delay_ms(2);
+		
 	}
 	if(currentStepPos < 0) {
+		NVIC_DisableIRQ(TIM3_IRQn);
 		stepsRemaining = 0;
 		currentStepPos = 0;
+		NVIC_EnableIRQ(TIM3_IRQn);
+		Delay_ms(2);
 	}
-	NVIC_EnableIRQ(TIM3_IRQn);
-		
-	
 }
 
 uint16_t Get_Stepper_Steps(void)

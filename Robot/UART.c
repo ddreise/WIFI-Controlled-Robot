@@ -265,6 +265,14 @@ void Test_Menu(void){
 	
 }
 
+void Command_Menu(void){
+	
+	char menu[] = {"\n\rEnter a command: \n\r "};
+	
+	UART1_printf(menu);
+	
+}
+
 void get_Input(char *str){
 	
 	uint8_t i = 0;

@@ -105,20 +105,21 @@ void RC_Position(int8_t position_degree)
 	{
 		position_degree = MAX_UP_TILT;
 		//LCD_Printf(SECOND_LINE, "CANT EXCEED +45DEG");					// Error message
-		LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
+		//LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
 	}
 	else if(position_degree < MAX_DOWN_TILT) 
 	{
 		position_degree = MAX_DOWN_TILT;
 		//LCD_Printf(SECOND_LINE, "CANT EXCEED -5DEG");						// Error message
-		LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
+		//LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
 	}
 	else
 	{
-		LCDclear();
-		LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
+		//LCDclear();
+		//LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
 		
 	}
+
 	
 	RC_Pulse_Width(position_degree);
 	

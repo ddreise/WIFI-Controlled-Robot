@@ -32,6 +32,7 @@ void UART1_printf(char *fmt, ...);
 void UARTputc(char str);
 void UARTputs(char *str);
 void Test_Menu(void);
+void Command_Menu(void);
 void receive(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter);
 char read_USART(void);
 char read(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter);
