@@ -20,6 +20,9 @@
 #include <unistd.h>
 #include <math.h>
 #include <stdint.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 
 /**
  * Reads a joystick event from the joystick device.
@@ -71,6 +74,7 @@ struct axis_state {
     short x, y;
 };
 
+
 /**
  * Keeps track of the current axis state.
  *
@@ -109,97 +113,120 @@ int main(int argc, char *argv[])
     int stepperMotor = 0;
     int servoMotor = 0;
     
-    
-    
-    if (argc > 1)
-        device = argv[1];
-    else
-        device = "/dev/input/js0";
+    int fd;
+    char * myfifo = "/tmp/myfifo";
 
-    js = open(device, O_RDONLY);
+    /* create the FIFO (named pipe) */
+    mkfifo(myfifo, 0666);
 
-    if (js == -1)
-        perror("Could not open joystick");
+    /* write "Hi" to the FIFO */
+    fd = open(myfifo, O_WRONLY);
 
-	size_t axis_count = get_axis_count(js);
-	printf("axis count: %ld\n", axis_count);	
 
-    /* This loop will exit if the controller is unplugged. */
-    while (read_event(js, &event) == 0)
-    {
-        switch (event.type)
+    while (1){
+        
+        
+        if (argc > 1)
+            device = argv[1];
+        else
+            device = "/dev/input/js0";
+
+        js = open(device, O_RDONLY);
+
+        if (js == -1)
+            perror("Could not open joystick");
+
+        size_t axis_count = get_axis_count(js);
+        printf("axis count: %ld\n", axis_count);	
+
+        /* This loop will exit if the controller is unplugged. */
+        while (read_event(js, &event) == 0)
         {
-            case JS_EVENT_BUTTON:
-                if (event.number == 0) //Green Button A is pressed 
-                {
-                    printf("BA%s\n", event.value ? "1" : "0");
-                }
-                break;
-                if (axis = 1) //Green Button A is pressed 
-                {
-                    printf("BA%s\n", event.value ? "1" : "0");
-                }
-                break;
-            case JS_EVENT_AXIS:
-                axis = get_axis_state(&event, axes);
-                if (axis = 1)   //Right analog (DC motors)
-                
-                    if ( axes[axis].x == 0 )    //Straight forward or reverse (No turning)
+            switch (event.type)
+            {
+                case JS_EVENT_BUTTON:
+                    if (event.number == 0) //Green Button A is pressed 
                     {
-                        rightMotorSpeed = round( axes[axis].y * ( -1 / 327.67 ) );
-                        leftMotorSpeed = rightMotorSpeed;
+                        char output[100];
+                        
+                        sprintf(output, "$BA%s$\n", event.value ? "1" : "0");
+                        write(fd, output, 5);
+                        
                     }
-                    if ( axes[axis].y == 0 || axes[axis].x == 0 )    //No forward or reverse (Only turning --> motors are complete opposite)
-                    {
-                        if ( axes[axis].x < 0 )    //Turning left (left motor reverse, right motor forward)
-                        {
-                            leftMotorSpeed = round( axes[axis].x * ( 1 / 327.67 ) );
-                            axes[axis].x = 2 * leftMotorSpeed - 100;
- //                           rightMotorSpeed = -leftMotorSpeed;
-                        }
-                        else if ( axes[axis].x > 0 )    //Turning right (right motor reverse, left motor forward)
-                        {
-                            rightMotorSpeed = round( axes[axis].x * ( 1 / 327.67 ) );
-                            axes[axis].y = -2 * leftMotorSpeed - 100;
- //                           leftMotorSpeed = -rightMotorSpeed;
-                        }
-                    }
-                    //printf("AR%+04d%+04d\n", leftMotorSpeed, rightMotorSpeed);
-                
+                    break;
+                case JS_EVENT_AXIS:
+                    axis = get_axis_state(&event, axes);
+                    if (axis = 1)   //Right analog (DC motors)
                     
+                        if ( axes[axis].x == 0 )    //Straight forward or reverse (No turning)
+                        {
+                            rightMotorSpeed = round( axes[axis].y * ( -1 / 327.67 ) );
+                            leftMotorSpeed = rightMotorSpeed;
+                        }
+                        if ( axes[axis].y == 0 || axes[axis].x == 0 )    //No forward or reverse (Only turning --> motors are complete opposite)
+                        {
+                            if ( axes[axis].x < 0 )    //Turning left (left motor reverse, right motor forward)
+                            {
+                                leftMotorSpeed = round( axes[axis].x * ( 1 / 327.67 ) );
+                                axes[axis].x = 2 * leftMotorSpeed - 100;
+    
+                            }
+                            else if ( axes[axis].x > 0 )    //Turning right (right motor reverse, left motor forward)
+                            {
+                                rightMotorSpeed = round( axes[axis].x * ( 1 / 327.67 ) );
+                                axes[axis].y = -2 * leftMotorSpeed - 100;
+
+                            }
+                        }
+    
+
+                    if (axis = 0)   //Left  analog (Camera)
                     
-                if (axis = 0)   //Left  analog (Camera)
-                
-                    if ( (axes[axis].x >= -2) && (axes[axis].x <= 0) && axes[axis].y <= 32767 )    //Tilt down
-                    {
-                        stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
-                        servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
-                    }
-                    if (( axes[axis].x >= -2) && (axes[axis].x <= 0) && axes[axis].y >= -32767 )    //Tilt up
-                    {
-                        stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
-                        servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
-                    }
-                    if (( axes[axis].y >= -2) && (axes[axis].y <= 0) && axes[axis].x <= 32767  )    //Pan Right
-                    {
-                        stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
-                        servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
-                    }
-                    if (( axes[axis].y >= -2) && (axes[axis].y <= 0) && axes[axis].x >= -32767  )    //Pan Left
-                    {
-                        stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
-                        servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
-                    }
-                     printf("AL%+04d%+04d   AR%+04d%+04d\n", stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
-                
-                break;
-            default:
-                /* Ignore init events. */
-                break;
+                        if ( (axes[axis].x >= -2) && (axes[axis].x <= 0) && axes[axis].y <= 32767 )    //Tilt down
+                        {
+                            stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
+                            servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
+                        }
+                        if (( axes[axis].x >= -2) && (axes[axis].x <= 0) && axes[axis].y >= -32767 )    //Tilt up
+                        {
+                            stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
+                            servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
+                        }
+                        if (( axes[axis].y >= -2) && (axes[axis].y <= 0) && axes[axis].x <= 32767  )    //Pan Right
+                        {
+                            stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
+                            servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
+                        }
+                        if (( axes[axis].y >= -2) && (axes[axis].y <= 0) && axes[axis].x >= -32767  )    //Pan Left
+                        {
+                            stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
+                            servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
+                        }
+                        
+                        char output[100];
+                        
+                        sprintf(output, "$AL%+04d%+04d$AR%+04d%+04d$\n", stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
+                        write(fd, output, 23);
+    //                      return (stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
+
+                    break;
+                default:
+                    
+                    break;
+            }
         }
     }
-
-    close(js);
+        /* remove the FIFO */
+    unlink(myfifo);
+        close(js);
     return 0;
 }
+    
+int send()
+{
+      
+    return 0;
+}
+
+
 
