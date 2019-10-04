@@ -31,6 +31,7 @@
 #include <unistd.h>
 
 #include "interface.h"
+#include "receive.h"
 
 // DEFINE //
 #define DISPLAY_STRING 1
@@ -155,7 +156,7 @@ int main()
 	ParseJoyconCmd("AR+050-050");
 	
 	ParseJoyconCmd("AL+100-100");
-	printf("%s", gs_Command);
+	printf("%s\n", gs_Command);
 	
 	ParseJoyconCmd("AG+100+100");
 	ParseJoyconCmd("E34");
@@ -187,7 +188,21 @@ int main()
 	else printf("Wrote %d bytes!\n", wlen);
     tcdrain(fd);    /* delay for output */
 #endif
-	
+
+#ifdef INPUT_TEST
+	rec_JoystickInit();
+
+	while(1)
+	{
+		rec_JoystickInput();
+	}
+
+	rec_JoystickClose();
+void rec_JoystickClose(void);
+
+//read named pipe
+void rec_JoystickInput(char *sJoystickBuffer);
+#endif
 	return 0;
 }
 

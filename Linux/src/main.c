@@ -31,6 +31,7 @@
 #include <unistd.h>
 
 #include "interface.h"
+#include "receive.h"
 
 // DEFINE //
 #define DISPLAY_STRING 1
@@ -187,7 +188,17 @@ int main()
 	else printf("Wrote %d bytes!\n", wlen);
     tcdrain(fd);    /* delay for output */
 #endif
-	
+
+#ifdef INPUT_TEST
+	rec_JoystickInit();
+
+	while(1)
+	{
+		rec_JoystickInput();
+	}
+
+	rec_JoystickClose();
+#endif
 	return 0;
 }
 

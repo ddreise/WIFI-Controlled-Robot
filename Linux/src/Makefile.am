@@ -18,7 +18,9 @@ linux_SOURCES = \
 	interface.c \
 	interface.h \
 	commands.c \
-	commands.h
+	commands.h \
+	receive.c \
+	receive.h
 
 linux_LDFLAGS = 
 

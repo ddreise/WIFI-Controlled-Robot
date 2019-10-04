@@ -102,7 +102,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_linux_OBJECTS = main.$(OBJEXT) interface.$(OBJEXT) \
-	commands.$(OBJEXT)
+	commands.$(OBJEXT) receive.$(OBJEXT)
 linux_OBJECTS = $(am_linux_OBJECTS)
 linux_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_$(V))
@@ -334,7 +334,9 @@ linux_SOURCES = \
 	interface.c \
 	interface.h \
 	commands.c \
-	commands.h
+	commands.h \
+	receive.c \
+	receive.h
 
 linux_LDFLAGS = 
 linux_LDADD = 
@@ -434,6 +436,7 @@ distclean-compile:
 include ./$(DEPDIR)/commands.Po
 include ./$(DEPDIR)/interface.Po
 include ./$(DEPDIR)/main.Po
+include ./$(DEPDIR)/receive.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
