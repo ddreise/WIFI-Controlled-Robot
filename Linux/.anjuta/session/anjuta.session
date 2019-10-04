@@ -2,16 +2,16 @@
 Maximized=1
 Geometry=1853x1025+67+27
 
+[File Loader]
+Files=../../src/main.c#235%%%../../src/interface.c#18%%%../../src/interface.h#26%%%../../src/receive.c#27%%%../../src/receive.h#21
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
 [Execution]
 Program uri=../../Debug/src/linux
 Run in terminal=2
 Working directories=../../.
-
-[File Loader]
-Files=../../src/main.c#166%%%../../src/interface.c#65%%%../../src/interface.h#26%%%../../src/commands.h#22%%%../../src/commands.c#16
-
-[Document Manager]
-bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 
 [Project Manager]
 Shortcut=Linux//src//linux

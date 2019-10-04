@@ -13,8 +13,12 @@
 #define RECEIVE_H
 
 #define MAX_JOYSTICK_BUFFER 250
+#define COMMAND_LIST 3
 
 extern char gs_JoystickBuffer[MAX_JOYSTICK_BUFFER];
+extern char *gs_JoystickInput;
+
+extern char delim[3];
 
 //open pipe
 void rec_JoystickInit(void);
@@ -23,6 +27,8 @@ void rec_JoystickInit(void);
 void rec_JoystickClose(void);
 
 //read named pipe
-void rec_JoystickInput(char *sJoystickBuffer);
+void rec_JoystickInput(void);
+
+void rec_CommandList(void);
 
 #endif

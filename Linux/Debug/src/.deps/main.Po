@@ -60,7 +60,8 @@ main.o: /home/justin/dev/engineering-project-v/Linux/src/main.c \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /home/justin/dev/engineering-project-v/Linux/src/interface.h
+ /home/justin/dev/engineering-project-v/Linux/src/interface.h \
+ /home/justin/dev/engineering-project-v/Linux/src/receive.h
 
 /usr/include/stdc-predef.h:
 
@@ -207,3 +208,5 @@ main.o: /home/justin/dev/engineering-project-v/Linux/src/main.c \
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
 
 /home/justin/dev/engineering-project-v/Linux/src/interface.h:
+
+/home/justin/dev/engineering-project-v/Linux/src/receive.h:

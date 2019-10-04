@@ -36,7 +36,8 @@
 // DEFINE //
 #define DISPLAY_STRING 1
 
-#define TESTING_ANALOG
+#define FULL_TEST
+
 
 //read rs232 and output what the robot sends
 //based off of: https://stackoverflow.com/questions/6947413/how-to-open-read-and-write-from-serial-port-in-c
@@ -198,11 +199,50 @@ int main()
 	}
 
 	rec_JoystickClose();
-void rec_JoystickClose(void);
-
-//read named pipe
-void rec_JoystickInput(char *sJoystickBuffer);
 #endif
+
+#ifdef FULL_TEST
+	rec_JoystickInit();
+
+	int i = 0;
+
+	while(1)
+	{	
+		rec_JoystickInput();
+
+		while(gs_JoystickInput != NULL)
+		{
+			//get current command
+			rec_CommandList();
+		
+			char *portname = "/dev/ttyS0";
+    		int fd;
+    		int wlen;
+	
+    		fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
+    		if (fd < 0) {
+        		printf("Error opening %s: %s\n", portname, strerror(errno));
+        		return -1;
+    		}
+    		/*baudrate 115200, 8 bits, no parity, 1 stop bit */
+    		set_interface_attribs(fd, B9600);
+    		//set_mincount(fd, 0);                /* set to pure timed read */
+
+			ParseJoyconCmd(gs_JoystickInput[i]);
+			gs_JoystickInput = strtok(NULL, delim);
+	
+    		/* simple output */
+			printf("Sending: %d bytes: %s\n", (int)strlen(gs_Command), gs_Command);
+    		wlen = write(fd, gs_Command, strlen(gs_Command));
+    		if (wlen != strlen(gs_Command)) {
+        		printf("Error from write: %d, %d\n", wlen, errno);
+    		}
+			else printf("Wrote %d bytes!\n", wlen);
+    		tcdrain(fd);    /* delay for output */
+		}
+	}
+#endif
+	
 	return 0;
 }
 

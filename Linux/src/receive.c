@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -21,6 +22,9 @@
 static int fd;
 char * myfifo = "/tmp/myfifo";
 char gs_JoystickBuffer[MAX_JOYSTICK_BUFFER];
+char *gs_JoystickInput;
+
+char delim[3] = "$";
 
 //open pipe
 void rec_JoystickInit(void)
@@ -35,8 +39,13 @@ void rec_JoystickClose(void)
 }
 
 //read named pipe
-void rec_JoystickInput()
+void rec_JoystickInput(void)
 {
 	read(fd, gs_JoystickBuffer, MAX_JOYSTICK_BUFFER);
-    printf("Received: %s\n", gs_JoystickBuffer);
+    //printf("Received: %s\n", gs_JoystickBuffer);
+}
+
+void rec_CommandList(void)
+{
+	gs_JoystickInput = strtok(&gs_JoystickBuffer[1], delim);
 }
