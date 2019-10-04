@@ -18,5 +18,9 @@
 // PROTOTYPES //
 // form and return homing command
 void cmd_Home(char cState);
+void cmd_Motor(char *sAxis);
+void cmd_Camera(char *sAxis);
+
+char* itoa(int value, char* result, int base);
 
 #endif

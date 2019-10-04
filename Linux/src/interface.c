@@ -31,17 +31,17 @@ void ParseJoyconCmd(char *sInput)
 	switch(sInput[0])
 	{
 		case 'B':
-			ButtonPress(sInput);
+			ButtonInput(sInput);
 			break;
 		case 'A':
-			printf("Analog detect!\n");
+			AnalogInput(sInput);
 			break;
 		default:
 			printf("Error: Unknown command identifier: %c\n", sInput[0]);
 	}
 }
 
-void ButtonPress(char* sInput)
+void ButtonInput(char* sInput)
 {	
 	switch(sInput[1])
 	{
@@ -50,5 +50,26 @@ void ButtonPress(char* sInput)
 			break;
 		default:
 			printf("Error: Unknown button pressed: %c\n", sInput[1]);
+	}
+}
+
+void AnalogInput(char *sInput)
+{
+	char sAxis[COMMAND_LENGTH];
+	
+	switch(sInput[1])
+	{
+		case 'L':
+			//extract values from motor out of string
+			memcpy(sAxis, &sInput[2], 8);
+			cmd_Camera(sAxis);
+			break;
+		case 'R':
+			//extract values from motor out of string
+			memcpy(sAxis, &sInput[2], 8);
+			cmd_Motor(sAxis);
+			break;
+		default:
+			printf("Error: Unknown analog input: %c\n", sInput[1]);
 	}
 }

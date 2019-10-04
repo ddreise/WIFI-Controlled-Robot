@@ -35,6 +35,8 @@
 // DEFINE //
 #define DISPLAY_STRING 1
 
+#define TESTING_ANALOG
+
 //read rs232 and output what the robot sends
 //based off of: https://stackoverflow.com/questions/6947413/how-to-open-read-and-write-from-serial-port-in-c
 int set_interface_attribs(int fd, int speed)
@@ -142,25 +144,28 @@ int main()
     } while (1);
 #endif
 
-#ifdef TESTING
+#ifdef TESTING_BUTTON
 	ParseJoyconCmd("BA1");
 	printf("%s\n", gs_Command);
-	
 	ParseJoyconCmd("BA0");
 	ParseJoyconCmd("BB0");
+#endif
+
+#ifdef TESTING_ANALOG
+	ParseJoyconCmd("AR+050-050");
 	
-	ParseJoyconCmd("AR+050-070");
 	ParseJoyconCmd("AL+100-100");
+	printf("%s\n", gs_Command);
+	
+	ParseJoyconCmd("AG+100+100");
 	ParseJoyconCmd("E34");
 #endif
 
-#ifdef RS232_TEST
+#ifdef RS232_OUTPUT
 
-	char *portname = "/dev/ttyS1";
+	char *portname = "/dev/ttyS0";
     int fd;
     int wlen;
-
-	char *output = "Operational\r\n";
 	
     fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
     if (fd < 0) {
@@ -171,39 +176,16 @@ int main()
     set_interface_attribs(fd, B9600);
     //set_mincount(fd, 0);                /* set to pure timed read */
 
+	ParseJoyconCmd("AR+000-000");
+	
     /* simple output */
-    wlen = write(fd, output, strlen(output));
-    if (wlen != strlen(output)) {
+	printf("Sending: %d bytes: %s\n", (int)strlen(gs_Command), gs_Command);
+    wlen = write(fd, gs_Command, strlen(gs_Command));
+    if (wlen != strlen(gs_Command)) {
         printf("Error from write: %d, %d\n", wlen, errno);
     }
+	else printf("Wrote %d bytes!\n", wlen);
     tcdrain(fd);    /* delay for output */
-
-
-    /* simple noncanonical input */
-    do {
-        unsigned char buf[256];
-        int rdlen;
-
-        rdlen = read(fd, buf, sizeof(buf) - 1);
-        if (rdlen > 0) {
-#ifdef DISPLAY_STRING
-            buf[rdlen] = 0;
-            printf("%s", buf);
-#else /* display hex */
-            unsigned char   *p;
-            //printf("Read %d:", rdlen);
-            for (p = buf; rdlen-- > 0; p++)
-                printf(" 0x%x", *p);
-            printf("\n");
-#endif
-        } else if (rdlen < 0) {
-            printf("Error from read: %d: %s\n", rdlen, strerror(errno));
-        } else {  /* rdlen == 0 */
-            printf("Timeout from read\n");
-        }               
-        /* repeat read to get full message */
-    } while (1);
-	
 #endif
 	
 	return 0;

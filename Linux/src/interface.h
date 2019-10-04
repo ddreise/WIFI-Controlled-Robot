@@ -23,7 +23,7 @@
 #define INTERFACE_H
 
 // DEFINES //
-#define COMMAND_LENGTH 10
+#define COMMAND_LENGTH 20
 
 // GLOBAL VARIABLES //
 extern char gs_Command[COMMAND_LENGTH];
@@ -35,7 +35,8 @@ extern char gs_Command[COMMAND_LENGTH];
 // 2 - parse joystick input
 // 3 - form appropriate command syntax
 void ParseJoyconCmd(char *sInput);
-void ButtonPress(char *sInput);
+void ButtonInput(char *sInput);
+void AnalogInput(char *sInput);
 
 // 4 - add command to output buffer which sends to robot
 // 5 - send commands from FIFO output buffer to robot and wait for response
