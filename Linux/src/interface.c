@@ -11,26 +11,44 @@
 
 // INCLUDES //
 #include <stdio.h>
+#include <string.h>
 
 #include "interface.h"
+#include "commands.h"
 
 // DEFINES //
 
+// GLOBAL VARIABLES //
+char gs_Command[COMMAND_LENGTH];
+
 // FUNCTIONS //
-char *ParseJoyconCmd(char *sInput)
+void ParseJoyconCmd(char *sInput)
 {
 	//sInput would look something like this: BA1 for button A is on
-	//									 or: ARF50B50 for right analog is pressed forward 50% for m1 and backwards 50% for m2
+	//									 or: AR+050-050 for right analog is pressed forward 50% for m1 and backwards 50% for m2
 	//ex: sInput = "BA1"
+	
 	switch(sInput[0])
 	{
 		case 'B':
-			printf("Button press!\n");
+			ButtonPress(sInput);
 			break;
 		case 'A':
 			printf("Analog detect!\n");
 			break;
 		default:
-			printf("Error: Malformed command.\n");
+			printf("Error: Unknown command identifier: %c\n", sInput[0]);
+	}
+}
+
+void ButtonPress(char* sInput)
+{	
+	switch(sInput[1])
+	{
+		case 'A':
+			cmd_Home(sInput[2]);
+			break;
+		default:
+			printf("Error: Unknown button pressed: %c\n", sInput[1]);
 	}
 }

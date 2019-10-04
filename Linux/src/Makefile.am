@@ -16,7 +16,9 @@ bin_PROGRAMS = linux
 linux_SOURCES = \
 	main.c \
 	interface.c \
-	interface.h
+	interface.h \
+	commands.c \
+	commands.h
 
 linux_LDFLAGS = 
 

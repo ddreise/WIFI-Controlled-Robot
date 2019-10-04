@@ -142,10 +142,24 @@ int main()
     } while (1);
 #endif
 
+#ifdef TESTING
 	ParseJoyconCmd("BA1");
-	ParseJoyconCmd("BA0");
-	ParseJoyconCmd("AR+050+070");
-	ParseJoyconCmd("E34");
+	printf("%s\n", gs_Command);
 	
+	ParseJoyconCmd("BA0");
+	ParseJoyconCmd("BB0");
+	
+	ParseJoyconCmd("AR+050-070");
+	ParseJoyconCmd("AL+100-100");
+	ParseJoyconCmd("E34");
+#endif
+
+#ifdef RS232_TEST
+
+	
+	
+#endif
+	
+	return 0;
 }
 

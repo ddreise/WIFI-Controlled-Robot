@@ -142,10 +142,70 @@ int main()
     } while (1);
 #endif
 
+#ifdef TESTING
 	ParseJoyconCmd("BA1");
-	ParseJoyconCmd("BA0");
-	ParseJoyconCmd("AR+050-070");
-	ParseJoyconCmd("E34");
+	printf("%s\n", gs_Command);
 	
+	ParseJoyconCmd("BA0");
+	ParseJoyconCmd("BB0");
+	
+	ParseJoyconCmd("AR+050-070");
+	ParseJoyconCmd("AL+100-100");
+	ParseJoyconCmd("E34");
+#endif
+
+#ifdef RS232_TEST
+
+	char *portname = "/dev/ttyS1";
+    int fd;
+    int wlen;
+
+	char *output = "Operational\r\n";
+	
+    fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
+    if (fd < 0) {
+        printf("Error opening %s: %s\n", portname, strerror(errno));
+        return -1;
+    }
+    /*baudrate 115200, 8 bits, no parity, 1 stop bit */
+    set_interface_attribs(fd, B9600);
+    //set_mincount(fd, 0);                /* set to pure timed read */
+
+    /* simple output */
+    wlen = write(fd, output, strlen(output));
+    if (wlen != strlen(output)) {
+        printf("Error from write: %d, %d\n", wlen, errno);
+    }
+    tcdrain(fd);    /* delay for output */
+
+
+    /* simple noncanonical input */
+    do {
+        unsigned char buf[256];
+        int rdlen;
+
+        rdlen = read(fd, buf, sizeof(buf) - 1);
+        if (rdlen > 0) {
+#ifdef DISPLAY_STRING
+            buf[rdlen] = 0;
+            printf("%s", buf);
+#else /* display hex */
+            unsigned char   *p;
+            //printf("Read %d:", rdlen);
+            for (p = buf; rdlen-- > 0; p++)
+                printf(" 0x%x", *p);
+            printf("\n");
+#endif
+        } else if (rdlen < 0) {
+            printf("Error from read: %d: %s\n", rdlen, strerror(errno));
+        } else {  /* rdlen == 0 */
+            printf("Timeout from read\n");
+        }               
+        /* repeat read to get full message */
+    } while (1);
+	
+#endif
+	
+	return 0;
 }
 
