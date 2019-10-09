@@ -267,7 +267,7 @@ void Test_Menu(void){
 
 void Command_Menu(void){
 	
-	char menu[] = {"\n\rEnter a command: \n\r "};
+	char menu[] = {"\n\rEnter the command:\n\n\r 1 - DC Motor \n\r 2 - Home \n\r 3 - Servo down \n\r 4 - Servo up \n\r 5 - Stepper Motor Right \n\r 6 - Stepper Motor Left\n\r "};
 	
 	UART1_printf(menu);
 	

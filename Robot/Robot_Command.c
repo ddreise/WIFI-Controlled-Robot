@@ -93,11 +93,11 @@ int CMD(char *str){
 		
 		// Stepper	
 		if (str[2] == 'L'  && str[3] == '1'){
-			Set_Stepper_Steps(1);
+			Set_Stepper_Steps(50);
 			Set_Stepper_Mode(STPR_HALF_BCKWRD);
 		}
 		else if (str[2] == 'R' && str[3] == '1'){
-			Set_Stepper_Steps(1);
+			Set_Stepper_Steps(50);
 			Set_Stepper_Mode(STPR_HALF_FRWRD);
 		}
 		else;

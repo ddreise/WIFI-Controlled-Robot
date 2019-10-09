@@ -44,6 +44,7 @@ int main(void){
 	uint16_t counter;
 	char str[32];											// For UART
 	uint8_t i = 0;										// Synchronous command test variable
+	uint8_t t = 0;
 	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
@@ -168,12 +169,84 @@ int main(void){
 		
 		get_Input(str);
 		CMD(str);
-		
-		if(i == 0xFF) {
-			LCD_Printf(FIRST_LINE, "STP%d SRV%d", Get_Stepper_Position, servo_position);
-			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", right_speed, left_speed);
-		}
-		i++;
+
+//		
+//		// Motor
+//		if(str[1] == '1'){
+//			strcpy(str, "$M100F100F%");
+//			CMD(str);
+//			Delay_s(2);
+//			
+//			strcpy(str, "$M050B050B%");
+//			CMD(str);
+//			Delay_s(2);
+//			
+//			strcpy(str, "$M100F050B%");
+//			CMD(str);
+//			Delay_s(2);
+//			
+//			strcpy(str, "$M050B100F%");
+//			CMD(str);
+//			Delay_s(2);
+//			
+//			strcpy(str, "$M000F000F%");
+//			CMD(str);
+//			Delay_s(2);
+//		}
+//		
+//		// Homing
+//		else if (str[1] == '2'){
+//			strcpy(str, "$H%");
+//			CMD(str);
+//			strcpy(str, "\n");
+//			CMD(str);
+//			Delay_s(2);
+//		}
+//		
+//		// Servo down
+//		else if (str[1] == '3'){
+//			for(t = 0; t < 0xFF; t++){
+//				strcpy(str, "$CL0D%");
+//				CMD(str);
+//			}
+//		}
+//		
+//		// Servo up
+//		else if (str[1] == '4'){
+//			for(t = 0; t < 0xFF; t++){
+//				strcpy(str, "$CL0U");
+//				CMD(str);
+//			}
+//		}
+//		
+//		// Stepper Right
+//		else if (str[1] == '5'){
+//			for(t = 0; t < 0xFF; t++){
+//				strcpy(str, "$CR1S");
+//				CMD(str);
+//			}
+//		}
+//		
+//		// Stepper Left
+//		else if (str[1] == '6'){
+//			for(t = 0; t < 0xFF; t++){
+//				strcpy(str, "$CL1S");
+//				CMD(str);
+//			}
+//		}
+//		else{
+//			CMD(str);
+//		}
+//			
+//			
+//		
+
+//		
+//		if(i == 0xFF) {
+//			LCD_Printf(FIRST_LINE, "STP%d SRV%d", Get_Stepper_Position, servo_position);
+//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", right_speed, left_speed);
+//		}
+//		i++;
 
 		
 		// *********************************************
