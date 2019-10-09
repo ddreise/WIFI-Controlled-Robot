@@ -210,8 +210,10 @@ int main()
 	{	
 		rec_JoystickInput();
 
-		while(gs_JoystickInput != NULL)
-		{
+		//rec_CommandList();
+		
+		//while(gs_JoystickInput != NULL)
+		//{
 			//get current command
 			rec_CommandList();
 		
@@ -228,7 +230,8 @@ int main()
     		set_interface_attribs(fd, B9600);
     		//set_mincount(fd, 0);                /* set to pure timed read */
 
-			ParseJoyconCmd(gs_JoystickInput[i]);
+			ParseJoyconCmd(gs_JoystickInput);
+			printf("%s\n", gs_JoystickInput);
 			gs_JoystickInput = strtok(NULL, delim);
 	
     		/* simple output */
@@ -239,7 +242,7 @@ int main()
     		}
 			else printf("Wrote %d bytes!\n", wlen);
     		tcdrain(fd);    /* delay for output */
-		}
+		//}
 	}
 #endif
 	

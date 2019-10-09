@@ -210,6 +210,8 @@ int main()
 	{	
 		rec_JoystickInput();
 
+		rec_CommandList();
+		
 		while(gs_JoystickInput != NULL)
 		{
 			//get current command
@@ -229,6 +231,7 @@ int main()
     		//set_mincount(fd, 0);                /* set to pure timed read */
 
 			ParseJoyconCmd(gs_JoystickInput);
+			printf("%s\n", gs_JoystickInput);
 			gs_JoystickInput = strtok(NULL, delim);
 	
     		/* simple output */

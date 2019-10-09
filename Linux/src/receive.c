@@ -19,7 +19,7 @@
 
 #include "receive.h"
 
-static int fd;
+static int fdJ;
 char * myfifo = "/tmp/myfifo";
 char gs_JoystickBuffer[MAX_JOYSTICK_BUFFER];
 char *gs_JoystickInput;
@@ -29,19 +29,19 @@ char delim[3] = "$";
 //open pipe
 void rec_JoystickInit(void)
 {
-	fd = open(myfifo, O_RDONLY);
+	fdJ = open(myfifo, O_RDONLY);
 }
 
 //close pipe
 void rec_JoystickClose(void)
 {
-	close(fd);
+	close(fdJ);
 }
 
 //read named pipe
 void rec_JoystickInput(void)
 {
-	read(fd, gs_JoystickBuffer, MAX_JOYSTICK_BUFFER);
+	read(fdJ, gs_JoystickBuffer, MAX_JOYSTICK_BUFFER);
     //printf("Received: %s\n", gs_JoystickBuffer);
 }
 
