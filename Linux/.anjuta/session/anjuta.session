@@ -1,0 +1,31 @@
+[Anjuta]
+Maximized=1
+Geometry=1853x1025+67+27
+
+[Execution]
+Program uri=../../Debug/src/linux
+Run in terminal=2
+Working directories=../../.
+
+[File Loader]
+Files=../../src/main.c#222%%%../../src/interface.c#32%%%../../src/interface.h#26%%%../../src/receive.c#53%%%../../src/receive.h#16
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
+[Project Manager]
+Shortcut=Linux//src//linux
+Expand=linux%%%Linux%%%Linux//src%%%Linux//src//linux
+
+[Build]
+Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized%%%1:MinGW32:MinGW32
+Selected Configuration=Debug
+BuildArgs/Default=--enable-maintainer-mode
+BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
+BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
+BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
+
+[Debugger]
+Watch=\sgs_JoystickBuffer
+Breakpoint=1:../../src/main.c:234:0:%%%1:../../src/main.c:225:0:
+Stop at beginning=2
