@@ -35,7 +35,7 @@
 
 char USART1_Buffer[BUFFERSIZE];
 char string_buffer[BUFFERSIZE];
-volatile uint32_t Rx_Counter = 0;
+volatile uint32_t Rx_Counter = 0;	
 uint8_t temp;
 uint8_t out_counter = 0;
 uint8_t in_counter = 0;
@@ -159,7 +159,7 @@ void USART1_IRQHandler(void){
 	receive(USART1, USART1_Buffer, &Rx_Counter); // &Rx_Counter
 }
 
-void receive(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter){	// *pCounter
+void receive(USART_TypeDef *USARTx, char *buffer, volatile uint32_t *pCounter){	// *pCounter
 
 	
 		buffer[in_counter] = USART1->RDR;

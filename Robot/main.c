@@ -162,10 +162,9 @@ int main(void){
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
 
+	Command_Menu();
 	
 	while(TRUE){
-		
-		Command_Menu();
 		
 		get_Input(str);
 		CMD(str);
