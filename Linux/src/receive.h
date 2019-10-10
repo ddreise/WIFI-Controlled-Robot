@@ -12,13 +12,11 @@
 #ifndef RECEIVE_H
 #define RECEIVE_H
 
-#define MAX_JOYSTICK_BUFFER 250
+#define MAX_JOYSTICK_BUFFER 23
 #define COMMAND_LIST 3
 
 extern char gs_JoystickBuffer[MAX_JOYSTICK_BUFFER];
-extern char *gs_JoystickInput;
-
-extern char delim[3];
+extern char *gs_RawCommand;
 
 //open pipe
 void rec_JoystickInit(void);

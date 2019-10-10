@@ -202,47 +202,54 @@ int main()
 #endif
 
 #ifdef FULL_TEST
-	rec_JoystickInit();
-
 	int i = 0;
+	
+	char *portname = "/dev/ttyS0";
+    int fd;
+    int wlen;
 
+	rec_JoystickInit();
+	
+    fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
+    if (fd < 0) {
+    	printf("Error opening %s: %s\n", portname, strerror(errno));
+        return -1;
+    }
+
+	/*baudrate 115200, 8 bits, no parity, 1 stop bit */
+    set_interface_attribs(fd, B9600);
+   	//set_mincount(fd, 0);                /* set to pure timed read */
+	
 	while(1)
 	{	
 		rec_JoystickInput();
 
-		rec_CommandList();
+		//printf("%s\n", gs_JoystickBuffer);
 		
-		while(gs_JoystickInput != NULL)
+		while(gs_RawCommand != NULL)
 		{
 			//get current command
-			rec_CommandList();
-		
-			char *portname = "/dev/ttyS0";
-    		int fd;
-    		int wlen;
-	
-    		fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
-    		if (fd < 0) {
-        		printf("Error opening %s: %s\n", portname, strerror(errno));
-        		return -1;
-    		}
-    		/*baudrate 115200, 8 bits, no parity, 1 stop bit */
-    		set_interface_attribs(fd, B9600);
-    		//set_mincount(fd, 0);                /* set to pure timed read */
+			//rec_CommandList();
 
-			ParseJoyconCmd(gs_JoystickInput);
-			printf("%s\n", gs_JoystickInput);
-			gs_JoystickInput = strtok(NULL, delim);
+			ParseJoyconCmd(gs_RawCommand);
+			//printf("Command: %s\n", gs_RawCommand);
 	
     		/* simple output */
-			printf("Sending: %d bytes: %s\n", (int)strlen(gs_Command), gs_Command);
+			//printf("Sending: %d bytes: %s\n", (int)strlen(gs_Command), gs_Command);
     		wlen = write(fd, gs_Command, strlen(gs_Command));
     		if (wlen != strlen(gs_Command)) {
         		printf("Error from write: %d, %d\n", wlen, errno);
     		}
-			else printf("Wrote %d bytes!\n", wlen);
+			else 
+			{
+				printf("Wrote %d bytes!: %s\n", wlen, gs_Command);
+			}
     		tcdrain(fd);    /* delay for output */
+
+			rec_CommandList();
 		}
+
+		for(i = 0; i < MAX_JOYSTICK_BUFFER; i++) gs_JoystickBuffer[i] = 0;
 	}
 #endif
 	

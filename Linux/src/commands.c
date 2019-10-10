@@ -28,8 +28,8 @@ void cmd_Home(char cState)
 		case '1':
 			strcpy(gs_Command, HOME_COMMAND);
 			break;
-		default: //since we don't care about anything other than an on state
-			printf("NOT HOMING...\n");
+		//default: //since we don't care about anything other than an on state
+			//printf("NOT HOMING...\n");
 	}
 }
 
@@ -161,7 +161,7 @@ void cmd_Camera(char *sAxis)
 	//put stepper back into string
 	itoa(iStepper, sStepper, 10);
 
-	printf("%s\n", sStepper);
+	//printf("%s\n", sStepper);
 
 	//put together command
 	//clear command

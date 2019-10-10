@@ -149,8 +149,8 @@ int main(int argc, char *argv[])
                     {
                         char output[100];
                         
-                        sprintf(output, "$BA%s$\n", event.value ? "1" : "0");
-                        write(fd, output, 5);
+                        sprintf(output, "BA%s00000000000000000$", event.value ? "1" : "0");
+                        write(fd, output, 23);
                         
                     }
                     break;
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
                         
                         char output[100];
                         
-                        sprintf(output, "$AL%+04d%+04d$AR%+04d%+04d$\n", stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
+                        sprintf(output, "AL%+04d%+04d$AR%+04d%+04d$", stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
                         write(fd, output, 23);
     //                      return (stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
 
