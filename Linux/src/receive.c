@@ -32,7 +32,7 @@ void rec_JoystickInit(void)
 {
 	fdJ = open(myfifo, O_RDONLY);
 	fcntl(fdJ, F_SETFL, O_NONBLOCK);
-	fcntl(fdJ, F_SETPIPE_SZ, MAX_JOYSTICK_BUFFER);
+	// fcntl(fdJ, F_SETPIPE_SZ, MAX_JOYSTICK_BUFFER);
 }
 
 //close pipe

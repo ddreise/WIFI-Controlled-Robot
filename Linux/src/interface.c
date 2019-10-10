@@ -74,3 +74,7 @@ void AnalogInput(char *sInput)
 			printf("Error: Unknown analog input: %c\n", sInput[1]);
 	}
 }
+
+void clear_gs_Command(){
+	memset(gs_Command, 0, strlen(gs_Command));
+}

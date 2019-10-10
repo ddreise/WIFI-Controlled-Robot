@@ -1,4 +1,4 @@
-receive.o: /home/justin/dev/engineering-project-v/Linux/src/receive.c \
+receive.o: /home/linuxuser/engineering-project-v/Linux/src/receive.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -58,7 +58,7 @@ receive.o: /home/justin/dev/engineering-project-v/Linux/src/receive.c \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h /usr/include/termios.h \
  /usr/include/x86_64-linux-gnu/bits/termios.h \
  /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
- /home/justin/dev/engineering-project-v/Linux/src/receive.h
+ /home/linuxuser/engineering-project-v/Linux/src/receive.h
 
 /usr/include/stdc-predef.h:
 
@@ -194,4 +194,4 @@ receive.o: /home/justin/dev/engineering-project-v/Linux/src/receive.c \
 
 /usr/include/x86_64-linux-gnu/sys/ttydefaults.h:
 
-/home/justin/dev/engineering-project-v/Linux/src/receive.h:
+/home/linuxuser/engineering-project-v/Linux/src/receive.h:

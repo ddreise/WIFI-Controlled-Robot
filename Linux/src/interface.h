@@ -37,6 +37,7 @@ extern char gs_Command[COMMAND_LENGTH];
 void ParseJoyconCmd(char *sInput);
 void ButtonInput(char *sInput);
 void AnalogInput(char *sInput);
+void clear_gs_Command();
 
 // 4 - add command to output buffer which sends to robot
 // 5 - send commands from FIFO output buffer to robot and wait for response

@@ -1,4 +1,4 @@
-commands.o: /home/justin/dev/engineering-project-v/Linux/src/commands.c \
+commands.o: /home/linuxuser/engineering-project-v/Linux/src/commands.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -47,8 +47,8 @@ commands.o: /home/justin/dev/engineering-project-v/Linux/src/commands.c \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
- /home/justin/dev/engineering-project-v/Linux/src/commands.h \
- /home/justin/dev/engineering-project-v/Linux/src/interface.h
+ /home/linuxuser/engineering-project-v/Linux/src/commands.h \
+ /home/linuxuser/engineering-project-v/Linux/src/interface.h
 
 /usr/include/stdc-predef.h:
 
@@ -156,6 +156,6 @@ commands.o: /home/justin/dev/engineering-project-v/Linux/src/commands.c \
 
 /usr/include/strings.h:
 
-/home/justin/dev/engineering-project-v/Linux/src/commands.h:
+/home/linuxuser/engineering-project-v/Linux/src/commands.h:
 
-/home/justin/dev/engineering-project-v/Linux/src/interface.h:
+/home/linuxuser/engineering-project-v/Linux/src/interface.h:

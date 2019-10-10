@@ -30,6 +30,7 @@ void cmd_Home(char cState)
 			break;
 		//default: //since we don't care about anything other than an on state
 			//printf("NOT HOMING...\n");
+		
 	}
 }
 

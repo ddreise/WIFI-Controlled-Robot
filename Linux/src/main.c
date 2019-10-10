@@ -108,7 +108,7 @@ int main()
         printf("Error opening %s: %s\n", portname, strerror(errno));
         return -1;
     }
-    /*baudrate 115200, 8 bits, no parity, 1 stop bit */
+    /*baudrate 9600, 8 bits, no parity, 1 stop bit */
     set_interface_attribs(fd, B9600);
     //set_mincount(fd, 0);                /* set to pure timed read */
 
@@ -187,6 +187,7 @@ int main()
         printf("Error from write: %d, %d\n", wlen, errno);
     }
 	else printf("Wrote %d bytes!\n", wlen);
+
     tcdrain(fd);    /* delay for output */
 #endif
 
@@ -250,6 +251,7 @@ int main()
 		}
 
 		for(i = 0; i < MAX_JOYSTICK_BUFFER; i++) gs_JoystickBuffer[i] = 0;
+		clear_gs_Command();
 	}
 #endif
 	
