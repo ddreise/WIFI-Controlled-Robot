@@ -279,13 +279,16 @@ void get_Input(char *str){
 	do {
 		str[i] = read_USART();
 		i++;
-
 		
+
 		if(str[i-1] == '%')	// end character for command sequence
 		{
 			str[i-1] = 0;
 			break;
 		}
+
+				
+
 		
 		//for testing menu
 		else if(str[i-1] == '\r')
