@@ -96,7 +96,7 @@ uint8_t Get_Stepper_Mode(void);
 void Set_Stepper_Steps(uint16_t steps);
 uint16_t Get_Stepper_Steps(void);
 void Set_Stepper_Speed(uint16_t speed);
-int8_t Get_Stepper_Position(void);
+int16_t Get_Stepper_Position(void);
 
 // LIMIT SWITCHES //
 void LimSwitch_Init(void);

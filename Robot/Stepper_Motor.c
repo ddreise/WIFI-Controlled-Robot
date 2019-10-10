@@ -6,6 +6,7 @@
 #include "stm32f303xe.h"
 #include "Macros.h"
 #include "SysTick.h"
+#include "Robot_Command.h"
 #include <stdlib.h>
 
 // IMPORTANT VARIABLES //
@@ -13,7 +14,7 @@
 static volatile int32_t stepsRemaining = 0;
 static uint8_t stepMode = STPR_STOP;
 static uint32_t totalSteps = 0; 
-static uint32_t currentStepPos = 0;
+static int32_t currentStepPos = 0;
 
 // FUNCTIONS //
 
@@ -28,6 +29,8 @@ void TIM3_IRQHandler(void)
 		{
 			// Take a step and decrement the number of steps left
 			stepperRun(stepMode);
+			
+
 			
 			switch(stepMode)
 			{
@@ -77,6 +80,10 @@ void stepperInit(void)
 //	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_MODE, OTYPER_PUSH_PULL);
 //	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN12, OTYPER_PUSH_PULL);
 //	GPIO_PIN_DRV_TYPE(STPR_PORT, STPR_PIN_ISEN34, OTYPER_PUSH_PULL);
+
+	//strcpy(str, "$H%");
+	CMD("$H");
+	Delay_s(2);
 }
 
 void TIM3_Init(void)
@@ -142,11 +149,19 @@ void stepperRun(uint8_t usr_mode)
 	static uint8_t mode = STPR_INVALID;																																				//stores the current mode of the stepper motor
 	static uint8_t state = 0;																																									//stores the current state of the stepper motor
 	static uint16_t stepperStates[STATES] = {STATE0, STATE1, STATE2, STATE3, STATE4, STATE5, STATE6, STATE7};	//holds all the steps of the stepper motor, 
-																																																						//for half step go through each one, for full step, go through by 2
+	
+																																																					//for half step go through each one, for full step, go through by 2
+//	if (currentStepPos > totalSteps) currentStepPos = totalSteps;
+//	else if (currentStepPos < 45) currentStepPos = 45;
+//	else;
+
 	
 	//set the mode of the stepper motor
 	//if the usr_mode is STPR_INVALID do not do anything
 	if(!(usr_mode == STPR_INVALID)) mode = usr_mode;
+	
+	
+
 	
 	//switch states based on mode
 	switch(mode)
@@ -173,6 +188,8 @@ void stepperRun(uint8_t usr_mode)
 			break;
 	}
 	
+
+	
 	FORCE_BITS(GPIOA->ODR, STPR_OUT_MASK, stepperStates[state & COUNTER_MAX]);
 }
 
@@ -186,6 +203,8 @@ void Stepper_Set(uint8_t mode, uint16_t speed, int16_t position_degrees)
 	stepPos = (((double)totalSteps) / 180) * (((double)position_degrees) + 90);	//convert position into appropriate step position
 	
 	//use stepPos - currentStepPos to determine CW (+) and CCW (-) stepping
+
+	
 	if((currentStepPos - stepPos) > 0)
 	{
 		if(mode == STPR_FULL) Set_Stepper_Mode(STPR_FULL_BCKWRD);
@@ -222,6 +241,26 @@ uint8_t Get_Stepper_Mode(void)
 void Set_Stepper_Steps(uint16_t steps)
 {
 	stepsRemaining = steps;
+	
+	
+	// Need to Disable Interrupt so that stepsRemaining can actually be set to ZERO without interruption 
+	
+	
+	if(currentStepPos >= totalSteps) {
+		NVIC_DisableIRQ(TIM3_IRQn);
+		stepsRemaining = 0;
+		currentStepPos = totalSteps;
+		NVIC_EnableIRQ(TIM3_IRQn);
+		Delay_ms(2);
+		
+	}
+	if(currentStepPos < 0) {
+		NVIC_DisableIRQ(TIM3_IRQn);
+		stepsRemaining = 0;
+		currentStepPos = 0;
+		NVIC_EnableIRQ(TIM3_IRQn);
+		Delay_ms(2);
+	}
 }
 
 uint16_t Get_Stepper_Steps(void)
@@ -229,9 +268,10 @@ uint16_t Get_Stepper_Steps(void)
 	return stepsRemaining;
 }
 
-int8_t Get_Stepper_Position(void)
+int16_t Get_Stepper_Position(void)
 {
-	return ((int8_t)((180 / totalSteps) * currentStepPos)) - 90;
+	return ((int16_t)((180 * currentStepPos) / totalSteps + 90));		// rm -90
+	//return currentStepPos;
 }
 
 // LIMIT SWITCHES //

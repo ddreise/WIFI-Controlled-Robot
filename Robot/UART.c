@@ -28,7 +28,6 @@
 #include <string.h>
 #include "stm32f303xe.h"
 #include "UART.h"
-//#include "MACROS2.h"
 #include "LCD.h"
 #include "Macros.h"
 
@@ -36,7 +35,7 @@
 
 char USART1_Buffer[BUFFERSIZE];
 char string_buffer[BUFFERSIZE];
-volatile uint32_t Rx_Counter = 0;
+volatile uint32_t Rx_Counter = 0;	
 uint8_t temp;
 uint8_t out_counter = 0;
 uint8_t in_counter = 0;
@@ -160,7 +159,7 @@ void USART1_IRQHandler(void){
 	receive(USART1, USART1_Buffer, &Rx_Counter); // &Rx_Counter
 }
 
-void receive(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter){	// *pCounter
+void receive(USART_TypeDef *USARTx, char *buffer, volatile uint32_t *pCounter){	// *pCounter
 
 	
 		buffer[in_counter] = USART1->RDR;
@@ -266,6 +265,14 @@ void Test_Menu(void){
 	
 }
 
+void Command_Menu(void){
+	
+	char menu[] = {"\n\rEnter the command:\n\n\r 1 - DC Motor \n\r 2 - Home \n\r 3 - Servo down \n\r 4 - Servo up \n\r 5 - Stepper Motor Right \n\r 6 - Stepper Motor Left\n\r "};
+	
+	UART1_printf(menu);
+	
+}
+
 void get_Input(char *str){
 	
 	uint8_t i = 0;
@@ -273,7 +280,18 @@ void get_Input(char *str){
 		str[i] = read_USART();
 		i++;
 		
-		if(str[i-1] == '\r')
+
+		if(str[i-1] == '%')	// end character for command sequence
+		{
+			str[i-1] = 0;
+			break;
+		}
+
+				
+
+		
+		//for testing menu
+		else if(str[i-1] == '\r')
 		{
 			str[i-1] = 0;
 			break;
