@@ -12,7 +12,7 @@
 #ifndef RECEIVE_H
 #define RECEIVE_H
 
-#define MAX_JOYSTICK_BUFFER 23
+#define MAX_JOYSTICK_BUFFER 27
 #define COMMAND_LIST 3
 
 extern char gs_JoystickBuffer[MAX_JOYSTICK_BUFFER];

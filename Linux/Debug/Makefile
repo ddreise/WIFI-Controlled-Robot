@@ -245,7 +245,7 @@ CATALOGS =
 CATOBJEXT = .gmo
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O0
+CFLAGS = -lm -g -O0
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -394,6 +394,11 @@ INTLTOOL_FILES = intltool-extract.in \
 EXTRA_DIST = \
 	$(INTLTOOL_FILES)
 
+AM_OBJCFLAGS = -lm 
+AM_CPPFLAGS = -lm 
+AM_LDFLAGS = -lm 
+AM_CXXFLAGS = -lm 
+AM_CFLAGS = -lm 
 DISTCLEANFILES = intltool-extract \
 	intltool-merge \
 	intltool-update \

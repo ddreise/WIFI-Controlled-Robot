@@ -32,11 +32,14 @@
 
 #include "interface.h"
 #include "receive.h"
+#include "commands.h"
 
 // DEFINE //
 #define DISPLAY_STRING 1
 
 #define FULL_TEST
+
+// GLOBAL VARIABLES //
 
 
 //read rs232 and output what the robot sends
@@ -243,15 +246,29 @@ int main()
     		}
 			else 
 			{
-				printf("Wrote %d bytes!: %s\n", wlen, gs_Command);
+				//printf("Wrote %d bytes!: %s\n", wlen, gs_Command);
 			}
-    		tcdrain(fd);    /* delay for output */
+    		//tcdrain(fd);    /* delay for output */
 
 			rec_CommandList();
 		}
 
+		if(iCamFlag)
+		{
+			wlen = write(fd, gs_Command, strlen(gs_Command));
+    		if (wlen != strlen(gs_Command)) {
+        		printf("Error from write: %d, %d\n", wlen, errno);
+    		}
+			else 
+			{
+				//printf("Wrote %d bytes!: %s\n", wlen, gs_Command);
+			}
+		}
+
+		usleep(300);
+		
 		for(i = 0; i < MAX_JOYSTICK_BUFFER; i++) gs_JoystickBuffer[i] = 0;
-		clear_gs_Command();
+		//clear_gs_Command();
 	}
 #endif
 	

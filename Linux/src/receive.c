@@ -8,6 +8,7 @@
  * 
  * All rights reserved.
  */
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,6 +33,7 @@ void rec_JoystickInit(void)
 {
 	fdJ = open(myfifo, O_RDONLY);
 	fcntl(fdJ, F_SETFL, O_NONBLOCK);
+	fcntl(fdJ, F_SETPIPE_SZ, 27);
 	// fcntl(fdJ, F_SETPIPE_SZ, MAX_JOYSTICK_BUFFER);
 }
 
@@ -47,6 +49,9 @@ void rec_JoystickInput(void)
 	//for(i = 0; i < MAX_JOYSTICK_BUFFER; i++) gs_JoystickBuffer[i] = 0;
 	
 	read(fdJ, gs_JoystickBuffer, MAX_JOYSTICK_BUFFER);
+
+	tcflush(fdJ, TCIOFLUSH);
+
 	//tcdrain(fdJ);
     //printf("Received: %s\n", gs_JoystickBuffer);
 

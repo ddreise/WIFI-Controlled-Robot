@@ -101,6 +101,8 @@ size_t get_axis_state(struct js_event *event, struct axis_state axes[3])
 
 int main(int argc, char *argv[])
 {
+    int i;
+
     const char *device;
     int js;
     struct js_event event;
@@ -122,14 +124,18 @@ int main(int argc, char *argv[])
     /* write "Hi" to the FIFO */
     fd = open(myfifo, O_WRONLY);
 
+    char output[23];
 
-    while (1){
+    for(i = 0; i < 23; i++) output[i] = 0;
+
+    while (1)
+    {
         
         
         if (argc > 1)
             device = argv[1];
         else
-            device = "/dev/input/js0";
+            device = "/dev/input/js2";
 
         js = open(device, O_RDONLY);
 
@@ -140,24 +146,29 @@ int main(int argc, char *argv[])
         printf("axis count: %ld\n", axis_count);	
 
         /* This loop will exit if the controller is unplugged. */
-        while (read_event(js, &event) == 0)
+        //while (read_event(js, &event) == 0)
+        while(1)
         {
+        	read_event(js, &event);
             switch (event.type)
             {
                 case JS_EVENT_BUTTON:
                     if (event.number == 0) //Green Button A is pressed 
                     {
-                        char output[100];
+                        //char output[23];
                         
                         sprintf(output, "BA%s00000000000000000$", event.value ? "1" : "0");
-                        write(fd, output, 23);
+                        //write(fd, output, 23);
                         
                     }
+                    
+                    printf("test3");
+                    
                     break;
                 case JS_EVENT_AXIS:
                     axis = get_axis_state(&event, axes);
-                    if (axis = 1)   //Right analog (DC motors)
-                    
+                    if (axis == 1)   //Right analog (DC motors)
+                    {
                         if ( axes[axis].x == 0 )    //Straight forward or reverse (No turning)
                         {
                             rightMotorSpeed = round( axes[axis].y * ( -1 / 327.67 ) );
@@ -178,10 +189,10 @@ int main(int argc, char *argv[])
 
                             }
                         }
-    
+    				}
 
-                    if (axis = 0)   //Left  analog (Camera)
-                    
+                    if (axis == 0)   //Left  analog (Camera)
+                    {
                         if ( (axes[axis].x >= -2) && (axes[axis].x <= 0) && axes[axis].y <= 32767 )    //Tilt down
                         {
                             stepperMotor = round( axes[axis].x * ( -1 / 327.67 ) );
@@ -203,17 +214,22 @@ int main(int argc, char *argv[])
                             servoMotor = round( axes[axis].y * ( -1 / 327.67 ) );
                         }
                         
-                        char output[100];
+                        //char output[23];
                         
                         sprintf(output, "AL%+04d%+04d$AR%+04d%+04d$", stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
-                        write(fd, output, 23);
+                        //write(fd, output, 23);
     //                      return (stepperMotor, servoMotor, leftMotorSpeed, rightMotorSpeed);
+    				}
+    				
+    				printf("test2");
 
                     break;
                 default:
-                    
+                    printf("test");
                     break;
             }
+            printf("%s\n", output);
+	    	//write(fd, output, 23);
         }
     }
         /* remove the FIFO */

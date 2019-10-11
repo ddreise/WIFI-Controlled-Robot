@@ -37,8 +37,8 @@ void ParseJoyconCmd(char *sInput)
 		case 'A':
 			AnalogInput(sInput);
 			break;
-		default:
-			printf("Error: Unknown command identifier: %c\n", sInput[0]);
+		//default:
+			//printf("Error: Unknown command identifier: %c\n", sInput[0]);
 	}
 }
 

@@ -14,6 +14,8 @@
 
 // DEFINES //
 
+// GLOBAL VARIABLES //
+extern int iCamFlag;
 
 // PROTOTYPES //
 // form and return homing command
