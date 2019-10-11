@@ -11,6 +11,9 @@
 #include "SysTick.h"
 #include "LCD.h"
 
+#define MAX_UP_TILT 90
+#define	MAX_DOWN_TILT -10
+
 // STATIC VALUES //
 static uint16_t pulse_width = 150;	//pulse width of where servo should be, initialized to starting position 
 
@@ -98,21 +101,25 @@ void RC_Init(void)
 // Update the position of the RC servo
 void RC_Position(int8_t position_degree)
 {
-	if(position_degree > 90) 
+	if(position_degree > MAX_UP_TILT) 
 	{
-		position_degree = 90;
-		LCD_Printf(SECOND_LINE, "CANT EXCEED +90DEG!");
+		position_degree = MAX_UP_TILT;
+		//LCD_Printf(SECOND_LINE, "CANT EXCEED +45DEG");					// Error message
+		//LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
 	}
-	else if(position_degree < -90) 
+	else if(position_degree < MAX_DOWN_TILT) 
 	{
-		position_degree = -90;
-		LCD_Printf(SECOND_LINE, "CANT EXCEED -90DEG!");
+		position_degree = MAX_DOWN_TILT;
+		//LCD_Printf(SECOND_LINE, "CANT EXCEED -5DEG");						// Error message
+		//LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
 	}
 	else
 	{
-		LCDclear();
-		LCD_Printf(FIRST_LINE, "RC SERVO");
+		//LCDclear();
+		//LCD_Printf(FIRST_LINE, "RC SERVO %d", position_degree);
+		
 	}
+
 	
 	RC_Pulse_Width(position_degree);
 	
