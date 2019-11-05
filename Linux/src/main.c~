@@ -30,6 +30,8 @@
 #include <termios.h>
 #include <unistd.h>
 
+//#include <iostream.h>
+
 #include "interface.h"
 #include "receive.h"
 #include "commands.h"
@@ -98,6 +100,7 @@ void set_mincount(int fd, int mcount)
 
 int main()
 {
+	
 #ifdef RS232
 	
     char *portname = "/dev/ttyS1";
@@ -207,14 +210,24 @@ int main()
 
 #ifdef FULL_TEST
 	int i = 0;
+
+	int fdInput;
+	char *infifo = "/tmp/jsfifo";
+	
+	system("sudo chmod 666 /dev/ttyS0");
+	mkfifo(infifo, 0666);
 	
 	char *portname = "/dev/ttyS0";
     int fd;
     int wlen;
 
+	char *cOutput = "1";
+
 	rec_JoystickInit();
 	
     fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
+	fdInput = open(infifo, O_WRONLY);
+	
     if (fd < 0) {
     	printf("Error opening %s: %s\n", portname, strerror(errno));
         return -1;
@@ -265,12 +278,20 @@ int main()
 			}
 		}
 
-		usleep(250);
+		usleep(300);
 		
 		for(i = 0; i < MAX_JOYSTICK_BUFFER; i++) gs_JoystickBuffer[i] = 0;
 		//clear_gs_Command();
+
+		// request joystick input //
+		if(gs_RawCommand == NULL)
+		{
+			write(fdInput, &cOutput, 1);
+		}
 	}
 #endif
+
+	close(fdInput);
 	
 	return 0;
 }

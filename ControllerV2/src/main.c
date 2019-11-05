@@ -26,7 +26,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <termios.h>
+#include <string.h>
 
+#define JOYSTICK "/dev/input/js2"
+
+#define MAX_ACK_BUFFER 1
 
 /**
  * Reads a joystick event from the joystick device.
@@ -109,6 +113,12 @@ int main(int argc, char *argv[])
 {
     int i;
 
+	// PIPE RELATED VARIABLES //
+	int ackFlag = 0;
+	int fdJ;
+	char * jsfifo = "/tmp/jsfifo";
+	char ackBuffer[MAX_ACK_BUFFER];
+
 	int aFlag = 0;
 	int aDouble = 0;
 	
@@ -129,6 +139,8 @@ int main(int argc, char *argv[])
     int fd;
     char * myfifo = "/tmp/myfifo";
 
+	for(i = 0; i < MAX_ACK_BUFFER; i++) ackBuffer[i] = 0;
+	
     /* create the FIFO (named pipe) */
     mkfifo(myfifo, 0666);
 
@@ -141,12 +153,16 @@ int main(int argc, char *argv[])
 
     for(i = 0; i < 23; i++) output[i] = '$';
 
+	// PIPE INIT //
+	fdJ = open(jsfifo, O_RDONLY);
+	fcntl(fdJ, F_SETFL, O_NONBLOCK);
+	
     while (1)
     {
         if (argc > 1)
             device = argv[1];
         else
-            device = "/dev/input/js1";
+            device = JOYSTICK;
 
         js = open(device, O_RDONLY);
 
@@ -160,57 +176,78 @@ int main(int argc, char *argv[])
         //while (read_event(js, &event) == 0)
         while(1)
         {
-        	read_event(js, &event);
-            switch (event.type)
-            {
-                case JS_EVENT_BUTTON:
-                    if (event.number == 0) //Green Button A is pressed 
-                    {
-                        //char output[23];
-						if (aDouble == 1) aDouble = 0;
-						else
-						{
-							aDouble = 1;
-							aFlag = 1;
+			if(ackFlag)
+			{
+		    	read_event(js, &event);
+		        switch (event.type)
+		        {
+		            case JS_EVENT_BUTTON:
+		                if (event.number == 0) //Green Button A is pressed 
+		                {
+		                    //char output[23];
+							if (aDouble == 1) aDouble = 0;
+							else
+							{
+								aDouble = 1;
+								aFlag = 1;
+							}
+		                    //sprintf(output, "BA%s00000000000000000$", event.value ? "1" : "0");
+		                    //write(fd, output, 23);
+		                    
+		                }
+		                break;
+		            case JS_EVENT_AXIS:
+		                axis = get_axis_state(&event, axes);
+		                if (axis == 1)   //Right analog (DC motors)
+		                {	
+		                	yMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
+		                    xMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
+
+							xMotor *= -1;
+							yMotor *= -1;
 						}
-                        //sprintf(output, "BA%s00000000000000000$", event.value ? "1" : "0");
-                        //write(fd, output, 23);
-                        
-                    }
-                    break;
-                case JS_EVENT_AXIS:
-                    axis = get_axis_state(&event, axes);
-                    if (axis == 1)   //Right analog (DC motors)
-                    {	
-                    	yMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
-                        xMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
 
-						xMotor *= -1;
-						yMotor *= -1;
-    				}
+						if (axis == 0)   //Left  analog (Camera)
+		                {
+		                    stepperMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
+							stepperMotor *= -1;
+							servoMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
 
-					if (axis == 0)   //Left  analog (Camera)
-                    {
-                        stepperMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
-						stepperMotor *= -1;
-						servoMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
+							if(stepperMotor < 100 && stepperMotor > -100) stepperMotor = 0;
+							if(servoMotor < 100 && servoMotor > -100) servoMotor = 0;
+						}
+		                break;
+		            default:
+		                break;
+		        }
+				sprintf(output, "BA%d$AR%+04d%+04d$AL%+04d%+04d$", aFlag, xMotor, yMotor, stepperMotor, servoMotor);
+				aFlag = 0;
+		        printf("%s\n", output);
+				write(fd, output, 27);
+			}
+			else
+			{
+				int k = 0;
+				
+				read(fdJ, ackBuffer, MAX_ACK_BUFFER);
+				//printf("%s\n", ackBuffer);
+				if(ackBuffer[0] == '1')
+				{
+					ackFlag = 1;
+					printf("%d\n", ackFlag);
 
-						if(stepperMotor < 100 && stepperMotor > -100) stepperMotor = 0;
-						if(servoMotor < 100 && servoMotor > -100) servoMotor = 0;
-					}
-                    break;
-                default:
-                    break;
-            }
-			sprintf(output, "BA%d$AR%+04d%+04d$AL%+04d%+04d$", aFlag, xMotor, yMotor, stepperMotor, servoMotor);
-			aFlag = 0;
-            printf("%s\n", output);
-	    	write(fd, output, 27);
+					for(k = 0; k < MAX_ACK_BUFFER; k++) ackBuffer[k] = 0;
+				}
+			}
         }
     }
     /* remove the FIFO */
     unlink(myfifo);
     close(js);
+
+	// ACK PIPE CLOSE //
+	close(fdJ);
+	
     return 0;
 }
     
