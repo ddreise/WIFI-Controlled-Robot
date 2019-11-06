@@ -1,8 +1,8 @@
 [Anjuta]
-Geometry=976x744+902+173
+Geometry=846x1025+1074+27
 
 [File Loader]
-Files=../../src/main.c#285%%%../../src/interface.c#43%%%../../src/interface.h#40%%%../../src/receive.c#28%%%../../src/receive.h#14%%%../../src/commands.c#73%%%../../src/commands.h#9
+Files=../../src/main.c#269%%%../../src/interface.c#72%%%../../src/interface.h#40%%%../../src/receive.c#28%%%../../src/receive.h#14%%%../../src/commands.c#166%%%../../src/commands.h#9
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
@@ -16,6 +16,11 @@ Working directories=../../.
 Shortcut=Linux//src//linux
 Expand=linux%%%Linux%%%Linux//src%%%Linux//src//linux
 
+[Debugger]
+Watch=\sgs_JoystickBuffer%%% sInput%%%cState%%% X%%% cXNum%%% cXNum%%%iLMotor%%%sLMotor%%%gs_Command
+Breakpoint=1:../../src/main.c:234:0:%%%1:../../src/main.c:225:0:%%%1:../../src/commands.c:26:0:%%%1:../../src/commands.c:37:0:%%%1:../../src/commands.c:86:0:%%%1:../../src/main.c:313:0:%%%1:../../src/main.c:280:0:
+Stop at beginning=2
+
 [Build]
 Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized%%%1:MinGW32:MinGW32
 Selected Configuration=Debug
@@ -23,8 +28,3 @@ BuildArgs/Default=--enable-maintainer-mode
 BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
 BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
 BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
-
-[Debugger]
-Watch=\sgs_JoystickBuffer%%% sInput%%%cState%%% X%%% cXNum%%% cXNum%%%iLMotor%%%sLMotor
-Breakpoint=1:../../src/main.c:234:0:%%%1:../../src/main.c:225:0:%%%1:../../src/commands.c:26:0:%%%1:../../src/commands.c:37:0:%%%1:../../src/commands.c:86:0:
-Stop at beginning=2

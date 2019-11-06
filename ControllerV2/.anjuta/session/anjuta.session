@@ -1,8 +1,8 @@
 [Anjuta]
-Geometry=976x744+67+33
+Geometry=1007x1025+67+27
 
 [File Loader]
-Files=../../src/main.c#114
+Files=../../src/main.c#228
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n

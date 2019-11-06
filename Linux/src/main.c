@@ -29,6 +29,8 @@
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 //#include <iostream.h>
 
@@ -40,6 +42,8 @@
 #define DISPLAY_STRING 1
 
 #define FULL_TEST
+
+#define MAX_ROBOT_BUFFER 6
 
 // GLOBAL VARIABLES //
 
@@ -71,7 +75,7 @@ int set_interface_attribs(int fd, int speed)
     tty.c_oflag &= ~OPOST;
 
     /* fetch bytes as they become available */
-    tty.c_cc[VMIN] = 1;
+    tty.c_cc[VMIN] = 0;
     tty.c_cc[VTIME] = 1;
 
     if (tcsetattr(fd, TCSANOW, &tty) != 0) {
@@ -211,6 +215,11 @@ int main()
 #ifdef FULL_TEST
 	int i = 0;
 
+	// ROBOT STUFF //
+	char robotBuffer[MAX_ROBOT_BUFFER];
+	int rdlength = 0;
+	int robotFlag = 0;
+
 	int fdInput;
 	char *infifo = "/tmp/jsfifo";
 	
@@ -223,6 +232,9 @@ int main()
 
 	char *cOutput = "1";
 
+	// ROBOT INIT //
+	for(i = 0; i < MAX_ROBOT_BUFFER; i++) robotBuffer[i] = 0;
+	
 	rec_JoystickInit();
 	
     fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
@@ -239,31 +251,39 @@ int main()
 	
 	while(1)
 	{	
-		rec_JoystickInput();
-
-		//printf("%s\n", gs_JoystickBuffer);
-		
-		while(gs_RawCommand != NULL)
+		if(robotFlag == 1)
 		{
-			//get current command
-			//rec_CommandList();
+			write(fdInput, cOutput, strlen(cOutput));
 
-			ParseJoyconCmd(gs_RawCommand);
-			//printf("Command: %s\n", gs_RawCommand);
-	
-    		/* simple output */
-			//printf("Sending: %d bytes: %s\n", (int)strlen(gs_Command), gs_Command);
-    		wlen = write(fd, gs_Command, strlen(gs_Command));
-    		if (wlen != strlen(gs_Command)) {
-        		printf("Error from write: %d, %d\n", wlen, errno);
-    		}
-			else 
+			usleep(500);
+			
+			rec_JoystickInput();
+
+			//printf("%s\n", gs_JoystickBuffer);
+		
+			while(gs_RawCommand != NULL)
 			{
-				//printf("Wrote %d bytes!: %s\n", wlen, gs_Command);
-			}
-    		//tcdrain(fd);    /* delay for output */
+				//get current command
+				//rec_CommandList();
 
-			rec_CommandList();
+				ParseJoyconCmd(gs_RawCommand);
+				//printf("Command: %s\n", gs_RawCommand);
+		
+				/* simple output */
+				//printf("Sending: %d bytes: %s\n", (int)strlen(gs_Command), gs_Command);
+				wlen = write(fd, gs_Command, strlen(gs_Command));
+				if (wlen != strlen(gs_Command)) {
+		    		printf("Error from write: %d, %d\n", wlen, errno);
+				}
+				else 
+				{
+					//printf("Wrote %d bytes!: %s\n", wlen, gs_Command);
+				}
+				//tcdrain(fd);    /* delay for output */
+
+				rec_CommandList();
+			}
+			robotFlag = 0;
 		}
 
 		if(iCamFlag)
@@ -284,9 +304,26 @@ int main()
 		//clear_gs_Command();
 
 		// request joystick input //
-		if(gs_RawCommand == NULL)
+		//if(gs_RawCommand == NULL)
+		//{
+			
+		//	write(fdInput, cOutput, strlen(cOutput));
+		//}
+
+		if(!robotFlag)
 		{
-			write(fdInput, cOutput, strlen(cOutput));
+			rdlength = read(fd, robotBuffer, sizeof(robotBuffer)-1);
+			//printf("Robot input: \n");
+			if(rdlength > 0)
+			{
+				robotFlag = 1;
+				printf("FLAG SET!\n");
+				//tcflush(fd);
+			}
+			else if(rdlength < 0)
+				printf("ERROR: %s\n", strerror(errno));
+			//else printf("TIMEOUT\n");
+			if(!robotFlag) printf("FLAG NOT SET!\n");
 		}
 	}
 #endif

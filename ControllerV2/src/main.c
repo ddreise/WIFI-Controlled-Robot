@@ -224,6 +224,8 @@ int main(int argc, char *argv[])
 				aFlag = 0;
 		        printf("%s\n", output);
 				write(fd, output, 27);
+
+				ackFlag = 0;
 			}
 			else
 			{
@@ -234,10 +236,11 @@ int main(int argc, char *argv[])
 				if(ackBuffer[0] == '1')
 				{
 					ackFlag = 1;
-					printf("%d\n", ackFlag);
+					//printf("%d\n", ackFlag);
 
 					for(k = 0; k < MAX_ACK_BUFFER; k++) ackBuffer[k] = 0;
 				}
+				printf("%d", ackFlag);
 			}
         }
     }
