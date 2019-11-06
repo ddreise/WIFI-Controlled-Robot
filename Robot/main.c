@@ -46,6 +46,10 @@ int main(void){
 	uint8_t i = 0;										// Synchronous command test variable
 	uint8_t t = 0;
 	
+	uint8_t inputFlag = 0;
+	uint8_t ackFlag = 0;
+	uint8_t startedReceiving = 0;
+	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
 	// TIMER INIT //
@@ -151,7 +155,6 @@ int main(void){
 	// **     									COMMAND FUNCTION    													**
 	// *************************************************************************
 	#if COMMAND_TEST
-	
 	TIM3_Init();
 	
 	UART1_init();
@@ -162,12 +165,33 @@ int main(void){
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
 
-	Command_Menu();
+	//Command_Menu();
 	
 	while(TRUE){
+		//inputFlag = get_Input(str);
+
+		inputFlag = read_Input(str);
 		
-		get_Input(str);
-		CMD(str);
+		if(!inputFlag && !ackFlag)
+		{
+			UART1_printf("$ACK%");
+			ackFlag = 1;
+		}
+		else if(inputFlag)
+		{
+			CMD(str);
+			
+			startedReceiving = 1;
+		}
+		
+		if(startedReceiving && !inputFlag)
+		{
+			ackFlag = 0;
+			startedReceiving = 0;
+		}
+		
+		
+
 
 //		
 //		// Motor
