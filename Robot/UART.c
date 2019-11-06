@@ -170,18 +170,34 @@ void receive(USART_TypeDef *USARTx, char *buffer, volatile uint32_t *pCounter){	
 }
 
 
+//char read_USART(void){
+//	char something;
+//	//temp = read(USART1, USART1_Buffer, &Rx_Counter);
+//	while (Rx_Counter == 0); 																// PROBABLY HAS SOMETHING TO DO WITH THE BLOCKING
+//	something = USART1_Buffer[out_counter];
+//	out_counter = (out_counter + 1) % BUFFERSIZE;
+//	NVIC_DisableIRQ(USART1_IRQn);
+//	Rx_Counter--;
+//	NVIC_EnableIRQ(USART1_IRQn);
+//	
+//	return something;
+//	
+//}
+
 char read_USART(void){
 	char something;
 	//temp = read(USART1, USART1_Buffer, &Rx_Counter);
-	while (Rx_Counter == 0);
-	something = USART1_Buffer[out_counter];
-	out_counter = (out_counter + 1) % BUFFERSIZE;
-	NVIC_DisableIRQ(USART1_IRQn);
-	Rx_Counter--;
-	NVIC_EnableIRQ(USART1_IRQn);
+	if(!(Rx_Counter == 0))
+	{
+		something = USART1_Buffer[out_counter];
+		out_counter = (out_counter + 1) % BUFFERSIZE;
+		NVIC_DisableIRQ(USART1_IRQn);
+		Rx_Counter--;
+		NVIC_EnableIRQ(USART1_IRQn);
 	
-	return something;
-	
+		return something;
+	}
+	else return 0;
 }
 
 
@@ -273,7 +289,7 @@ void Command_Menu(void){
 	
 }
 
-void get_Input(char *str){
+int get_Input(char *str){
 	
 	uint8_t i = 0;
 	do {
@@ -286,9 +302,6 @@ void get_Input(char *str){
 			str[i-1] = 0;
 			break;
 		}
-
-				
-
 		
 		//for testing menu
 		else if(str[i-1] == '\r')
@@ -297,8 +310,33 @@ void get_Input(char *str){
 			break;
 		}
 		
+		else if(str[i-1] == 0) return 0;
+		
 	} while (TRUE);
 	
+	return 1;
+	
+}
+
+int read_Input(char *str)
+{
+	uint8_t i = 0;
+	
+	if(Rx_Counter == 0) return 0;
+	
+	while(Rx_Counter > 0)
+	{
+		str[i] = read_USART();
+		
+		if(str[i] == '%')
+		{
+			str[i] = 0;
+			break;
+		}
+			
+		i++;
+	}
+	return 1;
 }
 
 
