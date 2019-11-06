@@ -17,10 +17,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// INCLUDES //
 #include <stdio.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+
+#include "pipes.h"
+
+// DEFINES //
+
+// PROTOTYPES //
+
+// FUNCTIONS //
 int main()
 {
-	printf("Hello world\n");
+	// INITIAL SETUP //
+	//setup controller pipe interface
+	//setup robot UART interface
 	return (0);
 }
 

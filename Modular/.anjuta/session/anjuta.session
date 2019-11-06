@@ -1,19 +1,21 @@
 [Anjuta]
-Geometry=1017x1145+903+27
+Geometry=1017x1143+903+27
 
 [File Loader]
-Files=../../src/main.c#23
+Files=../../src/main.c#25
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 
 [Execution]
+Program arguments=
+Program uri=../../Debug/src/modularize
 Run in terminal=2
 Working directories=../../.
 
 [Project Manager]
-Shortcut=Modular//src//modularize
-Expand=modularize
+Shortcut=Modular////modularize
+Expand=modularize%%%Modular
 
 [Debugger]
 Stop at beginning=2

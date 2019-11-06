@@ -1,8 +1,8 @@
 [Anjuta]
-Geometry=976x744+902+173
+Geometry=927x1145+67+27
 
 [File Loader]
-Files=../../src/main.c#285%%%../../src/interface.c#43%%%../../src/interface.h#40%%%../../src/receive.c#28%%%../../src/receive.h#14%%%../../src/commands.c#73%%%../../src/commands.h#9
+Files=../../src/main.c#229%%%../../src/interface.c#43%%%../../src/interface.h#40%%%../../src/receive.c#28%%%../../src/receive.h#14%%%../../src/commands.c#73%%%../../src/commands.h#18
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
