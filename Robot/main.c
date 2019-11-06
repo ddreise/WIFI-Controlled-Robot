@@ -24,12 +24,12 @@
 //#define STP		0 *** Implemented into RS232_Interface
 //#define SERVO 0 *** Implemented into RS232_Interface
 //#define DC		0 *** Implemented into RS232_Interface
-#define ENC		0
+#define ENC		1
 //#define UART	0 *** Implemented into RS232_Interface
 #define BUZ		0
 
 #define RS232_Interface	0
-#define COMMAND_TEST 1
+#define COMMAND_TEST 0
 
 //Prototypes
 void LCD_Test(void);
@@ -45,6 +45,8 @@ int main(void){
 	char str[32];											// For UART
 	uint8_t i = 0;										// Synchronous command test variable
 	uint8_t t = 0;
+	uint32_t pulseL;
+	uint32_t pulseR;
 	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
@@ -68,19 +70,37 @@ int main(void){
 	/////////////
 	
 	#if ENC
-	uint32_t pulseL;
-	uint32_t pulseR;
+
+
 	
+	LCD_Init();												// initialize the LCD screen
+	LCDclear();												// clears residual data in the LCD display from previous operation
 	Encoder_Init();
+	TIM3_Init();
+	UART1_init();
+	LimSwitch_Init();
+	DC_Init();
+	
+	RC_Init();	//needs to init last. Correction: doesn't need to
+	stepperInit();
+	
+
 	
 	LCD_Printf(FIRST_LINE, "Encoder:");
 	
+	Motor(DC_M1, 50, DC_FORWARD);
+	Motor(DC_M2, 50, DC_FORWARD);
+	
+	
 	while(TRUE)
 	{
-		pulseL = Encoder_Read(ENCODER_LEFT);
-		pulseR = Encoder_Read(ENCODER_RIGHT);
+		pulseL = Wheel_Speed(ENCODER_LEFT);
+		pulseR = Wheel_Speed(ENCODER_RIGHT);
+		//pulseL = Encoder_Read(ENCODER_LEFT);
+		//pulseR = Encoder_Read(ENCODER_RIGHT);
 		
-		LCD_Printf(SECOND_LINE, "EL %ldms ER %ldms ", pulseL, pulseR);
+		
+		LCD_Printf(SECOND_LINE, "LW %ld RW %ld ", pulseL, pulseR);
 		Delay_ms(50);
 	}
 	#endif
