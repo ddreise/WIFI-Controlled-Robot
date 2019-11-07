@@ -59,38 +59,41 @@ int main()
 /*	// UART SETUP //
 	UARTInit(UART_PORT, O_RDWR | O_NOCTTY | O_SYNC, 9600, 
                  8, 0, 1);*/
-		
-	// GET CONTROLLER INPUT //
-	ret = ControllerGetInput(sControllerBuf);
-	if(ret != SUCCESS)
+
+	while(1)
 	{
-		switch(ret)
+		// GET CONTROLLER INPUT //
+		ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
+		if(ret != SUCCESS)
 		{
-			case PIPE_ERROR:
-				printf("ERROR: Pipe failed to create!\n");
-				break;
-			case FORK_ERROR:
-				printf("ERROR: Fork failed to create!\n");
-			default:
-				break;
+			switch(ret)
+			{
+				case PIPE_ERROR:
+					printf("ERROR: Pipe failed to create!\n");
+					break;
+				case FORK_ERROR:
+					printf("ERROR: Fork failed to create!\n");
+				default:
+					break;
+			}
+
+			return -1;
 		}
 
-		return -1;
-	}
+		// CONVERT INPUT TO COMMAND //
+		ret = GetCommand(saCommands, sControllerBuf);	// 3 commands per input
+		if(ret != SUCCESS)
+		{
+			printf("ERROR: Problem converting input to command!\n");
+			return -1;
+		}
 
-	// CONVERT INPUT TO COMMAND //
-	ret = GetCommand(saCommands, sControllerBuf);	// 3 commands per input
-	if(ret != SUCCESS)
-	{
-		printf("ERROR: Problem converting input to command!\n");
-		return -1;
-	}
+		for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
 
-	for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
-	
-/*	// SEND COMMANDS TO ROBOT //
-	for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
-	                                             sizeof(saCommands[i]));*/
+	/*	// SEND COMMANDS TO ROBOT //
+		for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
+			                                         sizeof(saCommands[i]));*/
+	}
 	
 	return (0);
 }

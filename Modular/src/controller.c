@@ -31,6 +31,8 @@
 
 // IMPORTANT VARIABLES //
 int js = 0;
+int requestPipe[2];
+int inputPipe[2]; 
 
 /**
  * Current state of an axis.
@@ -40,7 +42,7 @@ struct axis_state {
 };
 
 // PROTOTYPES //
-ERR_VAL Read_Controller(char *buf);
+ERR_VAL Read_Controller(char *buf, int bufSize);
 int read_event(int fd, struct js_event *event);
 size_t get_axis_count(int fd);
 size_t get_button_count(int fd);
@@ -52,6 +54,10 @@ ERR_VAL ControllerInit(char *sDevicePath)
 {
 	int iAxisCount = 0;
 	int iButtonCount = 0;
+	pid_t forkResult;
+	ERR_VAL ret;
+	char childBuf[CONTROLLER_BUFFER_SIZE];
+	int flags = 0;
 	
 	js = open(sDevicePath, O_RDONLY);	//open device
 
@@ -70,53 +76,41 @@ ERR_VAL ControllerInit(char *sDevicePath)
 		return BUTTON_ERROR;
 	}
 	printf("Button Count: %d\n", iButtonCount);
-	
-	return SUCCESS;
-}
 
-// Gets controller input via a forked child and pipe
-ERR_VAL ControllerGetInput(char *buf)
-{
-	pid_t forkResult;
-	int fdControllerPipes[2];
-	ERR_VAL ret = 0;
-	char tempBuf[CONTROLLER_BUFFER_SIZE];
+	BufferClear(childBuf, sizeof(childBuf));
 
-	BufferClear(tempBuf, sizeof(tempBuf));
-
-	ret = PipeInit(fdControllerPipes);
+	ret = PipeInit(requestPipe);
 	if(ret == FAILURE) 
 	{
 		return PIPE_ERROR;
 	}
-	
-	forkResult = fork(); //child will read controller
+
+	ret = PipeInit(inputPipe);
+	if(ret == FAILURE) 
+	{
+		return PIPE_ERROR;
+	}
+
+	flags = fcntl(requestPipe[0], F_GETFL, 0);
+	fcntl(requestPipe[0], F_SETFL, flags | O_NONBLOCK);
+
+	forkResult = fork(); //child will read controller permanently
 	if(forkResult == -1) //fork creation error
 	{
 		return FORK_ERROR;
 	}
 	else if(forkResult == 0) //in child process
 	{
-		close(fdControllerPipes[0]);	//close read portion of pipe
+		close(requestPipe[1]);	//close write portion of request pipe
+		close(inputPipe[0]);	//close read portion of input pipe
 		
 		//read controller input
-		//write(fdControllerPipes[1], "HI!!! FROM THE CHILD!\n", 24); //send result on pipe
-		Read_Controller(tempBuf);
-		write(fdControllerPipes[1], tempBuf, sizeof(tempBuf));
-		
-		close(fdControllerPipes[1]);	//close pipe
-		
-		exit(EXIT_SUCCESS);	//end child execution
+		Read_Controller(childBuf, sizeof(childBuf));
 	}
-	else //in parent
+	else //in parent and we can continue as normal
 	{
-		close(fdControllerPipes[1]);	//close write portion of pipe
-
-		wait(NULL);	//wait for child to finish executing
-
-		read(fdControllerPipes[0], buf, CONTROLLER_BUFFER_SIZE);	//read pipe until nothing is left
-
-		close(fdControllerPipes[0]); //close read portion of pipe
+		close(requestPipe[0]);	//close read portion of request pipe
+		close(inputPipe[1]);	//close write portion of input pipe
 		
 		return SUCCESS;	//controller input has been received, so exit
 	}
@@ -124,63 +118,88 @@ ERR_VAL ControllerGetInput(char *buf)
 	return SUCCESS;
 }
 
-ERR_VAL Read_Controller(char *buf)
+// Gets controller input via a forked child and pipe
+ERR_VAL ControllerGetInput(char *buf, int bufSize)
 {
-	int aFlag = 0;
-	int aDouble = 0;
+	//request input from child
+	write(requestPipe[1], "1\0", 2);
 
-	struct js_event event;
-	struct axis_state axes[3] = {0};
-	size_t axis;
-
-	int xMotor = 0;
-	int yMotor = 0;
-
-	int stepperMotor = 0;
-	int servoMotor = 0;
+	//perform blocking read
+	read(inputPipe[0], buf, bufSize);
 	
-	read_event(js, &event);
-	switch(event.type)
+	return SUCCESS;
+}
+
+ERR_VAL Read_Controller(char *buf, int bufSize)
+{
+	while(1)
 	{
-		case JS_EVENT_BUTTON:
-			if (event.number == 0) //Green Button A is pressed 
-			{
-				if (aDouble == 1) aDouble = 0;
-				else
+		char request[REQUEST_PIPE_SIZE];
+		
+		int aFlag = 0;
+		int aDouble = 0;
+
+		struct js_event event;
+		struct axis_state axes[3] = {0};
+		size_t axis;
+
+		int xMotor = 0;
+		int yMotor = 0;
+
+		int stepperMotor = 0;
+		int servoMotor = 0;
+		
+		read_event(js, &event);
+		switch(event.type)
+		{
+			case JS_EVENT_BUTTON:
+				if (event.number == 0) //Green Button A is pressed 
 				{
-					aFlag = 1;
-					aDouble = 1;
+					if (aDouble == 1) aDouble = 0;
+					else
+					{
+						aFlag = 1;
+						aDouble = 1;
+					}
 				}
-			}
-			break;
-		case JS_EVENT_AXIS:
-			axis = get_axis_state(&event, axes);
-		    if (axis == 1)   //Right analog (DC motors)
-		    {	
-		      	yMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
-		    	xMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
+				break;
+			case JS_EVENT_AXIS:
+				axis = get_axis_state(&event, axes);
+				if (axis == 1)   //Right analog (DC motors)
+				{	
+				  	yMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
+					xMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
 
-				xMotor *= -1;
-				yMotor *= -1;
-			}
+					xMotor *= -1;
+					yMotor *= -1;
+				}
 
-			if (axis == 0)   //Left  analog (Camera)
-		    {
-		    	stepperMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
-				stepperMotor *= -1;
-				servoMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
+				if (axis == 0)   //Left  analog (Camera)
+				{
+					stepperMotor = (int) ( (double) ( ((double)axes[axis].x) * ((double)100/(double)32767) ));
+					stepperMotor *= -1;
+					servoMotor = (int) ( (double) ( ((double)axes[axis].y) * ((double)100/(double)32767) ));
 
-				if(stepperMotor < 100 && stepperMotor > -100) stepperMotor = 0;
-				if(servoMotor < 100 && servoMotor > -100) servoMotor = 0;
-			}
-			break;
-		default:
-			break;
+					if(stepperMotor < 100 && stepperMotor > -100) stepperMotor = 0;
+					if(servoMotor < 100 && servoMotor > -100) servoMotor = 0;
+				}
+				break;
+			default:
+				break;
+		}
+
+		sprintf(buf, "BA%d$AR%+04d%+04d$AL%+04d%+04d$", aFlag, xMotor, yMotor, stepperMotor, servoMotor);
+		aFlag = 0;
+
+		read(requestPipe[0], request, sizeof(request));
+		if(strcmp(request, "1") == 0)
+		{
+			write(inputPipe[1], buf, bufSize);
+			
+			BufferClear(request, sizeof(request));
+		}
 	}
-
-	sprintf(buf, "BA%d$AR%+04d%+04d$AL%+04d%+04d$", aFlag, xMotor, yMotor, stepperMotor, servoMotor);
-	aFlag = 0;
-	
+		
 	return SUCCESS;
 }
 
@@ -192,19 +211,14 @@ ERR_VAL Read_Controller(char *buf)
 int read_event(int fd, struct js_event *event)
 {
     ssize_t bytes;
-	//int fd2 = 0;
 
 	// UNCOMMENT FOR NON-BLOCKING READ //
-	//int flags = fcntl(fd, F_GETFL, 0);
-	//fcntl(js, F_SETFL, flags | O_NONBLOCK);
-
-	//fd2 = open("/dev/null", O_WRONLY);
+	int flags = fcntl(fd, F_GETFL, 0);
+	fcntl(js, F_SETFL, flags | O_NONBLOCK);
 	
     bytes = read(fd, event, sizeof(*event));
 
 	tcflush(fd, TCIOFLUSH);
-
-	//splice(fd2, NULL, fd);
 	
     if (bytes == sizeof(*event))
         return 0;

@@ -3,7 +3,7 @@ Maximized=1
 Geometry=1853x1025+67+27
 
 [File Loader]
-Files=../../src/main.c#89%%%../../src/controller.c#1
+Files=../../src/main.c#93%%%../../src/controller.c#197%%%../../src/controller.h#19
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n

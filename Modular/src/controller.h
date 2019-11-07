@@ -16,12 +16,13 @@
 
 // DEFINES //
 #define CONTROLLER_BUFFER_SIZE 1024
+#define REQUEST_PIPE_SIZE 2
 
 // IMPORTANT VARIABLES //
 
 // PROTOTYPES //
 // Gets controller input via a forked child and pipe
-ERR_VAL ControllerGetInput(char *buf);
+ERR_VAL ControllerGetInput(char *buf, int bufSize);
 ERR_VAL ControllerInit(char *sDevicePath);
 
 
