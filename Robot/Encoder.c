@@ -46,8 +46,8 @@ volatile uint32_t lastCapturedRight = 0;
 volatile uint32_t signalPolarityLeft = 0;	//assume input is initially low
 volatile uint32_t signalPolarityRight = 0;
 volatile uint32_t overflow_count = 0;
-volatile uint32_t right_wheel_speed = 0;
-volatile uint32_t left_wheel_speed = 0;
+uint32_t right_wheel_speed = 0;
+uint32_t left_wheel_speed = 0;
 
 // INTERRUPTS //
 void TIM2_IRQHandler(void)
@@ -67,25 +67,25 @@ void TIM2_IRQHandler(void)
 	if(((TIM2->SR & TIM_SR_CC3IF) | (TIM2->SR & TIM_SR_CC4IF)) != 0)
 	{
 		//read CCR1 to get current value, which then will clear CC1F flag
-		currentCapturedLeft = TIM2->CCR4;
-		currentCapturedRight = TIM2->CCR3;
+		currentCapturedRight = TIM2->CCR4;
+		currentCapturedLeft = TIM2->CCR3;
 		
 		//toggle polarity flag because signal is now high
-		signalPolarityLeft = 1 - signalPolarityLeft;
-		signalPolarityRight = 1 - signalPolarityRight;
+		//signalPolarityLeft = 1 - signalPolarityLeft;
+		//signalPolarityRight = 1 - signalPolarityRight;
 		
 		//calculate only when current input is low
-		if(signalPolarityLeft == 0)
-		{
+		//if(signalPolarityLeft == 0)
+		//{
 			//pulseWidthLeft = currentCapturedLeft - lastCapturedLeft; //assume up counting
 			pulseWidthLeft = (currentCapturedLeft - lastCapturedLeft) + (overflow_count * 65536);
 			
-		}
-		if(signalPolarityRight == 0)
-		{
+		//}
+		//if(signalPolarityRight != 0)
+		//{
 			//pulseWidthRight = currentCapturedRight - lastCapturedRight; //assume up counting
-			pulseWidthRight = currentCapturedRight - lastCapturedRight;
-		}
+			pulseWidthRight = (currentCapturedRight - lastCapturedRight) + (overflow_count * 65536);
+		//}
 		
 		lastCapturedLeft = currentCapturedLeft;
 		lastCapturedRight = currentCapturedRight;
@@ -126,7 +126,7 @@ static void Encoder_TIM_Init(void)
 {
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;							//enable clock of timer 2
 	TIM2->PSC = 71;																	//set PSC so that frequency is about 1 MHz
-	//TIM2->ARR = 0xFFFFFFFFUL;															//set ARR to 0xFFFF because max 32 bit number
+	//TIM2->ARR = 0xFFFFFFFFUL;											//set ARR to 0xFFFF because max 32 bit number
 	TIM2->ARR = 0xFFFFUL;
 	
 	//set channel 3 as active input

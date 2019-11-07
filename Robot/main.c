@@ -88,8 +88,8 @@ int main(void){
 	
 	LCD_Printf(FIRST_LINE, "Encoder:");
 	
-	Motor(DC_M1, 50, DC_FORWARD);
-	Motor(DC_M2, 50, DC_FORWARD);
+	Motor(DC_M1, 100, DC_FORWARD);
+	Motor(DC_M2, 100, DC_FORWARD);
 	
 	
 	while(TRUE)
