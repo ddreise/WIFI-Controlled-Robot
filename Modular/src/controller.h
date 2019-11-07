@@ -15,7 +15,7 @@
 #include "errorhandle.h"
 
 // DEFINES //
-#define CONTROLLER_BUFFER_SIZE 1024
+#define CONTROLLER_BUFFER_SIZE 128
 #define REQUEST_PIPE_SIZE 2
 
 // IMPORTANT VARIABLES //

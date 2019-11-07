@@ -34,8 +34,10 @@
 #include "uart.h"
 
 // DEFINES //
-#define CONTROLLER_PATH "/dev/input/js1"
+#define CONTROLLER_PATH "/dev/input/js2"
 #define UART_PORT "/dev/ttyS0"
+
+#define ACK_BUFFER_SIZE 128
 
 // PROTOTYPES //
 
@@ -46,22 +48,29 @@ int main()
 	
 	char sControllerBuf[CONTROLLER_BUFFER_SIZE + 1];
 	char saCommands[NUMBER_INPUTS][COMMAND_BUFFER_SIZE];
+	char sAckBuf[ACK_BUFFER_SIZE];
 
 	ERR_VAL ret = 0;
 
 	// INIT BUFFERS //
 	BufferClear(sControllerBuf, sizeof(sControllerBuf));
 	for(i = 0; i < NUMBER_INPUTS; i++) BufferClear(saCommands[i], sizeof(saCommands[i]));
-
+	BufferClear(sAckBuf, sizeof(sAckBuf));
+	
 	// CONTROLLER SETUP //
 	ControllerInit(CONTROLLER_PATH);
 	
-/*	// UART SETUP //
+	// UART SETUP //
 	UARTInit(UART_PORT, O_RDWR | O_NOCTTY | O_SYNC, 9600, 
-                 8, 0, 1);*/
+                 8, 0, 1);
 
 	while(1)
 	{
+		do
+		{
+			UARTRead(sAckBuf, sizeof(sAckBuf));
+		}while(sAckBuf[0] == 0);
+		
 		// GET CONTROLLER INPUT //
 		ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
 		if(ret != SUCCESS)
@@ -90,9 +99,12 @@ int main()
 
 		for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
 
-	/*	// SEND COMMANDS TO ROBOT //
+		// SEND COMMANDS TO ROBOT //
 		for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
-			                                         sizeof(saCommands[i]));*/
+				                                     strlen(saCommands[i]));
+		BufferClear(sAckBuf, sizeof(sAckBuf));
+
+		//sleep(3);
 	}
 	
 	return (0);

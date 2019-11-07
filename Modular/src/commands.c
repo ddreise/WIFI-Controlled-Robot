@@ -219,12 +219,13 @@ void cmd_Camera(char *command, char *sAxis)
 	//put together command
 	//clear command
 	for(i = 0; i < COMMAND_LENGTH; i++) gs_Command[i] = 0;
-	
-	memcpy(&command[0], "$C", 2);
+
+	sprintf(command, "$C%c%c%c%%", cStepper, sStepper[0], cServo);
+/*	memcpy(&command[0], "$C", 2);
 	memcpy(&command[2], &cStepper, 1);
 	memcpy(&command[3], &sStepper[0], 1);
 	memcpy(&command[4], &cServo, 1);
-	memcpy(&command[5], "%", 1);
+	memcpy(&command[5], "%", 1);*/
 
 	if(iStepper || cServo != 'S') iCamFlag = 1;
 	else iCamFlag = 0;
