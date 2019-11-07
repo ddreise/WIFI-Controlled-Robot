@@ -170,25 +170,54 @@ int main(void){
 	while(TRUE){
 		//inputFlag = get_Input(str);
 
+//		get_Input(str);
+//		CMD(str);
+//		UART1_printf("$ACK");
+		
 		inputFlag = read_Input(str);
 		
 		if(!inputFlag && !ackFlag)
 		{
-			UART1_printf("$ACK%");
+			UART1_printf("$ACK%%\0");
 			ackFlag = 1;
 		}
 		else if(inputFlag)
 		{
-			CMD(str);
-			
 			startedReceiving = 1;
+			CMD(str);
 		}
-		
-		if(startedReceiving && !inputFlag)
+		else if(!inputFlag && !startedReceiving)
 		{
 			ackFlag = 0;
+		}
+		else if(!inputFlag && startedReceiving)
+		{
 			startedReceiving = 0;
 		}
+		
+//		get_Input(str);
+//		CMD(str);
+//		UART1_printf("$ACK");
+		
+//		inputFlag = read_Input(str);
+//		
+//		if(!inputFlag && !ackFlag)
+//		{
+//			UART1_printf("$ACK%");
+//			ackFlag = 1;
+//		}
+//		else if(inputFlag)
+//		{
+//			CMD(str);
+//			
+//			startedReceiving = 1;
+//		}
+//		
+//		if(startedReceiving && !inputFlag)
+//		{
+//			ackFlag = 0;
+//			startedReceiving = 0;
+//		}
 		
 		
 

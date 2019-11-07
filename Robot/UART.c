@@ -300,6 +300,9 @@ int get_Input(char *str){
 		if(str[i-1] == '%')	// end character for command sequence
 		{
 			str[i-1] = 0;
+			
+			return 1;
+			
 			break;
 		}
 		
@@ -310,11 +313,9 @@ int get_Input(char *str){
 			break;
 		}
 		
-		else if(str[i-1] == 0) return 0;
-		
 	} while (TRUE);
 	
-	return 1;
+	return 0;
 	
 }
 
