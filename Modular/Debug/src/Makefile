@@ -101,7 +101,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_modularize_OBJECTS = main.$(OBJEXT)
+am_modularize_OBJECTS = main.$(OBJEXT) pipes.$(OBJEXT) \
+	buffers.$(OBJEXT) controller.$(OBJEXT) commands.$(OBJEXT) \
+	interface.$(OBJEXT) uart.$(OBJEXT)
 modularize_OBJECTS = $(am_modularize_OBJECTS)
 modularize_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_$(V))
@@ -186,7 +188,7 @@ CATALOGS =
 CATOBJEXT = .gmo
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O0
+CFLAGS = -g -O0 -lm
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -329,7 +331,20 @@ AM_CFLAGS = \
 	 -g
 
 modularize_SOURCES = \
-	main.c
+	main.c \
+	pipes.h \
+	pipes.c \
+	buffers.h \
+	buffers.c \
+	controller.h \
+	controller.c \
+	errorhandle.h \
+	commands.h \
+	commands.c \
+	interface.h \
+	interface.c \
+	uart.h \
+	uart.c
 
 modularize_LDFLAGS = 
 modularize_LDADD = 
@@ -426,7 +441,13 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/buffers.Po
+include ./$(DEPDIR)/commands.Po
+include ./$(DEPDIR)/controller.Po
+include ./$(DEPDIR)/interface.Po
 include ./$(DEPDIR)/main.Po
+include ./$(DEPDIR)/pipes.Po
+include ./$(DEPDIR)/uart.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

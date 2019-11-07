@@ -14,7 +14,20 @@ AM_CFLAGS =\
 bin_PROGRAMS = modularize
 
 modularize_SOURCES = \
-	main.c
+	main.c \
+	pipes.h \
+	pipes.c \
+	buffers.h \
+	buffers.c \
+	controller.h \
+	controller.c \
+	errorhandle.h \
+	commands.h \
+	commands.c \
+	interface.h \
+	interface.c \
+	uart.h \
+	uart.c
 
 modularize_LDFLAGS = 
 

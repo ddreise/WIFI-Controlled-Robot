@@ -245,7 +245,7 @@ CATALOGS =
 CATOBJEXT = .gmo
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O0
+CFLAGS = -g -O0 -lm
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
