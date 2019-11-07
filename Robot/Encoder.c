@@ -198,11 +198,13 @@ uint32_t Wheel_Speed(uint8_t encoder){
 	switch (encoder)
 	{
 		case ENCODER_LEFT:
-			left_wheel_speed = (ENCODER_CONSTANT/pulseWidthLeft)*10000;
+			//left_wheel_speed = (ENCODER_CONSTANT/(1/pulseWidthLeft))*10000;
+			left_wheel_speed = ((100000/(pulseWidthLeft))/37.9);//*1000;			// THIS GIVES YOU FREQUENCY (HZ)
 			return left_wheel_speed;	// Returns speed in cm/s
 			
 		case ENCODER_RIGHT:
-			right_wheel_speed = (ENCODER_CONSTANT/pulseWidthRight)*10000;
+			//right_wheel_speed = (ENCODER_CONSTANT/(1/pulseWidthRight))*10000;
+			right_wheel_speed = ((100000/(pulseWidthRight))/37.9);//*1000;
 			return right_wheel_speed;	// Returns speed in cm/s
 			
 		default:

@@ -96,8 +96,8 @@ int main(void){
 	{
 		pulseL = Wheel_Speed(ENCODER_LEFT);
 		pulseR = Wheel_Speed(ENCODER_RIGHT);
-		//pulseL = Encoder_Read(ENCODER_LEFT);
-		//pulseR = Encoder_Read(ENCODER_RIGHT);
+//			pulseL = Encoder_Read(ENCODER_LEFT);
+//			pulseR = Encoder_Read(ENCODER_RIGHT);
 		
 		
 		LCD_Printf(SECOND_LINE, "LW %ld RW %ld ", pulseL, pulseR);
