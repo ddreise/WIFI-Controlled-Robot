@@ -36,7 +36,7 @@ void Command_Menu(void);
 void receive(USART_TypeDef *USARTx, char *buffer, volatile uint32_t *pCounter);
 char read_USART(void);
 char read(USART_TypeDef *USARTx, char *buffer, uint32_t *pCounter);
-void get_Input(char* str);
+int get_Input(char* str);
 
  
 #endif 
