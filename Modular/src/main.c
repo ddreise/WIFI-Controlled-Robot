@@ -66,7 +66,7 @@ int main()
 
 	while(1)
 	{
-		if(strcmp(sAckBuf, "$ACK%") == 0)
+		if(strcmp(sAckBuf, "ACK") == 0)
 		{
 			// GET CONTROLLER INPUT //
 			ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
@@ -100,17 +100,16 @@ int main()
 			for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
 						                                 strlen(saCommands[i]));
 			BufferClear(sAckBuf, sizeof(sAckBuf));
-			printf("ANNNNNAAAAA!\n");
 		}
 		else
 		{
 			BufferClear(sAckBuf, sizeof(sAckBuf));
-			UARTRead(sAckBuf, sizeof(sAckBuf)-1);
+			UARTRead(sAckBuf, sizeof(sAckBuf));
 		}
 
 		//printf("Input: %s\n", sAckBuf);
 		
-		//sleep(3);
+		//sleep(2);
 	}
 	
 	return (0);

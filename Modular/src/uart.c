@@ -49,9 +49,33 @@ ERR_VAL UARTInit(char *portname, int flags, int baudrate,
 
 ERR_VAL UARTRead(char *dest, int destSize)
 {
-	read(fdUART, dest, destSize);
+	char c = 0;
+	int i = 0;
+	int start = 0;
+	//read(fdUART, dest, destSize);
 
-	printf("INPUT: %s\n", dest);
+	do
+	{
+		read(fdUART, &c, 1); //read one character
+
+		if(start && (c != '%') )
+		{
+			if(i < (destSize - 1))
+			{
+				dest[i] = c;
+
+				i++;
+
+				//printf("Char: %s\n", dest);
+			}
+		}
+
+		if(c == '$') start = 1;
+		
+	}while(c != '%');
+
+	start = 0;
+		
 	return SUCCESS;
 }
 ERR_VAL UARTWrite(char *src, int srcSize)
