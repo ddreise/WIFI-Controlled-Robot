@@ -240,24 +240,49 @@ uint8_t Get_Stepper_Mode(void)
 
 void Set_Stepper_Steps(uint16_t steps)
 {
+	
+
+	
+	
+	
+	NVIC_DisableIRQ(TIM3_IRQn);
 	stepsRemaining = steps;
+	NVIC_EnableIRQ(TIM3_IRQn);
 	
 	
 	// Need to Disable Interrupt so that stepsRemaining can actually be set to ZERO without interruption 
 	
+//	if((Get_LimSwitch_State() == LIM_LEFT_TOUCH) | (currentStepPos >= totalSteps)){
+//		NVIC_DisableIRQ(TIM3_IRQn);
+//		stepsRemaining = 0;
+//		currentStepPos = totalSteps;
+//		NVIC_EnableIRQ(TIM3_IRQn);
+//		Delay_ms(2);
+//	}
+//	
+//	if ((Get_LimSwitch_State() == LIM_RIGHT_TOUCH) | (currentStepPos <= 0)){
+//		NVIC_DisableIRQ(TIM3_IRQn);
+//		stepsRemaining = 0;
+//		currentStepPos = 0;
+//		NVIC_EnableIRQ(TIM3_IRQn);
+//		Delay_ms(2);
+//	}
 	
 	if(currentStepPos >= totalSteps) {
 		NVIC_DisableIRQ(TIM3_IRQn);
 		stepsRemaining = 0;
-		currentStepPos = totalSteps;
+		currentStepPos = totalSteps - 1;
 		NVIC_EnableIRQ(TIM3_IRQn);
 		Delay_ms(2);
+		
+		
+		
 		
 	}
 	if(currentStepPos < 0) {
 		NVIC_DisableIRQ(TIM3_IRQn);
 		stepsRemaining = 0;
-		currentStepPos = 0;
+		currentStepPos = 0 + 1;
 		NVIC_EnableIRQ(TIM3_IRQn);
 		Delay_ms(2);
 	}

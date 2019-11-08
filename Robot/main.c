@@ -24,12 +24,12 @@
 //#define STP		0 *** Implemented into RS232_Interface
 //#define SERVO 0 *** Implemented into RS232_Interface
 //#define DC		0 *** Implemented into RS232_Interface
-#define ENC		1
+#define ENC		0
 //#define UART	0 *** Implemented into RS232_Interface
 #define BUZ		0
 
 #define RS232_Interface	0
-#define COMMAND_TEST 0
+#define COMMAND_TEST 1
 
 //Prototypes
 void LCD_Test(void);
