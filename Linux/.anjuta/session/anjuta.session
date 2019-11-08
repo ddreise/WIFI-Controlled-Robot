@@ -1,16 +1,16 @@
 [Anjuta]
 Geometry=925x1023+67+27
 
+[File Loader]
+Files=../../src/main.c#112%%%../../src/interface.c#32%%%../../src/interface.h#27%%%../../src/receive.c#55%%%../../src/receive.h#14%%%../../src/commands.c#38%%%../../src/commands.h#22
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
 [Execution]
 Program uri=../../Debug/src/linux
 Run in terminal=2
 Working directories=../../.
-
-[File Loader]
-Files=../../src/main.c#118%%%../../src/interface.c#32%%%../../src/interface.h#27%%%../../src/receive.c#55%%%../../src/receive.h#14%%%../../src/commands.c#38%%%../../src/commands.h#22
-
-[Document Manager]
-bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 
 [Project Manager]
 Shortcut=Linux//src//linux
