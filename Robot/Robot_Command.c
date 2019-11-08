@@ -93,27 +93,41 @@ int CMD(char *str){
 		
 		// Stepper	
 		if (str[2] == 'L'  && str[3] == '1'){
-			Set_Stepper_Steps(2);
-			Set_Stepper_Mode(STPR_HALF_BCKWRD);
+			
+			if(!(Get_LimSwitch_State() == LIM_LEFT_TOUCH))
+			{
+				Set_Stepper_Steps(2);
+				Set_Stepper_Mode(STPR_HALF_BCKWRD);
+			}
+			else Set_Stepper_Steps(0);
 		}
 		else if (str[2] == 'R' && str[3] == '1'){
-			Set_Stepper_Steps(2);
-			Set_Stepper_Mode(STPR_HALF_FRWRD);
+			
+			if(!(Get_LimSwitch_State() == LIM_RIGHT_TOUCH))
+			{
+				Set_Stepper_Steps(2);
+				Set_Stepper_Mode(STPR_HALF_FRWRD);
+			}
+			else Set_Stepper_Steps(0);
 		}
-		else;
+		else if (str[3] == '0') Set_Stepper_Steps(0);
 		
 		// Servo
 		if (str[4] == 'D'){
 			// RC position +1 degree
-			if (servo_position > 90) servo_position = 90;				// Max tilt check
-			RC_Position(servo_position++);
+			//if (servo_position > 90) servo_position = 90;				// Max tilt check
+			//RC_Position(servo_position++);
+			
+			Set_Servo_State(2);
 		}
 		else if (str[4] == 'U'){
 			// RC position -1 degree
-			if (servo_position < (-10)) servo_position = -10;		// Max tilt check
-			RC_Position(servo_position--);
+			//if (servo_position < (-10)) servo_position = -10;		// Max tilt check
+			//RC_Position(servo_position--);
+			
+			Set_Servo_State(1);
 		}
-		else;	
+		else if(str[4] == 'S') Set_Servo_State(0);
 
 	}
 	

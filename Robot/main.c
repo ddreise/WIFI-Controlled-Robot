@@ -163,6 +163,7 @@ int main(void){
 	
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
+	
 
 	//Command_Menu();
 	
@@ -187,7 +188,7 @@ int main(void){
 			CMD(str);
 		}
 		
-		//Delay_s(2);
+		//Delay_ms(500);
 
 //		
 //		// Motor
