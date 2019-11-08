@@ -37,7 +37,7 @@
 #define CONTROLLER_PATH "/dev/input/js2"
 #define UART_PORT "/dev/ttyS0"
 
-#define ACK_BUFFER_SIZE 128
+#define ACK_BUFFER_SIZE 6
 
 // PROTOTYPES //
 
@@ -62,49 +62,54 @@ int main()
 	
 	// UART SETUP //
 	UARTInit(UART_PORT, O_RDWR | O_NOCTTY | O_SYNC, 9600, 
-                 8, 0, 1);
+                 8, 0, 0);
 
 	while(1)
 	{
-		do
+		if(strcmp(sAckBuf, "ACK") == 0)
 		{
-			UARTRead(sAckBuf, sizeof(sAckBuf));
-		}while(sAckBuf[0] == 0);
-		
-		// GET CONTROLLER INPUT //
-		ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
-		if(ret != SUCCESS)
-		{
-			switch(ret)
+			// GET CONTROLLER INPUT //
+			ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
+			if(ret != SUCCESS)
 			{
-				case PIPE_ERROR:
-					printf("ERROR: Pipe failed to create!\n");
-					break;
-				case FORK_ERROR:
-					printf("ERROR: Fork failed to create!\n");
-				default:
-					break;
+				switch(ret)
+				{
+					case PIPE_ERROR:
+						printf("ERROR: Pipe failed to create!\n");
+						break;
+					case FORK_ERROR:
+						printf("ERROR: Fork failed to create!\n");
+					default:
+						break;
+				}
+
+				return -1;
 			}
 
-			return -1;
-		}
+			// CONVERT INPUT TO COMMAND //
+			ret = GetCommand(saCommands, sControllerBuf);	// 3 commands per input
+			if(ret != SUCCESS)
+			{
+				printf("ERROR: Problem converting input to command!\n");
+				return -1;
+			}
 
-		// CONVERT INPUT TO COMMAND //
-		ret = GetCommand(saCommands, sControllerBuf);	// 3 commands per input
-		if(ret != SUCCESS)
+			for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
+
+			// SEND COMMANDS TO ROBOT //
+			for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
+						                                 strlen(saCommands[i]));
+			BufferClear(sAckBuf, sizeof(sAckBuf));
+		}
+		else
 		{
-			printf("ERROR: Problem converting input to command!\n");
-			return -1;
+			BufferClear(sAckBuf, sizeof(sAckBuf));
+			UARTRead(sAckBuf, sizeof(sAckBuf));
 		}
 
-		for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
-
-		// SEND COMMANDS TO ROBOT //
-		for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
-				                                     strlen(saCommands[i]));
-		BufferClear(sAckBuf, sizeof(sAckBuf));
-
-		//sleep(3);
+		//printf("Input: %s\n", sAckBuf);
+		
+		//sleep(2);
 	}
 	
 	return (0);

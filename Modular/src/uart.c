@@ -33,11 +33,14 @@ void set_mincount(int fd, int mcount);
 ERR_VAL UARTInit(char *portname, int flags, int baudrate, 
                  int bits, int parity, int stopbits)
 {
-	fdUART = open(portname, flags);
+	fdUART = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
 	if(fdUART < 0)
 	{
 		return FAILURE;
 	}
+
+	//flags = fcntl(fdUART, F_GETFL, 0);
+	//fcntl(fdUART, F_SETFL, flags | O_NONBLOCK);
 
 	set_interface_attribs(fdUART, B9600);
 
@@ -46,7 +49,33 @@ ERR_VAL UARTInit(char *portname, int flags, int baudrate,
 
 ERR_VAL UARTRead(char *dest, int destSize)
 {
-	read(fdUART, dest, destSize);
+	char c = 0;
+	int i = 0;
+	int start = 0;
+	//read(fdUART, dest, destSize);
+
+	do
+	{
+		read(fdUART, &c, 1); //read one character
+
+		if(start && (c != '%') )
+		{
+			if(i < (destSize - 1))
+			{
+				dest[i] = c;
+
+				i++;
+
+				//printf("Char: %s\n", dest);
+			}
+		}
+
+		if(c == '$') start = 1;
+		
+	}while(c != '%');
+
+	start = 0;
+		
 	return SUCCESS;
 }
 ERR_VAL UARTWrite(char *src, int srcSize)
