@@ -24,6 +24,7 @@
 
 // PROTOTYPES //
 void Encoder_Init(void);							//initializes encoders
-uint32_t Encoder_Read(uint8_t encoder);
+uint32_t Encoder_Read(uint8_t encoder);		// Reads encoder pulse width
+uint32_t Wheel_Speed(uint8_t encoder);		// Outputs wheel speed in cm/s
 
 #endif
