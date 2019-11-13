@@ -23,10 +23,10 @@ VERSION = 0.1
 
 SHELL = /bin/bash
 
-srcdir = /home/justin/dev/engineering-project-v/Modular/po
-top_srcdir = /home/justin/dev/engineering-project-v/Modular
+srcdir = /home/linuxuser/engineering-project-v/Modular/po
+top_srcdir = /home/linuxuser/engineering-project-v/Modular
 top_builddir = ..
-VPATH = /home/justin/dev/engineering-project-v/Modular/po
+VPATH = /home/linuxuser/engineering-project-v/Modular/po
 
 prefix = /usr/local
 exec_prefix = ${prefix}
@@ -35,7 +35,7 @@ datarootdir = ${prefix}/share
 libdir = ${exec_prefix}/lib
 localedir = ${datarootdir}/locale
 subdir = po
-install_sh = ${SHELL} /home/justin/dev/engineering-project-v/Modular/install-sh
+install_sh = ${SHELL} /home/linuxuser/engineering-project-v/Modular/install-sh
 # Automake >= 1.8 provides $(MKDIR_P).
 # Until it can be supposed, use the safe fallback:
 mkdir_p = $(install_sh) -d
@@ -65,7 +65,7 @@ DISTFILES = Makefile.in.in POTFILES.in $(POFILES)
 EXTRA_DISTFILES = ChangeLog POTFILES.skip Makevars LINGUAS
 
 POTFILES = \
-	/home/justin/dev/engineering-project-v/Modular/src/main.c
+	/home/linuxuser/engineering-project-v/Modular/src/main.c
 
 CATALOGS=$(shell LINGUAS="$(USE_LINGUAS)"; for lang in $$LINGUAS; do printf "$$lang.gmo "; done)
 

@@ -1,4 +1,4 @@
-main.o: /home/justin/dev/engineering-project-v/Modular/src/main.c \
+main.o: /home/linuxuser/engineering-project-v/Modular/src/main.c \
  /usr/include/stdc-predef.h /usr/include/unistd.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -74,12 +74,12 @@ main.o: /home/justin/dev/engineering-project-v/Modular/src/main.c \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/x86_64-linux-gnu/bits/stat.h \
- /home/justin/dev/engineering-project-v/Modular/src/buffers.h \
- /home/justin/dev/engineering-project-v/Modular/src/pipes.h \
- /home/justin/dev/engineering-project-v/Modular/src/errorhandle.h \
- /home/justin/dev/engineering-project-v/Modular/src/controller.h \
- /home/justin/dev/engineering-project-v/Modular/src/interface.h \
- /home/justin/dev/engineering-project-v/Modular/src/uart.h
+ /home/linuxuser/engineering-project-v/Modular/src/buffers.h \
+ /home/linuxuser/engineering-project-v/Modular/src/pipes.h \
+ /home/linuxuser/engineering-project-v/Modular/src/errorhandle.h \
+ /home/linuxuser/engineering-project-v/Modular/src/controller.h \
+ /home/linuxuser/engineering-project-v/Modular/src/interface.h \
+ /home/linuxuser/engineering-project-v/Modular/src/uart.h
 
 /usr/include/stdc-predef.h:
 
@@ -253,14 +253,14 @@ main.o: /home/justin/dev/engineering-project-v/Modular/src/main.c \
 
 /usr/include/x86_64-linux-gnu/bits/stat.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/buffers.h:
+/home/linuxuser/engineering-project-v/Modular/src/buffers.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/pipes.h:
+/home/linuxuser/engineering-project-v/Modular/src/pipes.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/errorhandle.h:
+/home/linuxuser/engineering-project-v/Modular/src/errorhandle.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/controller.h:
+/home/linuxuser/engineering-project-v/Modular/src/controller.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/interface.h:
+/home/linuxuser/engineering-project-v/Modular/src/interface.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/uart.h:
+/home/linuxuser/engineering-project-v/Modular/src/uart.h:

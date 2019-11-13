@@ -1,16 +1,16 @@
 [Anjuta]
 Geometry=927x1023+67+27
 
+[File Loader]
+Files=../../src/controller.h#1%%%../../src/controller.c#143%%%../../src/main.c#104
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
 [Execution]
 Program uri=../../Debug/src/modularize
 Run in terminal=2
 Working directories=../../.
-
-[File Loader]
-Files=../../src/controller.h#1%%%../../src/controller.c#143%%%../../src/main.c#105
-
-[Document Manager]
-bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 
 [Project Manager]
 Shortcut=Modular//src//modularize
