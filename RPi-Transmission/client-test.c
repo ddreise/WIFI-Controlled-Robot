@@ -15,23 +15,27 @@
  #include <netdb.h>
  
  #define PORT 5000
- #define HOST "raspberrypi"
+ #define HOST "10.192.158.130"
+ #define BUFFER_SIZE 256
  
  int main(void)
  {
+ 	char buffer[BUFFER_SIZE];
+ 
  	// CLIENT INIT //
  	int clientSocket;
  	struct sockaddr_in serverAddr;
  	struct hostent *host;
+ 	const char* hostName = HOST;
  	
  	//get host info
- 	host = gethostbyname(HOST);
+ 	host = gethostbyname(hostName);
  	if(host == NULL)
  	{
  		printf("ERROR: Could not get host by name!\n");
  		return -1;
  	}
- 	else printf("SUCCESS: Host info received!");
+ 	else printf("SUCCESS: Host info received!\n");
  	
  	//create client socket
  	clientSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -60,5 +64,15 @@
  	//ready for socket communication
  	printf("CLIENT SOCKET COMMUNICATION ONLINE!\n");
  	
- 	return -1;
+ 	memset(&buffer, 0, sizeof(buffer));
+ 	
+ 	//send a test
+ 	strcpy(buffer, "Hello RPi!\n");
+ 	write(clientSocket, buffer, strlen(buffer));
+ 	
+ 	//read a test
+ 	read(clientSocket, buffer, BUFFER_SIZE);
+ 	printf("RPi: %s", buffer);
+ 	
+ 	return 0;
  }
