@@ -1,15 +1,9 @@
 [Anjuta]
-<<<<<<< HEAD
-Geometry=927x1023+67+27
+Maximized=1
+Geometry=1920x1038+0+20
 
 [File Loader]
-Files=../../src/main.c#111%%%../../src/sockets.c#158%%%../../src/sockets.h#19%%%../../src/uart.c#79
-=======
-Geometry=654x393+0+20
-
-[File Loader]
-Files=../../src/controller.h#1%%%../../src/controller.c#143%%%../../src/main.c#109
->>>>>>> 979d7a7b5d123fbda353a19c54c8fb9118ed1994
+Files=../../src/controller.h#1%%%../../src/controller.c#143%%%../../src/main.c#118%%%../../src/sockets.c#14
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
@@ -20,8 +14,8 @@ Run in terminal=2
 Working directories=../../.
 
 [Project Manager]
-Shortcut=Modular//src//modularize
-Expand=modularize%%%Modular
+Shortcut=RPi//src//modularize
+Expand=modularize
 
 [Debugger]
 Stop at beginning=2
