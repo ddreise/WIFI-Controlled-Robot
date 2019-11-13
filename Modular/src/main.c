@@ -34,7 +34,7 @@
 #include "uart.h"
 
 // DEFINES //
-#define CONTROLLER_PATH "/dev/input/js2"
+#define CONTROLLER_PATH "/dev/input/js1"
 #define UART_PORT "/dev/ttyS0"
 
 #define ACK_BUFFER_SIZE 6
@@ -99,6 +99,7 @@ int main()
 			// SEND COMMANDS TO ROBOT //
 			for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
 						                                 strlen(saCommands[i]));
+			//printf("Input: %s\n", sAckBuf);
 			BufferClear(sAckBuf, sizeof(sAckBuf));
 		}
 		else
@@ -106,8 +107,6 @@ int main()
 			BufferClear(sAckBuf, sizeof(sAckBuf));
 			UARTRead(sAckBuf, sizeof(sAckBuf));
 		}
-
-		//printf("Input: %s\n", sAckBuf);
 		
 		//sleep(2);
 	}
