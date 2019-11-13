@@ -79,7 +79,8 @@ main.o: /home/justin/dev/engineering-project-v/Modular/src/main.c \
  /home/justin/dev/engineering-project-v/Modular/src/errorhandle.h \
  /home/justin/dev/engineering-project-v/Modular/src/controller.h \
  /home/justin/dev/engineering-project-v/Modular/src/interface.h \
- /home/justin/dev/engineering-project-v/Modular/src/uart.h
+ /home/justin/dev/engineering-project-v/Modular/src/uart.h \
+ /home/justin/dev/engineering-project-v/Modular/src/sockets.h
 
 /usr/include/stdc-predef.h:
 
@@ -264,3 +265,5 @@ main.o: /home/justin/dev/engineering-project-v/Modular/src/main.c \
 /home/justin/dev/engineering-project-v/Modular/src/interface.h:
 
 /home/justin/dev/engineering-project-v/Modular/src/uart.h:
+
+/home/justin/dev/engineering-project-v/Modular/src/sockets.h:
