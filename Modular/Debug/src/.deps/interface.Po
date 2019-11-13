@@ -1,5 +1,5 @@
 interface.o: \
- /home/linuxuser/engineering-project-v/Modular/src/interface.c \
+ /home/justin/dev/engineering-project-v/Modular/src/interface.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -47,11 +47,11 @@ interface.o: \
  /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/alloca.h /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /home/linuxuser/engineering-project-v/Modular/src/interface.h \
- /home/linuxuser/engineering-project-v/Modular/src/errorhandle.h \
- /home/linuxuser/engineering-project-v/Modular/src/commands.h \
- /home/linuxuser/engineering-project-v/Modular/src/buffers.h \
- /home/linuxuser/engineering-project-v/Modular/src/controller.h
+ /home/justin/dev/engineering-project-v/Modular/src/interface.h \
+ /home/justin/dev/engineering-project-v/Modular/src/errorhandle.h \
+ /home/justin/dev/engineering-project-v/Modular/src/commands.h \
+ /home/justin/dev/engineering-project-v/Modular/src/buffers.h \
+ /home/justin/dev/engineering-project-v/Modular/src/controller.h
 
 /usr/include/stdc-predef.h:
 
@@ -159,12 +159,12 @@ interface.o: \
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/interface.h:
+/home/justin/dev/engineering-project-v/Modular/src/interface.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/errorhandle.h:
+/home/justin/dev/engineering-project-v/Modular/src/errorhandle.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/commands.h:
+/home/justin/dev/engineering-project-v/Modular/src/commands.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/buffers.h:
+/home/justin/dev/engineering-project-v/Modular/src/buffers.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/controller.h:
+/home/justin/dev/engineering-project-v/Modular/src/controller.h:

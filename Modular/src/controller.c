@@ -132,23 +132,23 @@ ERR_VAL ControllerGetInput(char *buf, int bufSize)
 
 ERR_VAL Read_Controller(char *buf, int bufSize)
 {
+	char request[REQUEST_PIPE_SIZE];
+		
+	int aFlag = 0;
+	int aDouble = 0;
+
+	struct js_event event;
+	struct axis_state axes[3] = {0};
+	size_t axis;
+
+	int xMotor = 0;
+	int yMotor = 0;
+
+	int stepperMotor = 0;
+	int servoMotor = 0;
+	
 	while(1)
-	{
-		char request[REQUEST_PIPE_SIZE];
-		
-		int aFlag = 0;
-		int aDouble = 0;
-
-		struct js_event event;
-		struct axis_state axes[3] = {0};
-		size_t axis;
-
-		int xMotor = 0;
-		int yMotor = 0;
-
-		int stepperMotor = 0;
-		int servoMotor = 0;
-		
+	{	
 		read_event(js, &event);
 		switch(event.type)
 		{

@@ -32,7 +32,7 @@
             <notebook orientation="vertical" resize="yes" locked="no" iconified="no" closed="yes" page="-1"/>
           </paned>
         </paned>
-        <notebook orientation="vertical" resize="yes" locked="no" iconified="no" closed="no" page="0">
+        <notebook orientation="vertical" resize="yes" locked="no" iconified="no" closed="no" page="5">
           <item name="AnjutaTerminal" orientation="vertical" resize="yes" locked="no" iconified="no" closed="no"/>
           <item name="AnjutaDebuggerWatch" orientation="vertical" resize="yes" locked="no" iconified="no" closed="yes"/>
           <item name="AnjutaDebuggerBreakpoints" orientation="vertical" resize="yes" locked="no" iconified="no" closed="yes"/>

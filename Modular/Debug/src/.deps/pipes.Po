@@ -1,7 +1,7 @@
-pipes.o: /home/linuxuser/engineering-project-v/Modular/src/pipes.c \
+pipes.o: /home/justin/dev/engineering-project-v/Modular/src/pipes.c \
  /usr/include/stdc-predef.h \
- /home/linuxuser/engineering-project-v/Modular/src/pipes.h \
- /home/linuxuser/engineering-project-v/Modular/src/errorhandle.h \
+ /home/justin/dev/engineering-project-v/Modular/src/pipes.h \
+ /home/justin/dev/engineering-project-v/Modular/src/errorhandle.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -54,9 +54,9 @@ pipes.o: /home/linuxuser/engineering-project-v/Modular/src/pipes.c \
 
 /usr/include/stdc-predef.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/pipes.h:
+/home/justin/dev/engineering-project-v/Modular/src/pipes.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/errorhandle.h:
+/home/justin/dev/engineering-project-v/Modular/src/errorhandle.h:
 
 /usr/include/stdio.h:
 

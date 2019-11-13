@@ -1,7 +1,7 @@
-uart.o: /home/linuxuser/engineering-project-v/Modular/src/uart.c \
+uart.o: /home/justin/dev/engineering-project-v/Modular/src/uart.c \
  /usr/include/stdc-predef.h \
- /home/linuxuser/engineering-project-v/Modular/src/uart.h \
- /home/linuxuser/engineering-project-v/Modular/src/errorhandle.h \
+ /home/justin/dev/engineering-project-v/Modular/src/uart.h \
+ /home/justin/dev/engineering-project-v/Modular/src/errorhandle.h \
  /usr/include/errno.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -66,9 +66,9 @@ uart.o: /home/linuxuser/engineering-project-v/Modular/src/uart.c \
 
 /usr/include/stdc-predef.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/uart.h:
+/home/justin/dev/engineering-project-v/Modular/src/uart.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/errorhandle.h:
+/home/justin/dev/engineering-project-v/Modular/src/errorhandle.h:
 
 /usr/include/errno.h:
 

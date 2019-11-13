@@ -1,6 +1,6 @@
-buffers.o: /home/linuxuser/engineering-project-v/Modular/src/buffers.c \
+buffers.o: /home/justin/dev/engineering-project-v/Modular/src/buffers.c \
  /usr/include/stdc-predef.h \
- /home/linuxuser/engineering-project-v/Modular/src/buffers.h \
+ /home/justin/dev/engineering-project-v/Modular/src/buffers.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -52,7 +52,7 @@ buffers.o: /home/linuxuser/engineering-project-v/Modular/src/buffers.c \
 
 /usr/include/stdc-predef.h:
 
-/home/linuxuser/engineering-project-v/Modular/src/buffers.h:
+/home/justin/dev/engineering-project-v/Modular/src/buffers.h:
 
 /usr/include/stdio.h:
 
