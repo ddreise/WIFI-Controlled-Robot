@@ -132,7 +132,7 @@ void UART1_init(void) {
 	// If oversampling by 8,  Tx/Rx baud = 2*f_CK / USARTDIV
   // When OVER8 = 0, BRR = USARTDIV
 	// USARTDIV = 72MHz/9600 = 7500 = 0x1D4C
-	USART1->BRR  = 0x1D4C; // Limited to 16 bits --> changed from 0x1C14
+	USART1->BRR  = 0x1D4C; // Limited to 16 bits --> changed from 0x1C14 or 0x1D4C
 	
 	// Enable USART
 	//USART1->CR1  |= USART_CR1_UE;                 
@@ -173,7 +173,10 @@ void receive(USART_TypeDef *USARTx, char *buffer, volatile uint32_t *pCounter){	
 char read_USART(void){
 	char something;
 	//temp = read(USART1, USART1_Buffer, &Rx_Counter);
-	while (Rx_Counter == 0);
+	
+	//while (Rx_Counter == 0);
+	if(Rx_Counter == 0) return 0;
+	
 	something = USART1_Buffer[out_counter];
 	out_counter = (out_counter + 1) % BUFFERSIZE;
 	NVIC_DisableIRQ(USART1_IRQn);
@@ -273,13 +276,14 @@ void Command_Menu(void){
 	
 }
 
-void get_Input(char *str){
+int get_Input(char *str){
 	
 	uint8_t i = 0;
 	do {
 		str[i] = read_USART();
 		i++;
 		
+		if(str[i-1] == 0) return 0;
 
 		if(str[i-1] == '%')	// end character for command sequence
 		{
@@ -298,6 +302,8 @@ void get_Input(char *str){
 		}
 		
 	} while (TRUE);
+	
+	return 1;
 	
 }
 

@@ -7,7 +7,13 @@
 #include "Macros.h"
 #include "SysTick.h"
 #include "Robot_Command.h"
+#include "RC_Servo.h"
+
 #include <stdlib.h>
+
+#define MAX_UP_TILT 90
+#define	MAX_DOWN_TILT -10
+#define SERVO_DELAY 3
 
 // IMPORTANT VARIABLES //
 
@@ -15,6 +21,11 @@ static volatile int32_t stepsRemaining = 0;
 static uint8_t stepMode = STPR_STOP;
 static uint32_t totalSteps = 0; 
 static int32_t currentStepPos = 0;
+static volatile int32_t stepFlag = 0;
+
+static volatile uint8_t servoFlag = 0;
+static volatile int16_t servoDegree = 15;
+static volatile int32_t servoDelay = 0;
 
 // FUNCTIONS //
 
@@ -25,7 +36,7 @@ void TIM3_IRQHandler(void)
 	if((TIM3->SR & TIM_SR_UIF) != 0)
 	{
 		// Check if there are any steps to take
-		if(!(stepsRemaining <= 0))
+		if(stepFlag)		//if(!(stepsRemaining <= 0))
 		{
 			// Take a step and decrement the number of steps left
 			stepperRun(stepMode);
@@ -48,6 +59,29 @@ void TIM3_IRQHandler(void)
 		{
 			stepMode = STPR_STOP;
 			stepsRemaining = 0;
+		}
+		
+		if(servoFlag == 1) //go up
+		{
+			if(servoDegree <= MAX_UP_TILT && (servoDelay == SERVO_DELAY) )
+			{
+				RC_Position(servoDegree++);
+				//servoDelay = 0;
+			}
+			
+			if(servoDelay == SERVO_DELAY) servoDelay = 0;
+			servoDelay++;
+		}
+		else if(servoFlag == 2) //go down
+		{
+			if(servoDegree >= MAX_DOWN_TILT && (servoDelay == SERVO_DELAY) )
+			{
+				RC_Position(servoDegree--);
+				//servoDelay = 0;
+			}
+			
+			if(servoDelay == SERVO_DELAY) servoDelay = 0;
+			servoDelay++;
 		}
 		
 		TIM3->SR &= ~TIM_SR_UIF;
@@ -83,7 +117,7 @@ void stepperInit(void)
 
 	//strcpy(str, "$H%");
 	CMD("$H");
-	Delay_s(2);
+	//Delay_s(1);
 }
 
 void TIM3_Init(void)
@@ -137,6 +171,14 @@ void Stepper_Home(void)
 	}
 	
 	currentStepPos = 0;
+	
+
+	while (currentStepPos != (totalSteps / 2))
+	{
+		stepperRun(STPR_HALF_FRWRD);
+
+		Delay_us(2500);
+	}
 	
 	Stepper_Set(STPR_FULL, 0x13B, 0);	//goto stepper home
 	
@@ -247,7 +289,12 @@ void Set_Stepper_Steps(uint16_t steps)
 	
 	NVIC_DisableIRQ(TIM3_IRQn);
 	stepsRemaining = steps;
+
 	NVIC_EnableIRQ(TIM3_IRQn);
+
+	if (steps > 0) stepFlag = 1;
+	else stepFlag = 0;
+
 	
 	
 	// Need to Disable Interrupt so that stepsRemaining can actually be set to ZERO without interruption 
@@ -329,4 +376,9 @@ void Set_Stepper_Speed(uint16_t speed)
 {
 	TIM3->ARR = speed;
 	TIM3->CCR1 = speed;
+}
+
+void Set_Servo_State(int8_t state)
+{
+	servoFlag = state;
 }

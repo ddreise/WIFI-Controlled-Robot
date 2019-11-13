@@ -98,6 +98,8 @@ uint16_t Get_Stepper_Steps(void);
 void Set_Stepper_Speed(uint16_t speed);
 int16_t Get_Stepper_Position(void);
 
+void Set_Servo_State(int8_t state);
+
 // LIMIT SWITCHES //
 void LimSwitch_Init(void);
 uint8_t Get_LimSwitch_State(void);
