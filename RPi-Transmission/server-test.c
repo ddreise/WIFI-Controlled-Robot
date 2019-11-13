@@ -17,9 +17,12 @@
 #include <sys/wait.h>
 
 #define PORT 5000	//port to use for socket communications
+#define BUFFER_SIZE 256
 
 int main(void)
 {
+	char buffer[BUFFER_SIZE];
+
 	// SERVER INIT //
 	int serverSocket = 0, clientSocket = 0;
 	struct sockaddr_in serverAddr, clientAddr;
@@ -70,6 +73,18 @@ int main(void)
 	
 	//ready for socket communication!
 	printf("SERVER SOCKET COMMUNICATIONS ONLINE!\n");
-	
+
+	memset(&buffer, 0, sizeof(buffer));
+
+	//read a test
+	read(clientSocket, buffer, sizeof(buffer));
+	printf("DESKTOP: %s", buffer);
+
+	memset(&buffer, 0, sizeof(buffer));
+
+	//send a test
+	strcpy(buffer, "Hello Desktop!\n");
+	write(clientSocket, buffer, strlen(buffer));
+
 	return 0;
 }
