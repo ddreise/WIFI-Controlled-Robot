@@ -140,7 +140,31 @@ ERR_VAL SocketWrite(char *src, int srcSize)
 
 ERR_VAL SocketRead(char *dest, int destSize)
 {
-	read(clientSocket, dest, destSize);
+	char c = 0;
+	int i = 0;
+	int start = 0;
 
+	do
+	{
+		read(clientSocket, &c, 1); //read one character
+
+		if(start && (c != '%') )
+		{
+			if(i < (destSize - 1))
+			{
+				dest[i] = c;
+
+				i++;
+
+				//printf("Char: %s\n", dest);
+			}
+		}
+
+		if(c == '$') start = 1;
+		
+	}while(c != '%');
+
+	start = 0;
+		
 	return SUCCESS;
 }
