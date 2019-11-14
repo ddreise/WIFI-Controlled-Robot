@@ -47,6 +47,7 @@
 int main()
 {
 	u_int8_t i = 0;
+	int startup = 1;
 	
 	char sControllerBuf[CONTROLLER_BUFFER_SIZE + 1];
 	char saCommands[NUMBER_INPUTS][COMMAND_BUFFER_SIZE];
@@ -70,86 +71,52 @@ int main()
 
 	// SOCKET SETUP //
 	SocketServerInit(PORT);
-
-	//SocketRead(sAckBuf, sizeof(sAckBuf));
-	//printf("DESKTOP: %s", sAckBuf);
-	//BufferClear(sAckBuf, sizeof(sAckBuf));
-	strcpy(sAckBuf, "$ACK%");
 	
 	while(1)
 	{
-		//printf("Input: ");
-		//SocketWrite(sAckBuf, strlen(sAckBuf));   //send ACK to desktop
-		//SocketRead(sInputBuf, sizeof(sInputBuf));   //wait for input
-		//printf("%s\n", sInputBuf); //print input
-		//BufferClear(sInputBuf, sizeof(sInputBuf));
-		
-		if(strcmp(sAckBuf, "ACK") == 0)
+		if(strcmp(sAckBuf, "ACK") == 0 || startup)
 		{
-			printf("ACKNOWLEDGED!\n");
-			// GET CONTROLLER INPUT //
-			/*ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
-			if(ret != SUCCESS)
-			{
-				switch(ret)
-				{
-					case PIPE_ERROR:
-						printf("ERROR: Pipe failed to create!\n");
-						break;
-					case FORK_ERROR:
-						printf("ERROR: Fork failed to create!\n");
-					default:
-						break;
-				}
-
-				return -1;
-			}		
-
-			// CONVERT INPUT TO COMMAND //
-			ret = GetCommand(saCommands, sControllerBuf);	// 3 commands per input
-			if(ret != SUCCESS)
-			{
-				printf("ERROR: Problem converting input to command!\n");
-				return -1;
-			}*/
-
+			startup = 0;
+			
 			// GET COMMANDS FROM DESKTOP //
+			BufferClear(sAckBuf, sizeof(sAckBuf));
+			strcpy(sAckBuf, "$ACK%");
 			SocketWrite(sAckBuf, strlen(sAckBuf));
-			for(i = 0; i < NUMBER_INPUTS; i++) SocketRead(saCommands[i], sizeof(saCommands[i]));
-			printf("COMMANDS RECEIVED");
+			for(i = 0; i < NUMBER_INPUTS; i++) 
+			{
+				BufferClear(saCommands[i], sizeof(saCommands[i]));
+				SocketRead(saCommands[i], sizeof(saCommands[i]));
+			}
 
 			// RE-INPUT '$' AND '%' VALUES THAT WERE TAKEN OUT WHEN READ
 			for(i = 0; i < NUMBER_INPUTS; i++)
 			{
 				char sTempCommand[COMMAND_BUFFER_SIZE];
+				//char *pCmd = sTempCommand;
 				BufferClear(sTempCommand, sizeof(sTempCommand));
-				strcpy(sTempCommand, saCommands[i]);
 
-				sprintf(saCommands[i], "$%s%%", sTempCommand);
+				//memcpy(pCmd, "$", 1);
+				//pCmd++;
+				//memcpy(pCmd, saCommands[i], strlen(saCommands[i]));
+				//pCmd += strlen(saCommands[i]);
+				//memcpy(pCmd, "%\0", 2);
+
+				sprintf(sTempCommand, "$%s%%", saCommands[i]);
+				
+				// SEND COMMANDS TO ROBOT //
+				UARTWrite(sTempCommand, strlen(sTempCommand));
+				//printf("COMMAND: %s\n", sTempCommand);
 			}
-
-			for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
-
-			// SEND COMMANDS TO ROBOT //
-			for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
-						                                 strlen(saCommands[i]));
-			printf("Input: %s\n", sAckBuf);
-
-			// SEND COMMANDS TO RPi //
-			//for(i = 0; i < NUMBER_INPUTS; i++) SocketWrite(saCommands[i], 
-			//			                                 strlen(saCommands[i]));
-			
 			
 			BufferClear(sAckBuf, sizeof(sAckBuf));
+			
 		}
 		else
 		{
 			BufferClear(sAckBuf, sizeof(sAckBuf));
 
 			UARTRead(sAckBuf, sizeof(sAckBuf));
-			printf("ACK: %s\n", sAckBuf);
-
-			//SocketRead(sAckBuf, sizeof(sAckBuf));
+			printf("ROBOT: %s\n", sAckBuf);
 		}
 	}
 	

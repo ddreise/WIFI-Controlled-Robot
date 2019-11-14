@@ -155,12 +155,8 @@ ERR_VAL Read_Controller(char *buf, int bufSize)
 			case JS_EVENT_BUTTON:
 				if (event.number == 0) //Green Button A is pressed 
 				{
-					if (aDouble == 1) aDouble = 0;
-					else
-					{
-						aFlag = 1;
-						aDouble = 1;
-					}
+					if(aFlag) aFlag = 0;
+					else aFlag = 1;
 				}
 				break;
 			case JS_EVENT_AXIS:
@@ -188,8 +184,9 @@ ERR_VAL Read_Controller(char *buf, int bufSize)
 				break;
 		}
 
+		event.type = JS_EVENT_INIT; //reset event.type after event is processed to avoid duplicate processing
+
 		sprintf(buf, "BA%d$AR%+04d%+04d$AL%+04d%+04d$", aFlag, xMotor, yMotor, stepperMotor, servoMotor);
-		aFlag = 0;
 
 		read(requestPipe[0], request, sizeof(request));
 		if(strcmp(request, "1") == 0)
