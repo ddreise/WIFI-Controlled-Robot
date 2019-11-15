@@ -74,6 +74,7 @@ int main()
 		{
 			// GET CONTROLLER INPUT //
 			ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
+			printf("CONTROLLERBUF: %s\n", sControllerBuf);
 			if(ret != SUCCESS)
 			{
 				switch(ret)
@@ -98,11 +99,14 @@ int main()
 				return -1;
 			}
 
-			for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
+			//for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
 
 			// SEND COMMANDS TO RPi //
-			for(i = 0; i < NUMBER_INPUTS; i++) SocketWrite(saCommands[i], 
-						                                 strlen(saCommands[i]));
+			for(i = 0; i < NUMBER_INPUTS; i++) 
+			{
+				SocketWrite(saCommands[i], strlen(saCommands[i]));
+				printf("%s\n", saCommands[i]);
+			}
 			
 			BufferClear(sAckBuf, sizeof(sAckBuf));
 		}

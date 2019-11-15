@@ -101,9 +101,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_modularize_OBJECTS = main.$(OBJEXT) pipes.$(OBJEXT) \
-	buffers.$(OBJEXT) controller.$(OBJEXT) commands.$(OBJEXT) \
-	interface.$(OBJEXT) uart.$(OBJEXT) sockets.$(OBJEXT)
+am_modularize_OBJECTS = modularize-main.$(OBJEXT) \
+	modularize-pipes.$(OBJEXT) modularize-buffers.$(OBJEXT) \
+	modularize-controller.$(OBJEXT) modularize-commands.$(OBJEXT) \
+	modularize-interface.$(OBJEXT) modularize-uart.$(OBJEXT) \
+	modularize-sockets.$(OBJEXT)
 modularize_OBJECTS = $(am_modularize_OBJECTS)
 modularize_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -111,8 +113,8 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
 modularize_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(modularize_LDFLAGS) $(LDFLAGS) -o $@
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(modularize_CFLAGS) \
+	$(CFLAGS) $(modularize_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -348,6 +350,7 @@ modularize_SOURCES = \
 	sockets.h \
 	sockets.c
 
+modularize_CFLAGS = -lm 
 modularize_LDFLAGS = 
 modularize_LDADD = 
 all: all-am
@@ -443,14 +446,14 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buffers.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/commands.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controller.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interface.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pipes.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sockets.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uart.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-buffers.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-commands.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-controller.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-interface.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-pipes.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-sockets.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/modularize-uart.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -472,6 +475,118 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+
+modularize-main.o: main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-main.o -MD -MP -MF $(DEPDIR)/modularize-main.Tpo -c -o modularize-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-main.Tpo $(DEPDIR)/modularize-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='modularize-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+
+modularize-main.obj: main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-main.obj -MD -MP -MF $(DEPDIR)/modularize-main.Tpo -c -o modularize-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-main.Tpo $(DEPDIR)/modularize-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='modularize-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+
+modularize-pipes.o: pipes.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-pipes.o -MD -MP -MF $(DEPDIR)/modularize-pipes.Tpo -c -o modularize-pipes.o `test -f 'pipes.c' || echo '$(srcdir)/'`pipes.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-pipes.Tpo $(DEPDIR)/modularize-pipes.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='pipes.c' object='modularize-pipes.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-pipes.o `test -f 'pipes.c' || echo '$(srcdir)/'`pipes.c
+
+modularize-pipes.obj: pipes.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-pipes.obj -MD -MP -MF $(DEPDIR)/modularize-pipes.Tpo -c -o modularize-pipes.obj `if test -f 'pipes.c'; then $(CYGPATH_W) 'pipes.c'; else $(CYGPATH_W) '$(srcdir)/pipes.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-pipes.Tpo $(DEPDIR)/modularize-pipes.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='pipes.c' object='modularize-pipes.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-pipes.obj `if test -f 'pipes.c'; then $(CYGPATH_W) 'pipes.c'; else $(CYGPATH_W) '$(srcdir)/pipes.c'; fi`
+
+modularize-buffers.o: buffers.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-buffers.o -MD -MP -MF $(DEPDIR)/modularize-buffers.Tpo -c -o modularize-buffers.o `test -f 'buffers.c' || echo '$(srcdir)/'`buffers.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-buffers.Tpo $(DEPDIR)/modularize-buffers.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='buffers.c' object='modularize-buffers.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-buffers.o `test -f 'buffers.c' || echo '$(srcdir)/'`buffers.c
+
+modularize-buffers.obj: buffers.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-buffers.obj -MD -MP -MF $(DEPDIR)/modularize-buffers.Tpo -c -o modularize-buffers.obj `if test -f 'buffers.c'; then $(CYGPATH_W) 'buffers.c'; else $(CYGPATH_W) '$(srcdir)/buffers.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-buffers.Tpo $(DEPDIR)/modularize-buffers.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='buffers.c' object='modularize-buffers.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-buffers.obj `if test -f 'buffers.c'; then $(CYGPATH_W) 'buffers.c'; else $(CYGPATH_W) '$(srcdir)/buffers.c'; fi`
+
+modularize-controller.o: controller.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-controller.o -MD -MP -MF $(DEPDIR)/modularize-controller.Tpo -c -o modularize-controller.o `test -f 'controller.c' || echo '$(srcdir)/'`controller.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-controller.Tpo $(DEPDIR)/modularize-controller.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='controller.c' object='modularize-controller.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-controller.o `test -f 'controller.c' || echo '$(srcdir)/'`controller.c
+
+modularize-controller.obj: controller.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-controller.obj -MD -MP -MF $(DEPDIR)/modularize-controller.Tpo -c -o modularize-controller.obj `if test -f 'controller.c'; then $(CYGPATH_W) 'controller.c'; else $(CYGPATH_W) '$(srcdir)/controller.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-controller.Tpo $(DEPDIR)/modularize-controller.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='controller.c' object='modularize-controller.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-controller.obj `if test -f 'controller.c'; then $(CYGPATH_W) 'controller.c'; else $(CYGPATH_W) '$(srcdir)/controller.c'; fi`
+
+modularize-commands.o: commands.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-commands.o -MD -MP -MF $(DEPDIR)/modularize-commands.Tpo -c -o modularize-commands.o `test -f 'commands.c' || echo '$(srcdir)/'`commands.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-commands.Tpo $(DEPDIR)/modularize-commands.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='commands.c' object='modularize-commands.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-commands.o `test -f 'commands.c' || echo '$(srcdir)/'`commands.c
+
+modularize-commands.obj: commands.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-commands.obj -MD -MP -MF $(DEPDIR)/modularize-commands.Tpo -c -o modularize-commands.obj `if test -f 'commands.c'; then $(CYGPATH_W) 'commands.c'; else $(CYGPATH_W) '$(srcdir)/commands.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-commands.Tpo $(DEPDIR)/modularize-commands.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='commands.c' object='modularize-commands.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-commands.obj `if test -f 'commands.c'; then $(CYGPATH_W) 'commands.c'; else $(CYGPATH_W) '$(srcdir)/commands.c'; fi`
+
+modularize-interface.o: interface.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-interface.o -MD -MP -MF $(DEPDIR)/modularize-interface.Tpo -c -o modularize-interface.o `test -f 'interface.c' || echo '$(srcdir)/'`interface.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-interface.Tpo $(DEPDIR)/modularize-interface.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='interface.c' object='modularize-interface.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-interface.o `test -f 'interface.c' || echo '$(srcdir)/'`interface.c
+
+modularize-interface.obj: interface.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-interface.obj -MD -MP -MF $(DEPDIR)/modularize-interface.Tpo -c -o modularize-interface.obj `if test -f 'interface.c'; then $(CYGPATH_W) 'interface.c'; else $(CYGPATH_W) '$(srcdir)/interface.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-interface.Tpo $(DEPDIR)/modularize-interface.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='interface.c' object='modularize-interface.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-interface.obj `if test -f 'interface.c'; then $(CYGPATH_W) 'interface.c'; else $(CYGPATH_W) '$(srcdir)/interface.c'; fi`
+
+modularize-uart.o: uart.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-uart.o -MD -MP -MF $(DEPDIR)/modularize-uart.Tpo -c -o modularize-uart.o `test -f 'uart.c' || echo '$(srcdir)/'`uart.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-uart.Tpo $(DEPDIR)/modularize-uart.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='uart.c' object='modularize-uart.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-uart.o `test -f 'uart.c' || echo '$(srcdir)/'`uart.c
+
+modularize-uart.obj: uart.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-uart.obj -MD -MP -MF $(DEPDIR)/modularize-uart.Tpo -c -o modularize-uart.obj `if test -f 'uart.c'; then $(CYGPATH_W) 'uart.c'; else $(CYGPATH_W) '$(srcdir)/uart.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-uart.Tpo $(DEPDIR)/modularize-uart.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='uart.c' object='modularize-uart.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-uart.obj `if test -f 'uart.c'; then $(CYGPATH_W) 'uart.c'; else $(CYGPATH_W) '$(srcdir)/uart.c'; fi`
+
+modularize-sockets.o: sockets.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-sockets.o -MD -MP -MF $(DEPDIR)/modularize-sockets.Tpo -c -o modularize-sockets.o `test -f 'sockets.c' || echo '$(srcdir)/'`sockets.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-sockets.Tpo $(DEPDIR)/modularize-sockets.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sockets.c' object='modularize-sockets.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-sockets.o `test -f 'sockets.c' || echo '$(srcdir)/'`sockets.c
+
+modularize-sockets.obj: sockets.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -MT modularize-sockets.obj -MD -MP -MF $(DEPDIR)/modularize-sockets.Tpo -c -o modularize-sockets.obj `if test -f 'sockets.c'; then $(CYGPATH_W) 'sockets.c'; else $(CYGPATH_W) '$(srcdir)/sockets.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/modularize-sockets.Tpo $(DEPDIR)/modularize-sockets.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sockets.c' object='modularize-sockets.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(modularize_CFLAGS) $(CFLAGS) -c -o modularize-sockets.obj `if test -f 'sockets.c'; then $(CYGPATH_W) 'sockets.c'; else $(CYGPATH_W) '$(srcdir)/sockets.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
