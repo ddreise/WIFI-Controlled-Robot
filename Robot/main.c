@@ -47,6 +47,7 @@ int main(void){
 	uint8_t t = 0;
 	
 	int busy = 0;
+	int sentAck = 0;
 	
 	System_Clock_Init(); 							// Switch System Clock = 79 MHz
 	
@@ -176,11 +177,13 @@ int main(void){
 		else
 		{
 			busy = 1;
+			sentAck = 0;
 		}
 		
-		if(!busy)
+		if(!busy & !sentAck)
 		{
 			UARTputs("$ACK%");
+			sentAck = 1;
 		}
 		else
 		{
