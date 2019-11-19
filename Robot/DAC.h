@@ -8,6 +8,6 @@
 #define DAC_PIN 4
 
 void DAC_Init(void);
-void DAC_output(int8_t wheel_speed);
+void DAC_output(uint16_t wheel_speed);
 
 #endif

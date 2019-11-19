@@ -17,6 +17,7 @@
 #include "UART.h"
 #include "Encoder.h"
 #include "Robot_Command.h"
+#include "DAC.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
@@ -180,6 +181,8 @@ int main(void){
 	Encoder_Init();
 	LimSwitch_Init();
 	DC_Init();
+	DAC_Init();
+	
 	
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
@@ -207,6 +210,11 @@ int main(void){
 			UARTputs("$NACK%");
 			CMD(str);
 		}
+		
+		//Motor(DC_M1, 100, DC_FORWARD);
+		//Motor(DC_M2, 100, DC_FORWARD);
+		
+		DAC_output(Wheel_Speed(ENCODER_LEFT));
 		
 		//Delay_ms(500);
 
