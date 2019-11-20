@@ -11,6 +11,7 @@
 
 
 
+void Control_Law_Init(void);
 
 
 #endif
