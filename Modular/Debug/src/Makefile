@@ -103,7 +103,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_modularize_OBJECTS = main.$(OBJEXT) pipes.$(OBJEXT) \
 	buffers.$(OBJEXT) controller.$(OBJEXT) commands.$(OBJEXT) \
-	interface.$(OBJEXT) uart.$(OBJEXT)
+	interface.$(OBJEXT) uart.$(OBJEXT) sockets.$(OBJEXT)
 modularize_OBJECTS = $(am_modularize_OBJECTS)
 modularize_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_$(V))
@@ -344,7 +344,9 @@ modularize_SOURCES = \
 	interface.h \
 	interface.c \
 	uart.h \
-	uart.c
+	uart.c \
+	sockets.h \
+	sockets.c
 
 modularize_LDFLAGS = 
 modularize_LDADD = 
@@ -447,6 +449,7 @@ include ./$(DEPDIR)/controller.Po
 include ./$(DEPDIR)/interface.Po
 include ./$(DEPDIR)/main.Po
 include ./$(DEPDIR)/pipes.Po
+include ./$(DEPDIR)/sockets.Po
 include ./$(DEPDIR)/uart.Po
 
 .c.o:

@@ -192,6 +192,8 @@ void cmd_Camera(char *command, char *sAxis)
 		sStepper[i] = '0';
 	}
 
+	//printf("INPUT: %s\n", sAxis);
+
 	//get x and y numbers - bytes 0 - 3 and 4 - 7 respectively
 	memcpy(sXNum, &sAxis[0], 4);
 	memcpy(sYNum, &sAxis[4], 4);
@@ -229,6 +231,8 @@ void cmd_Camera(char *command, char *sAxis)
 
 	if(iStepper || cServo != 'S') iCamFlag = 1;
 	else iCamFlag = 0;
+
+	//printf("CAM: %s\n", command);
 }
 
 /**

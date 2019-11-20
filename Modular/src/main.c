@@ -32,6 +32,7 @@
 #include "errorhandle.h"
 #include "interface.h"
 #include "uart.h"
+#include "sockets.h"
 
 // DEFINES //
 #define CONTROLLER_PATH "/dev/input/js1"
@@ -59,17 +60,21 @@ int main()
 	
 	// CONTROLLER SETUP //
 	ControllerInit(CONTROLLER_PATH);
-	
-	// UART SETUP //
-	UARTInit(UART_PORT, O_RDWR | O_NOCTTY | O_SYNC, 9600, 
-                 8, 0, 0);
 
+	// SOCKET SETUP //
+	SocketClientInit(HOST, PORT);
+
+	//strcpy(sAckBuf, "Hi\n");
+	//SocketWrite(sAckBuf, strlen(sAckBuf));
+	//BufferClear(sAckBuf, sizeof(sAckBuf));
+	
 	while(1)
 	{
 		if(strcmp(sAckBuf, "ACK") == 0)
 		{
 			// GET CONTROLLER INPUT //
 			ret = ControllerGetInput(sControllerBuf, sizeof(sControllerBuf));
+			printf("CONTROLLERBUF: %s\n", sControllerBuf);
 			if(ret != SUCCESS)
 			{
 				switch(ret)
@@ -94,21 +99,23 @@ int main()
 				return -1;
 			}
 
-			for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
+			//for(i=0;i<NUMBER_INPUTS;i++) printf("%s\n", saCommands[i]);
 
-			// SEND COMMANDS TO ROBOT //
-			for(i = 0; i < NUMBER_INPUTS; i++) UARTWrite(saCommands[i], 
-						                                 strlen(saCommands[i]));
-			//printf("Input: %s\n", sAckBuf);
+			// SEND COMMANDS TO RPi //
+			for(i = 0; i < NUMBER_INPUTS; i++) 
+			{
+				SocketWrite(saCommands[i], strlen(saCommands[i]));
+				printf("%s\n", saCommands[i]);
+			}
+			
 			BufferClear(sAckBuf, sizeof(sAckBuf));
 		}
 		else
 		{
 			BufferClear(sAckBuf, sizeof(sAckBuf));
-			UARTRead(sAckBuf, sizeof(sAckBuf));
+
+			SocketRead(sAckBuf, sizeof(sAckBuf));
 		}
-		
-		//sleep(2);
 	}
 	
 	return (0);

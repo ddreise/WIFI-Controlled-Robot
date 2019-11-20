@@ -44,7 +44,9 @@ ERR_VAL GetCommand(char commands[NUMBER_INPUTS][COMMAND_BUFFER_SIZE], char *cont
 	tempInputBuf = strtok(controllerInput, &delim);
 
 	for(i = 0; tempInputBuf != 0; i++)
-	{
+	{		
+		//printf("TEMP: %s\n", tempInputBuf);		
+
 		ParseInput(tempBuf, tempInputBuf);
 		
 		strcpy(commands[i], tempBuf);
@@ -93,6 +95,7 @@ void AnalogInput(char *command, char *sInput)
 		case 'L':
 			//extract values from motor out of string
 			memcpy(sAxis, &sInput[2], 8);
+			//printf("sINPUT: %s\n", sInput);
 			cmd_Camera(command, sAxis);
 			break;
 		case 'R':
