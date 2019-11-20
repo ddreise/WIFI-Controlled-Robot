@@ -1,4 +1,4 @@
-commands.o: /home/justin/dev/engineering-project-v/Modular/src/commands.c \
+commands.o: /home/linuxuser/engineering-project-v/Modular/src/commands.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -58,9 +58,9 @@ commands.o: /home/justin/dev/engineering-project-v/Modular/src/commands.c \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/fenv.h /usr/include/x86_64-linux-gnu/bits/fenv.h \
- /home/justin/dev/engineering-project-v/Modular/src/commands.h \
- /home/justin/dev/engineering-project-v/Modular/src/interface.h \
- /home/justin/dev/engineering-project-v/Modular/src/errorhandle.h
+ /home/linuxuser/engineering-project-v/Modular/src/commands.h \
+ /home/linuxuser/engineering-project-v/Modular/src/interface.h \
+ /home/linuxuser/engineering-project-v/Modular/src/errorhandle.h
 
 /usr/include/stdc-predef.h:
 
@@ -200,8 +200,8 @@ commands.o: /home/justin/dev/engineering-project-v/Modular/src/commands.c \
 
 /usr/include/x86_64-linux-gnu/bits/fenv.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/commands.h:
+/home/linuxuser/engineering-project-v/Modular/src/commands.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/interface.h:
+/home/linuxuser/engineering-project-v/Modular/src/interface.h:
 
-/home/justin/dev/engineering-project-v/Modular/src/errorhandle.h:
+/home/linuxuser/engineering-project-v/Modular/src/errorhandle.h:
