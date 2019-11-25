@@ -35,7 +35,7 @@
 #include "sockets.h"
 
 // DEFINES //
-#define CONTROLLER_PATH "/dev/input/js1"
+#define CONTROLLER_PATH "/dev/input/js2"
 #define UART_PORT "/dev/ttyS0"
 
 #define ACK_BUFFER_SIZE 6

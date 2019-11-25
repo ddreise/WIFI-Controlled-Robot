@@ -18,7 +18,7 @@
 
 // DEFINES //
 #define PORT 5000
-#define HOST "10.192.158.130"	//RPi IPV4 address
+#define HOST "10.192.169.246"	//RPi IPV4 address
 #define BUFFER_SIZE 256
 
 // PROTOTYPES //
