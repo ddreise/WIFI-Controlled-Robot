@@ -18,6 +18,7 @@
 #include "Encoder.h"
 #include "Robot_Command.h"
 #include "DAC.h"
+#include "Control_Law.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
@@ -182,10 +183,12 @@ int main(void){
 	LimSwitch_Init();
 	DC_Init();
 	DAC_Init();
+	//Control_Law_Init();
 	
 	
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
+	Control_Law_Init();
 	
 
 	//Command_Menu();
@@ -214,7 +217,7 @@ int main(void){
 		//Motor(DC_M1, 100, DC_FORWARD);
 		//Motor(DC_M2, 100, DC_FORWARD);
 		
-		DAC_output(Wheel_Speed(ENCODER_LEFT));
+		//DAC_output(Wheel_Speed(ENCODER_LEFT));
 		
 		//Delay_ms(500);
 

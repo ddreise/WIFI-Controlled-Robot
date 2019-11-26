@@ -35,6 +35,7 @@
 #include "stm32f303xe.h"
 #include "Macros.h"
 #include "SysTick.h"
+#include "Control_Law.h"
 
 #define ENCODER_CONSTANT 0.2637
 
@@ -90,6 +91,7 @@ void TIM2_IRQHandler(void)
 		lastCapturedLeft = currentCapturedLeft;
 		lastCapturedRight = currentCapturedRight;
 		overflow_count = 0;
+		
 	}
 	
 
@@ -199,12 +201,12 @@ uint32_t Wheel_Speed(uint8_t encoder){
 	{
 		case ENCODER_LEFT:
 			//left_wheel_speed = (ENCODER_CONSTANT/(1/pulseWidthLeft))*10000;
-			left_wheel_speed = ((100000/(pulseWidthLeft))/37.9);//*1000;			// THIS GIVES YOU FREQUENCY (HZ)
+			left_wheel_speed = ((100000/(pulseWidthLeft))/38);//*1000;			// THIS GIVES YOU FREQUENCY (HZ)
 			return left_wheel_speed;	// Returns speed in cm/s
 			
 		case ENCODER_RIGHT:
 			//right_wheel_speed = (ENCODER_CONSTANT/(1/pulseWidthRight))*10000;
-			right_wheel_speed = ((100000/(pulseWidthRight))/37.9);//*1000;
+			right_wheel_speed = ((100000/(pulseWidthRight))/38);//*1000;			// changed 37.9 to 38
 			return right_wheel_speed;	// Returns speed in cm/s
 			
 		default:
