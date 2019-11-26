@@ -20,7 +20,7 @@
 #define MAX_PWM_VALUE 100
 #define MIN_PWM_VALUE 0
 #define P_GAIN 10
-#define I_GAIN 10
+#define I_GAIN 100
 #define GAIN_DIVISOR 1000
 
 // Globals
@@ -105,8 +105,8 @@ void TIM16_IRQHandler(void){
 		
 		if ((right_speedError < STUPID_SPEED_ERROR) && (right_speedError > -STUPID_SPEED_ERROR)){
 			
-			if 	(((right_dutyCycle == MAX_PWM_VALUE) && (right_speedError < 0)) ||										// REMOVED: (right_dutyCycle == MIN_PWM_VALUE) && (right_speedError > 0)) ||
-			((right_dutyCycle == MIN_PWM_VALUE) && (right_speedError > 0)) ||	
+			if 	(((right_dutyCycle == MAX_PWM_VALUE) && (right_speedError > 0)) ||										// REMOVED: (right_dutyCycle == MIN_PWM_VALUE) && (right_speedError > 0)) ||
+			((right_dutyCycle == MIN_PWM_VALUE) && (right_speedError < 0)) ||	
 			((right_dutyCycle < MAX_PWM_VALUE) && (right_dutyCycle > MIN_PWM_VALUE))){
 					
 					right_speedErrorIntegral += right_speedError;
