@@ -217,7 +217,7 @@ int main(void){
 		//Motor(DC_M1, 100, DC_FORWARD);
 		//Motor(DC_M2, 100, DC_FORWARD);
 		
-		DAC_output(left_dutyCycle);
+		// DAC_output(left_dutyCycle);
 		
 		//Delay_ms(500);
 

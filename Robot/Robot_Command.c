@@ -138,15 +138,15 @@ int CMD(char *str){
 		// need to change 3 digit value to string 
 		strncpy(temp_str, str + 2, 3);
 		temp_str[3] = '\0';
-		NVIC_DisableIRQ(TIM16_IRQn);
+		//NVIC_DisableIRQ(TIM16_IRQn);
 		left_setpoint_dutyCycle = atoi(temp_str);
-		NVIC_EnableIRQ(TIM16_IRQn);
+		//NVIC_EnableIRQ(TIM16_IRQn);
 		
 		strncpy(temp_str, str + 6, 3);
 		temp_str[3] = '\0';
-		NVIC_DisableIRQ(TIM16_IRQn);
+		//NVIC_DisableIRQ(TIM16_IRQn);
 		right_setpoint_dutyCycle = atoi(temp_str);
-		NVIC_EnableIRQ(TIM16_IRQn);
+		//NVIC_EnableIRQ(TIM16_IRQn);
 		
 		// DC Motor
 		// Right Motor
@@ -162,47 +162,15 @@ int CMD(char *str){
 		
 		
 		
-		
-		// need to change 3 digit value to string 
-		// Need to negate setpoint if going backwards for control law to function properly
-//		strncpy(temp_str, str + 2, 3);
-//		temp_str[3] = '\0';
-//		if (str[5] == 'B') left_setpoint_dutyCycle = (-1) * atoi(temp_str);
-//		else (left_setpoint_dutyCycle = atoi(temp_str));
-//		
-//		strncpy(temp_str, str + 6, 3);
-//		temp_str[3] = '\0';
-//		if (str[9] == 'B') right_setpoint_dutyCycle = (-1) * right_setpoint_dutyCycle;
-//		else (right_setpoint_dutyCycle = atoi(temp_str));
-//		
-//		
-//		if (left_dutyCycle <= 0) {
-//			left_dutyCycle = left_dutyCycle * (-1);
-//			Motor(DC_M1, left_dutyCycle, DC_BACKWARD);
-//		}
-//		else if (left_dutyCycle > 0) Motor(DC_M1, left_dutyCycle, DC_FORWARD);
-//		
-//		if (right_driveValue <= 0) {
-//			right_dutyCycle = right_dutyCycle * (-1);
-//			Motor(DC_M2, right_dutyCycle, DC_BACKWARD);
-//		}
-//		else if (right_dutyCycle > 0) Motor(DC_M2, right_dutyCycle, DC_FORWARD);
-		
-		
-		
-		
-		
-		
-		
 		// DC Motor
 		// Right Motor
-//		if (str[5] == 'F') Motor(DC_M1, left_driveValue, DC_FORWARD);
-//		else if (str[5] == 'B') Motor(DC_M1, left_driveValue, DC_BACKWARD);
+//		if (str[5] == 'F') Motor(DC_M1, left_setpoint_dutyCycle, DC_FORWARD);
+//		else if (str[5] == 'B') Motor(DC_M1, left_setpoint_dutyCycle, DC_BACKWARD);
 //		else;
 //		
 //		// Left Motor
-//		if (str[9] == 'F') Motor(DC_M2, right_driveValue, DC_FORWARD);
-//		else if (str[9] == 'B') Motor(DC_M2, right_driveValue, DC_BACKWARD);
+//		if (str[9] == 'F') Motor(DC_M2, right_setpoint_dutyCycle, DC_FORWARD);
+//		else if (str[9] == 'B') Motor(DC_M2, right_setpoint_dutyCycle, DC_BACKWARD);
 //		else;
 
 	}

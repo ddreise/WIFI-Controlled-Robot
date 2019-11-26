@@ -19,7 +19,7 @@
 #define MIN_DRIVE_VALUE 0
 #define MAX_PWM_VALUE 100
 #define MIN_PWM_VALUE 0
-#define P_GAIN 10
+#define P_GAIN 100
 #define I_GAIN 100
 #define GAIN_DIVISOR 1000
 
@@ -39,17 +39,18 @@ void Control_Law_Init(void){
 	
 	TIM16->CR1 &= ~TIM_CR1_DIR;
 	
-	TIM16->PSC = 7999;																	//set PSC so that frequency is about 1 MHz 71
-	TIM16->ARR = 0x100;																	//set ARR to 0xFFFF because max 32 bit number
+	TIM16->PSC = 799;																	//set PSC so that frequency is about 1 MHz 71
+	TIM16->ARR = 0xFFF;																	//set ARR to 0xFFFF because max 32 bit number
 	
 	// Number count has to count to in order to fire interrupt
-	TIM16->CCR1 = 0x100;
+	//TIM16->CCR1 = 0x100;
 	
 	// Set CC1IE if interrupt request is to be generated
 	SET_BITS(TIM16->DIER, TIM_DIER_UIE);	// REMOVED TIM_DIER_CC1IE
 	
 	// Enable TIM16 interrupt
 	NVIC_EnableIRQ(TIM16_IRQn);
+	NVIC_SetPriority(TIM16_IRQn, 0);
 	
 	TIM16->EGR |= TIM_EGR_UG;
 	
@@ -72,8 +73,8 @@ void TIM16_IRQHandler(void){
 	
 	if((TIM16->SR & TIM_SR_UIF) != 0){
 		
-		//left_dutyCycle = left_setpoint_dutyCycle;
-		//right_dutyCycle = right_setpoint_dutyCycle;
+//		left_dutyCycle = left_setpoint_dutyCycle;
+//		right_dutyCycle = right_setpoint_dutyCycle;
 	
 		left_setpoint_Speed = left_setpoint_dutyCycle / 3;
 		right_setpoint_Speed = right_setpoint_dutyCycle / 3;
@@ -101,6 +102,9 @@ void TIM16_IRQHandler(void){
 			
 			// Save the motor drive value for next time. Write PWM to hardware to drive wheel
 			left_dutyCycle = left_driveValue * 3;
+					
+			if (left_dutyCycle > MAX_PWM_VALUE) left_dutyCycle = MAX_PWM_VALUE;
+			else if (left_dutyCycle < MIN_PWM_VALUE) left_dutyCycle = MIN_PWM_VALUE;
 		}
 		
 		if ((right_speedError < STUPID_SPEED_ERROR) && (right_speedError > -STUPID_SPEED_ERROR)){
@@ -118,13 +122,19 @@ void TIM16_IRQHandler(void){
 			else if (right_driveValue < MIN_DRIVE_VALUE) right_driveValue = MIN_DRIVE_VALUE;
 						
 			right_dutyCycle = right_driveValue * 3;
+			
+			if (right_dutyCycle > MAX_PWM_VALUE) right_dutyCycle = MAX_PWM_VALUE;
+			else if (right_dutyCycle < MIN_PWM_VALUE) right_dutyCycle = MIN_PWM_VALUE;
 		}
+		
 
 		
 		
 				
 		CLR_BITS(TIM16->SR, TIM_SR_UIF);
+
 	}
+		CLR_BITS(TIM16->CNT, TIM_CNT_CNT); 	// reset timer
 
 	
 }
