@@ -49,6 +49,8 @@ int main(void){
 	uint8_t t = 0;
 	uint32_t pulseL;
 	uint32_t pulseR;
+	uint32_t no_connection;
+
 	
 	int busy = 0;
 	
@@ -176,6 +178,7 @@ int main(void){
 	// *************************************************************************
 	#if COMMAND_TEST
 	
+	
 	TIM3_Init();
 	
 	UART1_init();
@@ -198,10 +201,15 @@ int main(void){
 		if(!get_Input(str))
 		{
 			busy = 0;
+			
+			//no_connection++;
+			//if (no_connection == 0xF) stop_Robot();
 		}
 		else
 		{
 			busy = 1;
+			
+			//no_connection = 0;
 		}
 		
 		if(!busy)
@@ -217,7 +225,7 @@ int main(void){
 		//Motor(DC_M1, 100, DC_FORWARD);
 		//Motor(DC_M2, 100, DC_FORWARD);
 		
-		// DAC_output(left_dutyCycle);
+		//DAC_output(left_dutyCycle);
 		
 		//Delay_ms(500);
 

@@ -13,22 +13,26 @@
 #include "Macros.h"
 #include "SysTick.h"
 #include "Robot_Command.h"
+#include "DAC.h"
 
-#define STUPID_SPEED_ERROR 500
+#define STUPID_SPEED_ERROR 0xFFFF
 #define MAX_DRIVE_VALUE 35
 #define MIN_DRIVE_VALUE 0
 #define MAX_PWM_VALUE 100
 #define MIN_PWM_VALUE 0
 #define P_GAIN 100
-#define I_GAIN 100
-#define GAIN_DIVISOR 1000
+#define I_GAIN 200
+#define GAIN_DIVISOR 1000000
+#define SENSOR_GAIN 1226
+#define FEEDBACK_SCALE_FACTOR 16777216
 
 // Globals
-static volatile int16_t left_speedError, right_speedError;
+static volatile int32_t left_speedError, right_speedError;
 volatile int16_t left_setpoint_dutyCycle, right_setpoint_dutyCycle;
 static volatile int16_t left_setpoint_Speed, right_setpoint_Speed;
-static volatile int16_t left_speedErrorIntegral, right_speedErrorIntegral;
-static volatile int16_t left_driveValue, right_driveValue;
+static volatile int32_t left_speedErrorIntegral, right_speedErrorIntegral;
+static volatile int32_t left_driveValue, right_driveValue;
+volatile int32_t left_feedback, right_feedback;
 volatile int16_t left_dutyCycle = 0, right_dutyCycle = 0;
 volatile uint16_t overflow;
 
@@ -39,8 +43,8 @@ void Control_Law_Init(void){
 	
 	TIM16->CR1 &= ~TIM_CR1_DIR;
 	
-	TIM16->PSC = 799;																	//set PSC so that frequency is about 1 MHz 71
-	TIM16->ARR = 0xFFF;																	//set ARR to 0xFFFF because max 32 bit number
+	TIM16->PSC = 799;																	//set PSC so that frequency is about 1 MHz 71 CHANGED FROM 799
+	TIM16->ARR = 0xFFF;																	//set ARR to 0xFFFF because max 32 bit number	CHANGED FROM FFF
 	
 	// Number count has to count to in order to fire interrupt
 	//TIM16->CCR1 = 0x100;
@@ -79,6 +83,12 @@ void TIM16_IRQHandler(void){
 		left_setpoint_Speed = left_setpoint_dutyCycle / 3;
 		right_setpoint_Speed = right_setpoint_dutyCycle / 3;
 		
+//		left_feedback = (int32_t)(FEEDBACK_SCALE_FACTOR / (  1 / Encoder_Read(ENCODER_LEFT)));
+//		right_feedback = (int32_t)(FEEDBACK_SCALE_FACTOR / ( 1 /  Encoder_Read(ENCODER_RIGHT)));
+//		
+//		left_speedError = (int32_t)(left_setpoint_Speed * SENSOR_GAIN) - left_feedback;
+//		right_speedError = (int32_t)(right_setpoint_Speed * SENSOR_GAIN) - right_feedback;
+		
 		left_speedError = left_setpoint_Speed - Wheel_Speed(ENCODER_RIGHT);
 		right_speedError = right_setpoint_Speed - Wheel_Speed(ENCODER_RIGHT);
 		
@@ -94,14 +104,14 @@ void TIM16_IRQHandler(void){
 					}
 			
 			// Calculate the control law (NB: PI - no derivative term)...This is all the integer math
-			left_driveValue = (((left_speedError * P_GAIN) + (left_speedErrorIntegral * I_GAIN)) / GAIN_DIVISOR);
+			left_driveValue = (left_speedError * P_GAIN) + (left_speedErrorIntegral * I_GAIN) / GAIN_DIVISOR;
 			
 			// Limit the controller output to the range of PWM
-			if (left_driveValue > MAX_DRIVE_VALUE) left_driveValue = MAX_DRIVE_VALUE;
-			else if (left_driveValue < MIN_DRIVE_VALUE) left_driveValue = MIN_DRIVE_VALUE;
+			//if (left_driveValue > MAX_DRIVE_VALUE) left_driveValue = MAX_DRIVE_VALUE;
+			//else if (left_driveValue < MIN_DRIVE_VALUE) left_driveValue = MIN_DRIVE_VALUE;
 			
 			// Save the motor drive value for next time. Write PWM to hardware to drive wheel
-			left_dutyCycle = left_driveValue * 3;
+			left_dutyCycle = (left_driveValue * 3);
 					
 			if (left_dutyCycle > MAX_PWM_VALUE) left_dutyCycle = MAX_PWM_VALUE;
 			else if (left_dutyCycle < MIN_PWM_VALUE) left_dutyCycle = MIN_PWM_VALUE;
@@ -109,17 +119,17 @@ void TIM16_IRQHandler(void){
 		
 		if ((right_speedError < STUPID_SPEED_ERROR) && (right_speedError > -STUPID_SPEED_ERROR)){
 			
-			if 	(((right_dutyCycle == MAX_PWM_VALUE) && (right_speedError > 0)) ||										// REMOVED: (right_dutyCycle == MIN_PWM_VALUE) && (right_speedError > 0)) ||
-			((right_dutyCycle == MIN_PWM_VALUE) && (right_speedError < 0)) ||	
+			if 	(((right_dutyCycle == MAX_PWM_VALUE) && (right_speedError < 0)) ||										// REMOVED: (right_dutyCycle == MIN_PWM_VALUE) && (right_speedError > 0)) ||
+			((right_dutyCycle == MIN_PWM_VALUE) && (right_speedError > 0)) ||	
 			((right_dutyCycle < MAX_PWM_VALUE) && (right_dutyCycle > MIN_PWM_VALUE))){
 					
 					right_speedErrorIntegral += right_speedError;
 			}
 			
-			right_driveValue = (((right_speedError * P_GAIN) + (right_speedErrorIntegral * I_GAIN)) / GAIN_DIVISOR);	
+			right_driveValue = (right_speedError * P_GAIN) + (right_speedErrorIntegral * I_GAIN) / GAIN_DIVISOR;	
 
-			if (right_driveValue > MAX_DRIVE_VALUE) right_driveValue = MAX_DRIVE_VALUE;
-			else if (right_driveValue < MIN_DRIVE_VALUE) right_driveValue = MIN_DRIVE_VALUE;
+			//if (right_driveValue > MAX_DRIVE_VALUE) right_driveValue = MAX_DRIVE_VALUE;
+			//else if (right_driveValue < MIN_DRIVE_VALUE) right_driveValue = MIN_DRIVE_VALUE;
 						
 			right_dutyCycle = right_driveValue * 3;
 			
@@ -135,6 +145,9 @@ void TIM16_IRQHandler(void){
 
 	}
 		CLR_BITS(TIM16->CNT, TIM_CNT_CNT); 	// reset timer
+	
+	DAC_output(40*left_dutyCycle);
+	
 
 	
 }

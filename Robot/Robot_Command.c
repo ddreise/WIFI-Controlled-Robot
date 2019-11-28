@@ -138,16 +138,23 @@ int CMD(char *str){
 		// need to change 3 digit value to string 
 		strncpy(temp_str, str + 2, 3);
 		temp_str[3] = '\0';
-		//NVIC_DisableIRQ(TIM16_IRQn);
+		
+//		NVIC_DisableIRQ(TIM16_IRQn);
+//		if (str[5] == 'F') left_setpoint_dutyCycle = atoi(temp_str);
+//		else if (str[5] == 'B') left_setpoint_dutyCycle = (-1) * atoi(temp_str);
 		left_setpoint_dutyCycle = atoi(temp_str);
-		//NVIC_EnableIRQ(TIM16_IRQn);
+//		NVIC_EnableIRQ(TIM16_IRQn);
 		
 		strncpy(temp_str, str + 6, 3);
 		temp_str[3] = '\0';
-		//NVIC_DisableIRQ(TIM16_IRQn);
+//		NVIC_DisableIRQ(TIM16_IRQn);
+//		if (str[9] == 'F') right_setpoint_dutyCycle = atoi(temp_str);
+//		else if (str[9] == 'B') right_setpoint_dutyCycle = (-1) * atoi(temp_str);
 		right_setpoint_dutyCycle = atoi(temp_str);
-		//NVIC_EnableIRQ(TIM16_IRQn);
-		
+//		NVIC_EnableIRQ(TIM16_IRQn);
+
+
+
 		// DC Motor
 		// Right Motor
 		if (str[5] == 'F') Motor(DC_M1, left_dutyCycle, DC_FORWARD);
@@ -158,6 +165,19 @@ int CMD(char *str){
 		if (str[9] == 'F') Motor(DC_M2, right_dutyCycle, DC_FORWARD);
 		else if (str[9] == 'B') Motor(DC_M2, right_dutyCycle, DC_BACKWARD);
 		else;
+//		
+//		// DC Motor
+//		// Right Motor
+//		if (str[5] == 'F') Motor(DC_M1, left_dutyCycle, DC_FORWARD);
+//		else if (str[5] == 'B') Motor(DC_M1, left_dutyCycle, DC_BACKWARD);
+//		else;
+//		
+//		// Left Motor
+//		if (str[9] == 'F') Motor(DC_M2, right_dutyCycle, DC_FORWARD);
+//		else if (str[9] == 'B') Motor(DC_M2, right_dutyCycle, DC_BACKWARD);
+//		else;
+
+		
 		
 		
 		
@@ -181,5 +201,18 @@ int CMD(char *str){
 	
 	return 0;
 	
+	
+}
+
+int stop_Robot(void){
+	
+	Motor(DC_M1, 0, DC_FORWARD);
+	Motor(DC_M2, 0, DC_BACKWARD);
+	
+	Set_Servo_State(0);
+	
+	Set_Stepper_Steps(0);
+	
+	return(0);
 	
 }

@@ -29,4 +29,6 @@ extern uint16_t right_speed;
 
 int CMD(char *str);
 
+int stop_Robot(void);
+
 #endif 
