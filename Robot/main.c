@@ -18,6 +18,7 @@
 #include "Encoder.h"
 #include "Robot_Command.h"
 #include "DAC.h"
+#include "Control_Law.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
@@ -48,6 +49,8 @@ int main(void){
 	uint8_t t = 0;
 	uint32_t pulseL;
 	uint32_t pulseR;
+	uint32_t no_connection;
+
 	
 	int busy = 0;
 	
@@ -175,17 +178,18 @@ int main(void){
 	// *************************************************************************
 	#if COMMAND_TEST
 	
+	
 	TIM3_Init();
 	
 	UART1_init();
 	Encoder_Init();
 	LimSwitch_Init();
 	DC_Init();
-	DAC_Init();
-	
-	
+	DAC_Init();	
+
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
+	Control_Law_Init();
 	
 
 	//Command_Menu();
@@ -195,10 +199,15 @@ int main(void){
 		if(!get_Input(str))
 		{
 			busy = 0;
+			
+			no_connection++;
+			if (no_connection == 0xFF) stop_Robot();
 		}
 		else
 		{
 			busy = 1;
+			
+			no_connection = 0;
 		}
 		
 		if(!busy)
@@ -210,11 +219,11 @@ int main(void){
 			UARTputs("$NACK%");
 			CMD(str);
 		}
+//		
+//		Motor(DC_M1, 100, DC_FORWARD);
+//		Motor(DC_M2, 100, DC_FORWARD);
 		
-		//Motor(DC_M1, 100, DC_FORWARD);
-		//Motor(DC_M2, 100, DC_FORWARD);
-		
-		DAC_output(Wheel_Speed(ENCODER_LEFT));
+		//DAC_output(left_dutyCycle);
 		
 		//Delay_ms(500);
 
@@ -290,11 +299,11 @@ int main(void){
 //		
 
 //		
-//		if(i == 0xFF) {
+////		if(i == 0xFF) {
 //			LCD_Printf(FIRST_LINE, "STP%d SRV%d", Get_Stepper_Position, servo_position);
-//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", right_speed, left_speed);
-//		}
-//		i++;
+//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", Wheel_Speed(ENCODER_RIGHT), Wheel_Speed(ENCODER_LEFT));
+////		}
+////		i++;
 
 		
 		// *********************************************

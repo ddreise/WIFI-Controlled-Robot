@@ -35,6 +35,7 @@
 #include "stm32f303xe.h"
 #include "Macros.h"
 #include "SysTick.h"
+#include "Control_Law.h"
 
 #define ENCODER_CONSTANT 0.2637
 
@@ -48,12 +49,14 @@ volatile uint32_t signalPolarityRight = 0;
 volatile uint32_t overflow_count = 0;
 uint32_t right_wheel_speed = 0;
 uint32_t left_wheel_speed = 0;
+volatile uint32_t currentCapturedLeft;
+volatile uint32_t currentCapturedRight;
 
 // INTERRUPTS //
 void TIM2_IRQHandler(void)
 {
-	uint32_t currentCapturedLeft;
-	uint32_t currentCapturedRight;
+	//uint32_t currentCapturedLeft;
+	//uint32_t currentCapturedRight;
 	
 	//check if overflow has happened
 	if((TIM2->SR & TIM_SR_UIF) != 0)
@@ -64,33 +67,47 @@ void TIM2_IRQHandler(void)
 	
 	
 	//check if interrupt flag is set
-	if(((TIM2->SR & TIM_SR_CC3IF) | (TIM2->SR & TIM_SR_CC4IF)) != 0)
+	if((TIM2->SR & TIM_SR_CC3IF) != 0)
 	{
 		//read CCR1 to get current value, which then will clear CC1F flag
-		currentCapturedRight = TIM2->CCR4;
+		//currentCapturedRight = TIM2->CCR4;
 		currentCapturedLeft = TIM2->CCR3;
 		
 		//toggle polarity flag because signal is now high
-		//signalPolarityLeft = 1 - signalPolarityLeft;
-		//signalPolarityRight = 1 - signalPolarityRight;
+//		signalPolarityLeft = 1 - signalPolarityLeft;
+//		signalPolarityRight = 1 - signalPolarityRight;
 		
 		//calculate only when current input is low
-		//if(signalPolarityLeft == 0)
-		//{
+//		if(signalPolarityLeft == 0)
+//		{
 			//pulseWidthLeft = currentCapturedLeft - lastCapturedLeft; //assume up counting
 			pulseWidthLeft = (currentCapturedLeft - lastCapturedLeft) + (overflow_count * 65536);
 			
-		//}
-		//if(signalPolarityRight != 0)
-		//{
+//		}
+//		if(signalPolarityRight != 0)
+//		{
 			//pulseWidthRight = currentCapturedRight - lastCapturedRight; //assume up counting
-			pulseWidthRight = (currentCapturedRight - lastCapturedRight) + (overflow_count * 65536);
-		//}
+			//pulseWidthRight = (currentCapturedRight - lastCapturedRight) + (overflow_count * 65536);
+//		}
+		
+//		currentCapturedRight = TIM2->CCR4;
+//		pulseWidthRight = (currentCapturedRight - lastCapturedRight) + (overflow_count * 65536);
+//		lastCapturedRight = currentCapturedRight;
 		
 		lastCapturedLeft = currentCapturedLeft;
-		lastCapturedRight = currentCapturedRight;
-		overflow_count = 0;
+		//lastCapturedRight = currentCapturedRight;
+		
+		
 	}
+	
+	if ((TIM2->SR & TIM_SR_CC4IF) != 0){
+		currentCapturedRight = TIM2->CCR4;
+		pulseWidthRight = (currentCapturedRight - lastCapturedRight) + (overflow_count * 65536);
+		lastCapturedRight = currentCapturedRight;
+
+	}
+	
+	overflow_count = 0;
 	
 
 }
@@ -141,7 +158,7 @@ static void Encoder_TIM_Init(void)
 	TIM2->CCMR2 &= ~TIM_CCMR2_IC3F;
 	TIM2->CCMR2 &= ~TIM_CCMR2_IC4F;
 	
-	//set active transition as rising and falling edges
+	//set active transition as rising
 	TIM2->CCER &= ~(TIM_CCER_CC3P | TIM_CCER_CC3NP);
 	TIM2->CCER &= ~(TIM_CCER_CC4P | TIM_CCER_CC4NP);
 	
@@ -199,12 +216,12 @@ uint32_t Wheel_Speed(uint8_t encoder){
 	{
 		case ENCODER_LEFT:
 			//left_wheel_speed = (ENCODER_CONSTANT/(1/pulseWidthLeft))*10000;
-			left_wheel_speed = ((100000/(pulseWidthLeft))/37.9);//*1000;			// THIS GIVES YOU FREQUENCY (HZ)
+			left_wheel_speed = (uint32_t)((100000/(pulseWidthLeft))/38);//*1000;			// THIS GIVES YOU FREQUENCY (HZ)
 			return left_wheel_speed;	// Returns speed in cm/s
 			
 		case ENCODER_RIGHT:
 			//right_wheel_speed = (ENCODER_CONSTANT/(1/pulseWidthRight))*10000;
-			right_wheel_speed = ((100000/(pulseWidthRight))/37.9);//*1000;
+			right_wheel_speed = (uint32_t)((100000/(pulseWidthRight))/38);//*1000;			// changed 37.9 to 38
 			return right_wheel_speed;	// Returns speed in cm/s
 			
 		default:

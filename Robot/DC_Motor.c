@@ -6,6 +6,11 @@
 #include "stm32f303xe.h"
 #include "Macros.h"
 #include "SysTick.h"
+#include "Control_Law.h"
+#include "Encoder.h"
+
+
+
 
 // STATIC FUNCTIONS //
 
@@ -67,8 +72,6 @@ static void DC_TIM_Init(void)
 	//auto-reload
 	TIM4->ARR = DC_TIMER_AR;	//determines the period of the PWM signal
 	
-	
-	
 	//clear output compare mode bits for channels 1 2 3 4
 	TIM4->CCMR1 &= ~TIM_CCMR1_OC1M;
 	TIM4->CCMR1 &= ~TIM_CCMR1_OC2M;
@@ -111,6 +114,10 @@ static void DC_TIM_Init(void)
 	
 	DC_Timer_EN();
 }
+
+
+
+
 
 static void Set_CCRx(uint8_t channel, uint8_t driveDutyCycle_percent)
 {

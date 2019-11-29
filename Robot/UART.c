@@ -166,7 +166,9 @@ void receive(USART_TypeDef *USARTx, char *buffer, volatile uint32_t *pCounter){	
 		in_counter = (in_counter + 1) % BUFFERSIZE;
 	
 		//(*pCounter)++;
+	NVIC_DisableIRQ(USART1_IRQn);
 		Rx_Counter++;
+	NVIC_EnableIRQ(USART1_IRQn);
 }
 
 

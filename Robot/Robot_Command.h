@@ -29,4 +29,9 @@ extern uint16_t right_speed;
 
 int CMD(char *str);
 
+int stop_Robot(void);
+uint32_t get_left_driveValue(void);
+uint32_t get_right_driveValue(void);
+
+
 #endif 

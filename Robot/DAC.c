@@ -34,7 +34,7 @@ Current Vref = around 3.3V
 */
 
 
-void DAC_output(uint16_t wheel_speed){
+void DAC_output(uint8_t wheel_speed){
 	
 	FORCE_BITS(DAC->DHR8R1, DAC_DHR8R1_DACC1DHR, wheel_speed);
 	
