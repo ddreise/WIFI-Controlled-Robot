@@ -79,54 +79,71 @@ void cmd_Motor(char *command, char *sAxis)
 	iXNum = atoi(cXNum);
 	iYNum = atoi(cYNum);
 
-	//get motor output
-	//iLMotor = iYNum + iXNum;
-	//iRMotor = iYNum - iXNum;
-	if(iYNum >= 0 && iXNum >= 0) //quadrant A
-	{
-		iRMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
-		iLMotor = abs( (int) ( (double)((double)100 - (double)iXNum) * ((double)iRMotor/(double)100) ) );
-
-		cLMDir = 'F';
-		cRMDir = 'F';
-	}
-	else if(iYNum >= 0 && iXNum < 0) //quadrant B
-	{
-
-		iLMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
-		iRMotor = abs( (int) ( (double)((double)(-100) - (double)iXNum) * ((double)iLMotor/(double)100) ) );
-		
-		cLMDir = 'F';
-		cRMDir = 'F';
-	}
-	else if(iYNum < 0 && iXNum < 0) //quadrant C
-	{
-
-		iLMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
-		iRMotor = abs( (int) ( (double)((double)(-100) - (double)iXNum) * ((double)iLMotor/(double)100) ) );
-		
-		cLMDir = 'B';
-		cRMDir = 'B';
-	}
-	else if(iYNum < 0 && iXNum >= 0) //quadrant D
-	{
-
-		iRMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
-		iLMotor = abs( (int) ( (double)((double)100 - (double)iXNum) * ((double)iRMotor/(double)100) ) );
-		//iLMotor *= (-1);
-		
-		cLMDir = 'B';
-		cRMDir = 'B';
-	}
-
-	//printf("MOTORS: %d : %d\n", iLMotor, iRMotor);
 	
-	//if motor output is under -100 or above 100, cap it to -100 or 100
-	if(iLMotor > 100) iLMotor = 100;
-	else if(iLMotor < -100) iLMotor = -100;
-	
-	if(iRMotor > 100) iRMotor = 100;
-	else if(iRMotor < -100) iRMotor = -100;
+	if (iXNum == 110)
+	{
+		iLMotor = 100;
+		iRMotor = 100;
+		cRMDir = 'B';
+		cLMDir = 'F';
+	}
+	else if (iXNum == -110)
+	{
+		iLMotor = 100;
+		iRMotor = 100;
+		cRMDir = 'F';
+		cLMDir = 'B';
+	}
+	else { 
+		//get motor output
+		//iLMotor = iYNum + iXNum;
+		//iRMotor = iYNum - iXNum;
+		if(iYNum >= 0 && iXNum >= 0) //quadrant A
+		{
+			iRMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
+			iLMotor = abs( (int) ( (double)((double)100 - (double)iXNum) * ((double)iRMotor/(double)100) ) );
+
+			cLMDir = 'F';
+			cRMDir = 'F';
+		}
+		else if(iYNum >= 0 && iXNum < 0) //quadrant B
+		{
+
+			iLMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
+			iRMotor = abs( (int) ( (double)((double)(-100) - (double)iXNum) * ((double)iLMotor/(double)100) ) );
+			
+			cLMDir = 'F';
+			cRMDir = 'F';
+		}
+		else if(iYNum < 0 && iXNum < 0) //quadrant C
+		{
+
+			iLMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
+			iRMotor = abs( (int) ( (double)((double)(-100) - (double)iXNum) * ((double)iLMotor/(double)100) ) );
+			
+			cLMDir = 'B';
+			cRMDir = 'B';
+		}
+		else if(iYNum < 0 && iXNum >= 0) //quadrant D
+		{
+
+			iRMotor = sqrt(pow(iXNum, 2) + pow(iYNum, 2));
+			iLMotor = abs( (int) ( (double)((double)100 - (double)iXNum) * ((double)iRMotor/(double)100) ) );
+			//iLMotor *= (-1);
+			
+			cLMDir = 'B';
+			cRMDir = 'B';
+		}
+
+		//printf("MOTORS: %d : %d\n", iLMotor, iRMotor);
+		
+		//if motor output is under -100 or above 100, cap it to -100 or 100
+		if(iLMotor > 100) iLMotor = 100;
+		else if(iLMotor < -100) iLMotor = -100;
+		
+		if(iRMotor > 100) iRMotor = 100;
+		else if(iRMotor < -100) iRMotor = -100;
+}
 	
 	//put speed back into string
 	//itoa(iLMotor, sLMotor, 10);

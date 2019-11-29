@@ -136,6 +136,8 @@ ERR_VAL Read_Controller(char *buf, int bufSize)
 		
 	int aFlag = 0;
 	int aDouble = 0;
+	int LTFlag = 0;
+	int RTFlag = 0;
 
 	struct js_event event;
 	struct axis_state axes[3] = {0};
@@ -157,6 +159,29 @@ ERR_VAL Read_Controller(char *buf, int bufSize)
 				{
 					if(aFlag) aFlag = 0;
 					else aFlag = 1;
+				}
+				
+				if (event.number == 6) {	// Left trigger pressed
+					if(LTFlag) {	// If left trigger pulled, set left wheel backward, right wheel forward
+						LTFlag = 0;
+						xMotor = 0;
+						yMotor = 0;
+						//printf("flag low\n");
+					}
+					 
+					else {
+						LTFlag = 1;
+						//printf("flag high\n");
+					}
+				}
+
+				if (event.number == 7) {	// Right trigger pressed
+					if(RTFlag) {	// If left trigger pulled, set left wheel backward, right wheel forward
+						RTFlag = 0;
+						xMotor = 0;
+						yMotor = 0;
+					} 
+					else RTFlag = 1;
 				}
 				break;
 			case JS_EVENT_AXIS:
@@ -184,11 +209,25 @@ ERR_VAL Read_Controller(char *buf, int bufSize)
 				break;
 		}
 
-		//event.type = JS_EVENT_INIT;	//reset event.type after event is processed to avoid duplicate processing
-		
+		event.number = -1;	//reset event.type after event is processed to avoid duplicate processing
+
+
+		if (RTFlag)		// If right trigger pulled, override analog stick input
+		{
+			xMotor = 110;		// this is cheating, do not do this
+			yMotor = -110;
+		}
+		if (LTFlag)		// If left trigger pulled, override analog stick input
+		{
+			xMotor = -110;		// same here
+			yMotor = 110;
+		}
+
 		sprintf(buf, "BA%d$AR%+04d%+04d$AL%+04d%+04d$", aFlag, xMotor, yMotor, stepperMotor, servoMotor);
 
+
 		//printf("CONTROLLER: %s\n", buf);
+		printf("%d\n", event.number);
 		
 		read(requestPipe[0], request, sizeof(request));
 		if(strcmp(request, "1") == 0)
@@ -196,6 +235,8 @@ ERR_VAL Read_Controller(char *buf, int bufSize)
 			write(inputPipe[1], buf, bufSize);
 			
 			BufferClear(request, sizeof(request));
+
+			if(aFlag) aFlag = 0;
 		}
 	}
 		
