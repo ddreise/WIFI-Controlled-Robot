@@ -185,10 +185,8 @@ int main(void){
 	Encoder_Init();
 	LimSwitch_Init();
 	DC_Init();
-	DAC_Init();
-	//Control_Law_Init();
-	
-	
+	DAC_Init();	
+
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
 	Control_Law_Init();
@@ -221,9 +219,9 @@ int main(void){
 			UARTputs("$NACK%");
 			CMD(str);
 		}
-		
-		//Motor(DC_M1, 100, DC_FORWARD);
-		//Motor(DC_M2, 100, DC_FORWARD);
+//		
+//		Motor(DC_M1, 100, DC_FORWARD);
+//		Motor(DC_M2, 100, DC_FORWARD);
 		
 		//DAC_output(left_dutyCycle);
 		
@@ -301,11 +299,11 @@ int main(void){
 //		
 
 //		
-//		if(i == 0xFF) {
+////		if(i == 0xFF) {
 //			LCD_Printf(FIRST_LINE, "STP%d SRV%d", Get_Stepper_Position, servo_position);
-//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", right_speed, left_speed);
-//		}
-//		i++;
+//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", Wheel_Speed(ENCODER_RIGHT), Wheel_Speed(ENCODER_LEFT));
+////		}
+////		i++;
 
 		
 		// *********************************************

@@ -142,7 +142,8 @@ int CMD(char *str){
 //		NVIC_DisableIRQ(TIM16_IRQn);
 //		if (str[5] == 'F') left_setpoint_dutyCycle = atoi(temp_str);
 //		else if (str[5] == 'B') left_setpoint_dutyCycle = (-1) * atoi(temp_str);
-		left_setpoint_dutyCycle = atoi(temp_str);
+		right_setpoint_dutyCycle = 100;
+		//right_setpoint_dutyCycle = atoi(temp_str);
 //		NVIC_EnableIRQ(TIM16_IRQn);
 		
 		strncpy(temp_str, str + 6, 3);
@@ -150,20 +151,21 @@ int CMD(char *str){
 //		NVIC_DisableIRQ(TIM16_IRQn);
 //		if (str[9] == 'F') right_setpoint_dutyCycle = atoi(temp_str);
 //		else if (str[9] == 'B') right_setpoint_dutyCycle = (-1) * atoi(temp_str);
-		right_setpoint_dutyCycle = atoi(temp_str);
+		left_setpoint_dutyCycle = 100;
+		//left_setpoint_dutyCycle = atoi(temp_str);
 //		NVIC_EnableIRQ(TIM16_IRQn);
 
 
 
 		// DC Motor
 		// Right Motor
-		if (str[5] == 'F') Motor(DC_M1, left_dutyCycle, DC_FORWARD);
-		else if (str[5] == 'B') Motor(DC_M1, left_dutyCycle, DC_BACKWARD);
+		if (str[5] == 'F') Motor(DC_M1, right_dutyCycle, DC_FORWARD);
+		else if (str[5] == 'B') Motor(DC_M1, right_dutyCycle, DC_BACKWARD);
 		else;
 		
 		// Left Motor
-		if (str[9] == 'F') Motor(DC_M2, right_dutyCycle, DC_FORWARD);
-		else if (str[9] == 'B') Motor(DC_M2, right_dutyCycle, DC_BACKWARD);
+		if (str[9] == 'F') Motor(DC_M2, left_dutyCycle, DC_FORWARD);
+		else if (str[9] == 'B') Motor(DC_M2, left_dutyCycle, DC_BACKWARD);
 		else;
 //		
 //		// DC Motor
