@@ -34,12 +34,12 @@
         </paned>
         <paned orientation="horizontal" resize="yes" locked="no" iconified="no" closed="no" position="615">
           <item name="AnjutaTerminal" orientation="vertical" resize="yes" locked="no" iconified="no" closed="no"/>
-          <notebook orientation="vertical" resize="yes" locked="no" iconified="no" closed="no" page="4">
+          <notebook orientation="vertical" resize="yes" locked="no" iconified="no" closed="yes" page="-1">
             <item name="AnjutaDebuggerWatch" orientation="vertical" resize="yes" locked="no" iconified="no" closed="yes"/>
             <item name="AnjutaDebuggerBreakpoints" orientation="vertical" resize="yes" locked="no" iconified="no" closed="yes"/>
             <item name="AnjutaDebuggerLocals" orientation="horizontal" resize="yes" locked="no" iconified="no" closed="yes"/>
             <item name="AnjutaDebuggerStack" orientation="horizontal" resize="yes" locked="no" iconified="no" closed="yes"/>
-            <item name="AnjutaMessageView" orientation="vertical" resize="yes" locked="no" iconified="no" closed="no"/>
+            <item name="AnjutaMessageView" orientation="horizontal" resize="yes" locked="no" iconified="no" closed="yes"/>
           </notebook>
         </paned>
       </paned>

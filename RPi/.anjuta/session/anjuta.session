@@ -3,7 +3,7 @@ Maximized=1
 Geometry=1920x1038+0+20
 
 [File Loader]
-Files=../../src/controller.h#1%%%../../src/controller.c#143%%%../../src/main.c#118%%%../../src/sockets.c#14
+Files=../../src/controller.h#1%%%../../src/controller.c#204%%%../../src/main.c#79%%%../../src/sockets.c#20%%%../../src/interface.c#32
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
@@ -15,7 +15,7 @@ Working directories=../../.
 
 [Project Manager]
 Shortcut=RPi//src//modularize
-Expand=modularize
+Expand=modularize%%%RPi
 
 [Debugger]
 Stop at beginning=2
