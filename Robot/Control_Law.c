@@ -156,9 +156,17 @@ void TIM16_IRQHandler(void){
 	
 		CLR_BITS(TIM16->CNT, TIM_CNT_CNT); 	// reset timer
 	
-	DAC_output(40*Wheel_Speed(ENCODER_LEFT));
+	DAC_output(left_driveValue);
 	
 
 	
+}
+
+uint32_t get_left_driveValue(void){
+	return left_driveValue;
+}
+
+uint32_t get_right_driveValue(void){
+	return right_driveValue;
 }
 

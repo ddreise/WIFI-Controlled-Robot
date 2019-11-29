@@ -200,14 +200,14 @@ int main(void){
 		{
 			busy = 0;
 			
-			//no_connection++;
-			//if (no_connection == 0xF) stop_Robot();
+			no_connection++;
+			if (no_connection == 0xFF) stop_Robot();
 		}
 		else
 		{
 			busy = 1;
 			
-			//no_connection = 0;
+			no_connection = 0;
 		}
 		
 		if(!busy)
