@@ -1,28 +1,29 @@
 [Anjuta]
-Geometry=927x1023+67+27
+Maximized=1
+Geometry=1853x1025+67+27
 
 [File Loader]
-Files=../../src/controller.h#1%%%../../src/controller.c#143%%%../../src/main.c#104
+Files=../../src/main.c#38%%%../../src/uart.c#1%%%../../src/sockets.c#1%%%../../src/sockets.h#21%%%../../src/controller.c#226%%%../../src/pipes.c#1%%%../../src/buffers.c#1%%%../../src/commands.c#105%%%../../src/interface.c#104
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 
 [Execution]
-Program uri=../../Debug/src/modularize
+Program uri=../../src/modularize
 Run in terminal=2
 Working directories=../../.
 
 [Project Manager]
 Shortcut=Modular//src//modularize
-Expand=modularize%%%Modular
-
-[Build]
-Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized%%%1:MinGW32:MinGW32
-Selected Configuration=Debug
-BuildArgs/Default=--enable-maintainer-mode
-BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0 -lm' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
-BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
-BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
+Expand=Modular%%%Modular//src%%%Modular//src//modularize%%%Modular//dist_doc
 
 [Debugger]
 Stop at beginning=2
+
+[Build]
+Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized
+Selected Configuration=Default
+BuildArgs/Default=--enable-maintainer-mode
+BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
+BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
+BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'

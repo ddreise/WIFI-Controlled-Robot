@@ -28,6 +28,11 @@
 #include "UART.h"
 #include "Encoder.h"
 #include "Robot_Command.h"
+#include "Control_Law.h"
+
+#define WHEEL_SETPOINT 100
+#define FORWARD 0
+#define BACKWARD 1
 
 
 char command_str[MAX_CMD_BUFSIZ];
@@ -35,6 +40,7 @@ int16_t servo_position;
 char temp_str[8];
 uint16_t left_speed = 0;
 uint16_t right_speed = 0;
+uint8_t left_current_direction, right_current_direction;
 
 //void TIM7_Init(void)
 //{
@@ -137,29 +143,95 @@ int CMD(char *str){
 		// need to change 3 digit value to string 
 		strncpy(temp_str, str + 2, 3);
 		temp_str[3] = '\0';
-		left_speed = atoi(temp_str);
+		
+//		NVIC_DisableIRQ(TIM16_IRQn);
+		//right_setpoint_dutyCycle = WHEEL_SETPOINT;
+		right_setpoint_dutyCycle = atoi(temp_str);
+//		NVIC_EnableIRQ(TIM16_IRQn);
 		
 		strncpy(temp_str, str + 6, 3);
 		temp_str[3] = '\0';
-		right_speed = atoi(temp_str);
-		
+		//left_setpoint_dutyCycle = WHEEL_SETPOINT;
+		left_setpoint_dutyCycle = atoi(temp_str);
+
+
+
 		// DC Motor
 		// Right Motor
-		if (str[5] == 'F') Motor(DC_M1, left_speed, DC_FORWARD);
-		else if (str[5] == 'B') Motor(DC_M1, left_speed, DC_BACKWARD);
-		else;
+//		NVIC_DisableIRQ(TIM16_IRQn);		
+//		if (str[5] == 'F') {
+//			if (right_current_direction == FORWARD) Motor(DC_M1, right_dutyCycle, DC_FORWARD);
+//			
+//			else if (right_current_direction == BACKWARD){
+//				Motor(DC_M1, 0, DC_BACKWARD);										// Bring robot to stop
+//				if ( get_right_driveValue() <= 0x8 ) right_current_direction = FORWARD;
+//			}
+//		}
+//		
+//		else if (str[5] == 'B') {
+//			if (right_current_direction == BACKWARD) Motor(DC_M1, right_dutyCycle, DC_BACKWARD);
+//			
+//			else if (right_current_direction == FORWARD){
+//				Motor(DC_M1, 0, DC_FORWARD);										// Bring robot to stop
+//				if ( get_right_driveValue() <= 0x8 ) right_current_direction = BACKWARD;
+//			}
+//		}
+//		else;
+//		
+//		
+//		
+//		if (str[9] == 'F') {
+//			if (left_current_direction == FORWARD) Motor(DC_M2, left_dutyCycle, DC_FORWARD);
+//			
+//			else if (left_current_direction == BACKWARD){
+//				Motor(DC_M2, 0, DC_BACKWARD);										// Bring robot to stop
+//				if ( get_left_driveValue() <= 0x8 ) left_current_direction = FORWARD;
+//			}
+//		}
+//		
+//		else if (str[9] == 'B') {
+//			if (left_current_direction == BACKWARD) Motor(DC_M2, left_dutyCycle, DC_BACKWARD);
+//			
+//			else if (left_current_direction == FORWARD){
+//				Motor(DC_M2, 0, DC_FORWARD);										// Bring robot to stop
+//				if ( get_left_driveValue() <= 0x8 ) left_current_direction = BACKWARD;
+//			}
+//		}
+//		else;
+//		
+//		
+//		
+//		NVIC_EnableIRQ(TIM16_IRQn);
 		
+		// Right Motor
+		if (str[5] == 'F') Motor(DC_M1, right_dutyCycle, DC_FORWARD);
+		else if (str[5] == 'B') Motor(DC_M1, right_dutyCycle, DC_BACKWARD);
+
 		// Left Motor
-		if (str[9] == 'F') Motor(DC_M2, right_speed, DC_FORWARD);
-		else if (str[9] == 'B') Motor(DC_M2, right_speed, DC_BACKWARD);
+		if (str[9] == 'F') Motor(DC_M2, left_dutyCycle, DC_FORWARD);
+		else if (str[9] == 'B') Motor(DC_M2, left_dutyCycle, DC_BACKWARD);
 		else;
 
 	}
 	else;
 	
+	
 
 	
 	return 0;
 	
+	
+}
+
+int stop_Robot(void){
+	
+	Motor(DC_M1, 0, DC_FORWARD);
+	Motor(DC_M2, 0, DC_BACKWARD);
+	
+	Set_Servo_State(0);
+	
+	Set_Stepper_Steps(0);
+	
+	return(0);
 	
 }

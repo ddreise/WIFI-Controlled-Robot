@@ -17,6 +17,8 @@
 #include "UART.h"
 #include "Encoder.h"
 #include "Robot_Command.h"
+#include "DAC.h"
+#include "Control_Law.h"
 
 // FOLLOWING MACROS USED TO DETERMINE WHICH LAB TO TEST //
 //#define LED		0 *** OBSOLETE
@@ -45,6 +47,10 @@ int main(void){
 	char str[32];											// For UART
 	uint8_t i = 0;										// Synchronous command test variable
 	uint8_t t = 0;
+	uint32_t pulseL;
+	uint32_t pulseR;
+	uint32_t no_connection;
+
 	
 	int busy = 0;
 	
@@ -70,19 +76,37 @@ int main(void){
 	/////////////
 	
 	#if ENC
-	uint32_t pulseL;
-	uint32_t pulseR;
+
+
 	
+	LCD_Init();												// initialize the LCD screen
+	LCDclear();												// clears residual data in the LCD display from previous operation
 	Encoder_Init();
+	TIM3_Init();
+	UART1_init();
+	LimSwitch_Init();
+	DC_Init();
+	
+	RC_Init();	//needs to init last. Correction: doesn't need to
+	stepperInit();
+	
+
 	
 	LCD_Printf(FIRST_LINE, "Encoder:");
 	
+	Motor(DC_M1, 100, DC_FORWARD);
+	Motor(DC_M2, 100, DC_FORWARD);
+	
+	
 	while(TRUE)
 	{
-		pulseL = Encoder_Read(ENCODER_LEFT);
-		pulseR = Encoder_Read(ENCODER_RIGHT);
+		pulseL = Wheel_Speed(ENCODER_LEFT);
+		pulseR = Wheel_Speed(ENCODER_RIGHT);
+//			pulseL = Encoder_Read(ENCODER_LEFT);
+//			pulseR = Encoder_Read(ENCODER_RIGHT);
 		
-		LCD_Printf(SECOND_LINE, "EL %ldms ER %ldms ", pulseL, pulseR);
+		
+		LCD_Printf(SECOND_LINE, "LW %ld RW %ld ", pulseL, pulseR);
 		Delay_ms(50);
 	}
 	#endif
@@ -154,15 +178,18 @@ int main(void){
 	// *************************************************************************
 	#if COMMAND_TEST
 	
+	
 	TIM3_Init();
 	
 	UART1_init();
 	Encoder_Init();
 	LimSwitch_Init();
 	DC_Init();
-	
+	DAC_Init();	
+
 	RC_Init();	//needs to init last. Correction: doesn't need to
 	stepperInit();
+	Control_Law_Init();
 	
 
 	//Command_Menu();
@@ -172,10 +199,15 @@ int main(void){
 		if(!get_Input(str))
 		{
 			busy = 0;
+			
+			no_connection++;
+			if (no_connection == 0xFF) stop_Robot();
 		}
 		else
 		{
 			busy = 1;
+			
+			no_connection = 0;
 		}
 		
 		if(!busy)
@@ -187,6 +219,11 @@ int main(void){
 			UARTputs("$NACK%");
 			CMD(str);
 		}
+//		
+//		Motor(DC_M1, 100, DC_FORWARD);
+//		Motor(DC_M2, 100, DC_FORWARD);
+		
+		//DAC_output(left_dutyCycle);
 		
 		//Delay_ms(500);
 
@@ -262,11 +299,11 @@ int main(void){
 //		
 
 //		
-//		if(i == 0xFF) {
+////		if(i == 0xFF) {
 //			LCD_Printf(FIRST_LINE, "STP%d SRV%d", Get_Stepper_Position, servo_position);
-//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", right_speed, left_speed);
-//		}
-//		i++;
+//			LCD_Printf(SECOND_LINE, "DCR%d DCL%d", Wheel_Speed(ENCODER_RIGHT), Wheel_Speed(ENCODER_LEFT));
+////		}
+////		i++;
 
 		
 		// *********************************************

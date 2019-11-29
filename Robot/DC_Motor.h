@@ -47,6 +47,7 @@
 #define DC_TIMER_PSC		719UL
 #define DC_TIMER_AR			1999UL
 
+
 // PROTOTYPES //
 
 void DC_Init(void);

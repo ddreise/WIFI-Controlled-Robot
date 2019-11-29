@@ -27,7 +27,11 @@ modularize_SOURCES = \
 	interface.h \
 	interface.c \
 	uart.h \
-	uart.c
+	uart.c \
+	sockets.h \
+	sockets.c
+
+modularize_CFLAGS = -lm 
 
 modularize_LDFLAGS = 
 

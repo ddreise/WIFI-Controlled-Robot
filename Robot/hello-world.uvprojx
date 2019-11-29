@@ -500,6 +500,31 @@
               <FileType>1</FileType>
               <FilePath>.\Robot_Command.c</FilePath>
             </File>
+            <File>
+              <FileName>Control_Law.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Control_Law.c</FilePath>
+            </File>
+            <File>
+              <FileName>DAC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\DAC.c</FilePath>
+            </File>
+            <File>
+              <FileName>DAC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\DAC.h</FilePath>
+            </File>
+            <File>
+              <FileName>Control_Law.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Control_Law.h</FilePath>
+            </File>
+            <File>
+              <FileName>Robot_Command.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Robot_Command.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
