@@ -31,6 +31,8 @@ modularize_SOURCES = \
 	sockets.h \
 	sockets.c
 
+modularize_CFLAGS = -lm 
+
 modularize_LDFLAGS = 
 
 modularize_LDADD = 
