@@ -141,11 +141,11 @@
   )
 
   (symbol_instances
+    (path "/3819e76f-b7e2-4da8-9170-fe124b9ee495/00359e63-0732-4bf0-9764-9c3b68ff209d"
+      (reference "U?") (unit 1) (value "MCP2561-E-P") (footprint "Package_DIP:DIP-8_W7.62mm")
+    )
     (path "/69fbc66f-128f-4141-9a6d-01da30623e7b/13101efd-83d3-4692-a02f-b581a91ceac8"
       (reference "U?") (unit 1) (value "RP2040") (footprint "QFN40P700X700X90-57N")
-    )
-    (path "/3819e76f-b7e2-4da8-9170-fe124b9ee495/8395775f-8f56-48cd-8b68-9aec3156784d"
-      (reference "U?") (unit 1) (value "MCP2551-I-SN") (footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
     )
   )
 )
